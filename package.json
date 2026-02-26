@@ -1,7 +1,6 @@
 {
   "name": "cmv-italin",
   "version": "1.0.0",
-"vercel.build": "npx api deploy", 
 "private": true,
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4"
