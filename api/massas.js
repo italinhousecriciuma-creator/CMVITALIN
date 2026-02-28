@@ -16,14 +16,18 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { nome, custo_p, custo_g } = req.body;
-      const [row] = await sql`INSERT INTO massas (nome, custo_p, custo_g) VALUES (${nome}, ${custo_p || 0}, ${custo_g || 0}) RETURNING *`;
+      const { nome, custo_ifood, custo_anota } = req.body;
+      const [row] = await sql`INSERT INTO massas (nome, custo_ifood, custo_anota) 
+                              VALUES (${nome}, ${custo_ifood||0}, ${custo_anota||0}) 
+                              RETURNING *`;
       return res.status(200).json(row);
     }
 
     if (req.method === 'PUT') {
-      const { id, nome, custo_p, custo_g } = req.body;
-      const [row] = await sql`UPDATE massas SET nome = ${nome}, custo_p = ${custo_p || 0}, custo_g = ${custo_g || 0} WHERE id = ${id} RETURNING *`;
+      const { id, nome, custo_ifood, custo_anota } = req.body;
+      const [row] = await sql`UPDATE massas 
+                              SET nome = ${nome}, custo_ifood = ${custo_ifood||0}, custo_anota = ${custo_anota||0}
+                              WHERE id = ${id} RETURNING *`;
       return res.status(200).json(row);
     }
 

@@ -11,20 +11,15 @@ module.exports = async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     if (req.method === 'GET') {
-      const rows = await sql`SELECT f.*, i.nome as ing_nome, i.custo as ing_custo, i.un as ing_un FROM fichas f LEFT JOIN ingredientes i ON f.ingrediente_id = i.id ORDER BY f.produto_id, f.tamanho`;
+      const rows = await sql`SELECT * FROM fichas ORDER BY produto_id, tamanho`;
       return res.status(200).json(rows);
     }
 
     if (req.method === 'POST') {
-      const { produto_id, tamanho, ingrediente_id, qtd } = req.body;
-      const existing = await sql`SELECT * FROM fichas WHERE produto_id = ${produto_id} AND tamanho = ${tamanho} AND ingrediente_id = ${ingrediente_id}`;
-      
-      if (existing.length > 0) {
-        const [row] = await sql`UPDATE fichas SET qtd = qtd + ${qtd} WHERE id = ${existing[0].id} RETURNING *`;
-        return res.status(200).json(row);
-      }
-      
-      const [row] = await sql`INSERT INTO fichas (produto_id, tamanho, ingrediente_id, qtd) VALUES (${produto_id}, ${tamanho}, ${ingrediente_id}, ${qtd}) RETURNING *`;
+      const { produto_id, tamanho, ingrediente_id, qtd, un } = req.body;
+      const [row] = await sql`INSERT INTO fichas (produto_id, tamanho, ingrediente_id, qtd, un) 
+                              VALUES (${produto_id}, ${tamanho||'G'}, ${ingrediente_id}, ${qtd||0}, ${un||'g'}) 
+                              RETURNING *`;
       return res.status(200).json(row);
     }
 

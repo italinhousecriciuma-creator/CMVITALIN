@@ -16,14 +16,18 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { nome, preco, custo } = req.body;
-      const [row] = await sql`INSERT INTO extras (nome, preco, custo) VALUES (${nome}, ${preco || 0}, ${custo || 0}) RETURNING *`;
+      const { nome, custo } = req.body;
+      const [row] = await sql`INSERT INTO extras (nome, custo) 
+                              VALUES (${nome}, ${custo||0}) 
+                              RETURNING *`;
       return res.status(200).json(row);
     }
 
     if (req.method === 'PUT') {
-      const { id, nome, preco, custo } = req.body;
-      const [row] = await sql`UPDATE extras SET nome = ${nome}, preco = ${preco || 0}, custo = ${custo || 0} WHERE id = ${id} RETURNING *`;
+      const { id, nome, custo } = req.body;
+      const [row] = await sql`UPDATE extras 
+                              SET nome = ${nome}, custo = ${custo||0}
+                              WHERE id = ${id} RETURNING *`;
       return res.status(200).json(row);
     }
 

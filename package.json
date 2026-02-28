@@ -1,6 +1,6 @@
 {
   "name": "cmv-italin",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "private": true,
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4"

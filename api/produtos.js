@@ -16,14 +16,20 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'POST') {
-      const { nome, cat, ifood_p, ifood_g, anota_p, anota_g } = req.body;
-      const [row] = await sql`INSERT INTO produtos (nome, cat, ifood_p, ifood_g, anota_p, anota_g) VALUES (${nome}, ${cat || 'macarrao'}, ${ifood_p || 0}, ${ifood_g || 0}, ${anota_p || 0}, ${anota_g || 0}) RETURNING *`;
+      const { nome, cat, custo_p, custo_g, preco_p, preco_g } = req.body;
+      const [row] = await sql`INSERT INTO produtos (nome, cat, custo_p, custo_g, preco_p, preco_g) 
+                              VALUES (${nome}, ${cat||'macarrao'}, ${custo_p||0}, ${custo_g||0}, ${preco_p||0}, ${preco_g||0}) 
+                              RETURNING *`;
       return res.status(200).json(row);
     }
 
     if (req.method === 'PUT') {
-      const { id, nome, cat, ifood_p, ifood_g, anota_p, anota_g } = req.body;
-      const [row] = await sql`UPDATE produtos SET nome = ${nome}, cat = ${cat}, ifood_p = ${ifood_p || 0}, ifood_g = ${ifood_g || 0}, anota_p = ${anota_p || 0}, anota_g = ${anota_g || 0} WHERE id = ${id} RETURNING *`;
+      const { id, nome, cat, custo_p, custo_g, preco_p, preco_g } = req.body;
+      const [row] = await sql`UPDATE produtos 
+                              SET nome = ${nome}, cat = ${cat||'macarrao'}, 
+                                  custo_p = ${custo_p||0}, custo_g = ${custo_g||0},
+                                  preco_p = ${preco_p||0}, preco_g = ${preco_g||0}
+                              WHERE id = ${id} RETURNING *`;
       return res.status(200).json(row);
     }
 
