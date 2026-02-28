@@ -639,7 +639,18 @@ function setBtnLoading(btn, loading) {
 }
 
 function abrirModal(id, editId) {
+    // Limpar formulário primeiro
+    const form = $(id).querySelector('form');
+    if(form) {
+        form.reset();
+        // Limpar campo hidden explicitamente
+        const hiddenField = form.querySelector('input[type="hidden"]');
+        if(hiddenField) hiddenField.value = '';
+    }
+    
+    // Se for edição, preencher os dados
     if(editId) preencherForm(id, editId);
+    
     $(id).classList.add('show');
     if(id === 'mod-combo') atualizarSelectsCombo();
     document.body.style.overflow = 'hidden';
@@ -649,7 +660,12 @@ function fecharModal(id) {
     $(id).classList.remove('show');
     document.body.style.overflow = '';
     const form = $(id).querySelector('form');
-    if(form) form.reset();
+    if(form) {
+        form.reset();
+        // Limpar campos hidden explicitamente
+        const hiddenFields = form.querySelectorAll('input[type="hidden"]');
+        hiddenFields.forEach(f => f.value = '');
+    }
     pendingDelete = null;
 }
 
@@ -845,16 +861,19 @@ async function submitForm(formId, tabela, getData, renderFn, modalId) {
     const form = $(formId);
     const btn = form.querySelector('button[type="submit"]');
     const idField = form.querySelector('input[type="hidden"]');
-    const id = parseInt(idField.value);
+    const idValue = idField ? idField.value.trim() : '';
+    const id = idValue ? parseInt(idValue) : null;
     
     setBtnLoading(btn, true);
     try {
         const d = getData();
-        if(id) {
+        if(id && !isNaN(id) && id > 0) {
+            // EDIÇÃO - PUT
             const r = await api(tabela, 'PUT', {...d, id});
             const i = DB[tabela].findIndex(x => x.id === id);
             if(i >= 0) DB[tabela][i] = r;
         } else {
+            // NOVO - POST
             const r = await api(tabela, 'POST', d);
             DB[tabela].push(r);
         }
