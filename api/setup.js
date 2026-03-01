@@ -22,6 +22,19 @@ module.exports = async function handler(req, res) {
       preco_anota DECIMAL(10,2) DEFAULT 0,
       created_at TIMESTAMP DEFAULT NOW()
     )`;
+    
+    // Migração: adicionar colunas novas se não existirem
+    await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS tam CHAR(1) DEFAULT 'G'`;
+    await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS custo DECIMAL(10,2) DEFAULT 0`;
+    await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS preco_ifood DECIMAL(10,2) DEFAULT 0`;
+    await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS preco_anota DECIMAL(10,2) DEFAULT 0`;
+    
+    // Remover colunas antigas se existirem (das versões anteriores)
+    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS custo_p`; } catch(e) {}
+    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS custo_g`; } catch(e) {}
+    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS preco_p`; } catch(e) {}
+    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS preco_g`; } catch(e) {}
+    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS tamanho`; } catch(e) {}
 
     // Ingredientes (inclui embalagens)
     await sql`CREATE TABLE IF NOT EXISTS ingredientes (
