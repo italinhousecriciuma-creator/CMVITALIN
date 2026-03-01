@@ -403,11 +403,11 @@ const cmvCls = c => c <= 25 ? 'green' : c <= 35 ? 'yellow' : 'red';
 function toast(msg, err) { const t = $('toast'); t.textContent = (err?'❌ ':'✅ ') + msg; t.className = err ? 'err' : ''; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
 function loading(s) { $('loading').style.display = s ? 'flex' : 'none'; }
 
-async function api(ep, method='GET', body=null) {
+async function api(route, method='GET', body=null) {
     try {
         const opts = { method, headers: { 'Content-Type': 'application/json' } };
         if (body) opts.body = JSON.stringify(body);
-        const res = await fetch(API + '/' + ep, opts);
+        const res = await fetch(API + '?route=' + route, opts);
         if (!res.ok) throw new Error(await res.text());
         return await res.json();
     } catch (e) { console.error(e); throw e; }
