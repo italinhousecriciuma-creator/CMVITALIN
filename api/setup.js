@@ -55,6 +55,13 @@ module.exports = async function handler(req, res) {
       un VARCHAR(10) DEFAULT 'g',
       created_at TIMESTAMP DEFAULT NOW()
     )`;
+    
+    // Migração: adicionar colunas novas na tabela fichas
+    await sql`ALTER TABLE fichas ADD COLUMN IF NOT EXISTS un VARCHAR(10) DEFAULT 'g'`;
+    await sql`ALTER TABLE fichas ADD COLUMN IF NOT EXISTS qtd DECIMAL(10,4) DEFAULT 0`;
+    
+    // Remover colunas antigas de fichas se existirem
+    try { await sql`ALTER TABLE fichas DROP COLUMN IF EXISTS tamanho`; } catch(e) {}
 
     // Vendas/Importações
     await sql`CREATE TABLE IF NOT EXISTS vendas (

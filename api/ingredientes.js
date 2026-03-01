@@ -39,6 +39,10 @@ module.exports = async function handler(req, res) {
 
     res.status(405).json({ error: 'Method not allowed' });
   } catch (e) {
+    console.error(e);
+    if (e.message.includes('column') && e.message.includes('does not exist')) {
+      return res.status(500).json({ error: 'Banco desatualizado. Vá em Config → Setup DB para atualizar.' });
+    }
     res.status(500).json({ error: e.message });
   }
 };

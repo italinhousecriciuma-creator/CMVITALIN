@@ -11,8 +11,21 @@ module.exports = async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     if (req.method === 'GET') {
-      const rows = await sql`SELECT * FROM produtos ORDER BY cat, tam, nome`;
-      return res.status(200).json(rows);
+      // Tentar com todas as colunas novas, se falhar, tentar com colunas básicas
+      try {
+        const rows = await sql`SELECT id, nome, cat, tam, custo, preco_ifood, preco_anota, created_at FROM produtos ORDER BY cat, tam, nome`;
+        return res.status(200).json(rows);
+      } catch (e) {
+        // Se falhar, provavelmente falta rodar Setup DB
+        const rows = await sql`SELECT * FROM produtos ORDER BY nome`;
+        return res.status(200).json(rows.map(r => ({
+          ...r,
+          tam: r.tam || 'G',
+          custo: r.custo || 0,
+          preco_ifood: r.preco_ifood || 0,
+          preco_anota: r.preco_anota || 0
+        })));
+      }
     }
 
     if (req.method === 'POST') {
@@ -40,6 +53,11 @@ module.exports = async function handler(req, res) {
 
     res.status(405).json({ error: 'Method not allowed' });
   } catch (e) {
+    console.error(e);
+    // Mensagem mais clara sobre o erro
+    if (e.message.includes('column') && e.message.includes('does not exist')) {
+      return res.status(500).json({ error: 'Banco desatualizado. Vá em Config → Setup DB para atualizar.' });
+    }
     res.status(500).json({ error: e.message });
   }
 };
