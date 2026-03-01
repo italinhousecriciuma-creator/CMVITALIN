@@ -11,36 +11,19 @@ module.exports = async function handler(req, res) {
   try {
     const sql = neon(process.env.DATABASE_URL);
 
-    // Produtos - com custo e preço por tamanho
+    // Produtos - com custo único e preços por plataforma
     await sql`CREATE TABLE IF NOT EXISTS produtos (
       id SERIAL PRIMARY KEY,
       nome VARCHAR(255) NOT NULL,
       cat VARCHAR(50) DEFAULT 'macarrao',
-      custo_p DECIMAL(10,2) DEFAULT 0,
-      custo_g DECIMAL(10,2) DEFAULT 0,
-      preco_p DECIMAL(10,2) DEFAULT 0,
-      preco_g DECIMAL(10,2) DEFAULT 0,
-      created_at TIMESTAMP DEFAULT NOW()
-    )`;
-
-    // Massas Premium - com custo extra por plataforma
-    await sql`CREATE TABLE IF NOT EXISTS massas (
-      id SERIAL PRIMARY KEY,
-      nome VARCHAR(255) NOT NULL,
-      custo_ifood DECIMAL(10,2) DEFAULT 0,
-      custo_anota DECIMAL(10,2) DEFAULT 0,
-      created_at TIMESTAMP DEFAULT NOW()
-    )`;
-
-    // Extras - custo de cada extra
-    await sql`CREATE TABLE IF NOT EXISTS extras (
-      id SERIAL PRIMARY KEY,
-      nome VARCHAR(255) NOT NULL,
+      tam CHAR(1) DEFAULT 'G',
       custo DECIMAL(10,2) DEFAULT 0,
+      preco_ifood DECIMAL(10,2) DEFAULT 0,
+      preco_anota DECIMAL(10,2) DEFAULT 0,
       created_at TIMESTAMP DEFAULT NOW()
     )`;
 
-    // Ingredientes
+    // Ingredientes (inclui embalagens)
     await sql`CREATE TABLE IF NOT EXISTS ingredientes (
       id SERIAL PRIMARY KEY,
       nome VARCHAR(255) NOT NULL,
@@ -54,7 +37,6 @@ module.exports = async function handler(req, res) {
     await sql`CREATE TABLE IF NOT EXISTS fichas (
       id SERIAL PRIMARY KEY,
       produto_id INTEGER REFERENCES produtos(id) ON DELETE CASCADE,
-      tamanho CHAR(1) DEFAULT 'G',
       ingrediente_id INTEGER REFERENCES ingredientes(id) ON DELETE CASCADE,
       qtd DECIMAL(10,4) DEFAULT 0,
       un VARCHAR(10) DEFAULT 'g',
@@ -67,10 +49,7 @@ module.exports = async function handler(req, res) {
       mes VARCHAR(2) NOT NULL,
       ano VARCHAR(4) NOT NULL,
       cardapio VARCHAR(20) NOT NULL,
-      grupos JSONB,
-      massas JSONB,
-      extras JSONB,
-      detalhes_cmv JSONB,
+      itens JSONB,
       total_qtd INTEGER DEFAULT 0,
       total_fat DECIMAL(12,2) DEFAULT 0,
       total_custo DECIMAL(12,2) DEFAULT 0,
@@ -78,7 +57,7 @@ module.exports = async function handler(req, res) {
       UNIQUE(mes, ano, cardapio)
     )`;
 
-    return res.status(200).json({ ok: true, message: 'Tabelas criadas/atualizadas!' });
+    return res.status(200).json({ ok: true, message: 'Tabelas criadas!' });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: e.message });

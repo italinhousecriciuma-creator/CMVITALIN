@@ -11,14 +11,14 @@ module.exports = async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     if (req.method === 'GET') {
-      const rows = await sql`SELECT * FROM fichas ORDER BY produto_id, tamanho`;
+      const rows = await sql`SELECT * FROM fichas ORDER BY produto_id`;
       return res.status(200).json(rows);
     }
 
     if (req.method === 'POST') {
-      const { produto_id, tamanho, ingrediente_id, qtd, un } = req.body;
-      const [row] = await sql`INSERT INTO fichas (produto_id, tamanho, ingrediente_id, qtd, un) 
-                              VALUES (${produto_id}, ${tamanho||'G'}, ${ingrediente_id}, ${qtd||0}, ${un||'g'}) 
+      const { produto_id, ingrediente_id, qtd, un } = req.body;
+      const [row] = await sql`INSERT INTO fichas (produto_id, ingrediente_id, qtd, un) 
+                              VALUES (${produto_id}, ${ingrediente_id}, ${qtd || 0}, ${un || 'g'}) 
                               RETURNING *`;
       return res.status(200).json(row);
     }

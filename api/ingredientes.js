@@ -18,7 +18,7 @@ module.exports = async function handler(req, res) {
     if (req.method === 'POST') {
       const { nome, un, custo, forn } = req.body;
       const [row] = await sql`INSERT INTO ingredientes (nome, un, custo, forn) 
-                              VALUES (${nome}, ${un||'kg'}, ${custo||0}, ${forn||''}) 
+                              VALUES (${nome}, ${un || 'kg'}, ${custo || 0}, ${forn || ''}) 
                               RETURNING *`;
       return res.status(200).json(row);
     }
@@ -26,7 +26,7 @@ module.exports = async function handler(req, res) {
     if (req.method === 'PUT') {
       const { id, nome, un, custo, forn } = req.body;
       const [row] = await sql`UPDATE ingredientes 
-                              SET nome = ${nome}, un = ${un||'kg'}, custo = ${custo||0}, forn = ${forn||''}
+                              SET nome = ${nome}, un = ${un || 'kg'}, custo = ${custo || 0}, forn = ${forn || ''}
                               WHERE id = ${id} RETURNING *`;
       return res.status(200).json(row);
     }

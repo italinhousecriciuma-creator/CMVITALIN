@@ -11,24 +11,23 @@ module.exports = async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     if (req.method === 'GET') {
-      const rows = await sql`SELECT * FROM produtos ORDER BY nome`;
+      const rows = await sql`SELECT * FROM produtos ORDER BY cat, tam, nome`;
       return res.status(200).json(rows);
     }
 
     if (req.method === 'POST') {
-      const { nome, cat, custo_p, custo_g, preco_p, preco_g } = req.body;
-      const [row] = await sql`INSERT INTO produtos (nome, cat, custo_p, custo_g, preco_p, preco_g) 
-                              VALUES (${nome}, ${cat||'macarrao'}, ${custo_p||0}, ${custo_g||0}, ${preco_p||0}, ${preco_g||0}) 
+      const { nome, cat, tam, custo, preco_ifood, preco_anota } = req.body;
+      const [row] = await sql`INSERT INTO produtos (nome, cat, tam, custo, preco_ifood, preco_anota) 
+                              VALUES (${nome}, ${cat || 'macarrao'}, ${tam || 'G'}, ${custo || 0}, ${preco_ifood || 0}, ${preco_anota || 0}) 
                               RETURNING *`;
       return res.status(200).json(row);
     }
 
     if (req.method === 'PUT') {
-      const { id, nome, cat, custo_p, custo_g, preco_p, preco_g } = req.body;
+      const { id, nome, cat, tam, custo, preco_ifood, preco_anota } = req.body;
       const [row] = await sql`UPDATE produtos 
-                              SET nome = ${nome}, cat = ${cat||'macarrao'}, 
-                                  custo_p = ${custo_p||0}, custo_g = ${custo_g||0},
-                                  preco_p = ${preco_p||0}, preco_g = ${preco_g||0}
+                              SET nome = ${nome}, cat = ${cat || 'macarrao'}, tam = ${tam || 'G'},
+                                  custo = ${custo || 0}, preco_ifood = ${preco_ifood || 0}, preco_anota = ${preco_anota || 0}
                               WHERE id = ${id} RETURNING *`;
       return res.status(200).json(row);
     }

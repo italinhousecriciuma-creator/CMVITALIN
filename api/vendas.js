@@ -11,28 +11,19 @@ module.exports = async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     if (req.method === 'GET') {
-      const rows = await sql`SELECT * FROM vendas ORDER BY ano DESC, mes DESC`;
+      const rows = await sql`SELECT * FROM vendas ORDER BY ano DESC, mes DESC, cardapio`;
       return res.status(200).json(rows);
     }
 
     if (req.method === 'POST') {
-      const { mes, ano, cardapio, grupos, massas, extras, detalhes_cmv, total_qtd, total_fat, total_custo } = req.body;
+      const { mes, ano, cardapio, itens, total_qtd, total_fat, total_custo } = req.body;
       
-      // Deletar existente (upsert)
+      // Upsert - deletar existente e inserir novo
       await sql`DELETE FROM vendas WHERE mes = ${mes} AND ano = ${ano} AND cardapio = ${cardapio}`;
       
-      const [row] = await sql`INSERT INTO vendas 
-                              (mes, ano, cardapio, grupos, massas, extras, detalhes_cmv, total_qtd, total_fat, total_custo) 
-                              VALUES (
-                                ${mes}, ${ano}, ${cardapio}, 
-                                ${JSON.stringify(grupos || [])}, 
-                                ${JSON.stringify(massas || [])}, 
-                                ${JSON.stringify(extras || [])}, 
-                                ${JSON.stringify(detalhes_cmv || [])}, 
-                                ${total_qtd || 0}, 
-                                ${total_fat || 0}, 
-                                ${total_custo || 0}
-                              ) 
+      const [row] = await sql`INSERT INTO vendas (mes, ano, cardapio, itens, total_qtd, total_fat, total_custo) 
+                              VALUES (${mes}, ${ano}, ${cardapio}, ${JSON.stringify(itens || [])}, 
+                                      ${total_qtd || 0}, ${total_fat || 0}, ${total_custo || 0}) 
                               RETURNING *`;
       return res.status(200).json(row);
     }

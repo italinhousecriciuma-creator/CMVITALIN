@@ -28,26 +28,23 @@
             --border: #2d3a52;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html { scroll-behavior: smooth; }
         body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text); min-height: 100vh; padding-bottom: 100px; }
         
         .header { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 0.7rem 1rem; position: sticky; top: 0; z-index: 100; }
         .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
         .logo { display: flex; align-items: center; gap: 0.5rem; }
-        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--green), var(--blue)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--green), var(--blue)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
         .logo h1 { font-size: 0.95rem; font-weight: 700; }
         .logo span { font-size: 0.55rem; color: var(--text3); display: block; }
-        .header-right { display: flex; align-items: center; gap: 0.5rem; }
-        .header-date { font-family: 'Space Mono', monospace; color: var(--green); font-size: 0.65rem; }
         .sync-status { display: flex; align-items: center; gap: 0.25rem; font-size: 0.55rem; padding: 0.2rem 0.5rem; border-radius: 4px; }
         .sync-status.online { background: rgba(16,185,129,0.2); color: var(--green); }
         .sync-status.offline { background: rgba(239,68,68,0.2); color: var(--red); }
         
         .nav { background: var(--bg-secondary); border-bottom: 1px solid var(--border); position: sticky; top: 48px; z-index: 99; }
-        .nav-content { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 0.5rem; }
+        .nav-content { display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 0.5rem; }
         .nav-content::-webkit-scrollbar { display: none; }
-        .nav-btn { background: none; border: none; color: var(--text2); padding: 0.7rem 0.7rem; font-family: inherit; font-size: 0.65rem; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; flex-shrink: 0; }
-        .nav-btn:hover, .nav-btn:active { color: var(--text); background: var(--bg-hover); }
+        .nav-btn { background: none; border: none; color: var(--text2); padding: 0.7rem; font-family: inherit; font-size: 0.65rem; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+        .nav-btn:hover { color: var(--text); background: var(--bg-hover); }
         .nav-btn.active { color: var(--green); border-bottom-color: var(--green); background: rgba(16,185,129,0.1); }
         
         .main { max-width: 1400px; margin: 0 auto; padding: 0.9rem; }
@@ -55,9 +52,8 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .grid-kpi { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; margin-bottom: 0.9rem; }
-        @media (max-width: 600px) { .grid-kpi { grid-template-columns: repeat(3, 1fr); } }
-        @media (max-width: 400px) { .grid-kpi { grid-template-columns: repeat(2, 1fr); } }
+        .grid-kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 0.9rem; }
+        @media (max-width: 500px) { .grid-kpi { grid-template-columns: repeat(2, 1fr); } }
         .kpi { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; position: relative; overflow: hidden; }
         .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
         .kpi.green::before { background: var(--green); }
@@ -65,15 +61,13 @@
         .kpi.yellow::before { background: var(--yellow); }
         .kpi.purple::before { background: var(--purple); }
         .kpi.red::before { background: var(--red); }
-        .kpi.orange::before { background: var(--orange); }
         .kpi-label { color: var(--text2); font-size: 0.55rem; margin-bottom: 0.15rem; text-transform: uppercase; }
-        .kpi-value { font-family: 'Space Mono', monospace; font-size: 0.9rem; font-weight: 700; }
+        .kpi-value { font-family: 'Space Mono', monospace; font-size: 0.95rem; font-weight: 700; }
         .kpi.green .kpi-value { color: var(--green); }
         .kpi.blue .kpi-value { color: var(--blue); }
         .kpi.yellow .kpi-value { color: var(--yellow); }
         .kpi.purple .kpi-value { color: var(--purple); }
         .kpi.red .kpi-value { color: var(--red); }
-        .kpi.orange .kpi-value { color: var(--orange); }
         
         .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.8rem; }
         .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem; }
@@ -84,43 +78,41 @@
         .search-box input { background: none; border: none; color: var(--text); font-size: 0.7rem; width: 100px; outline: none; }
         .search-box input::placeholder { color: var(--text3); }
         
-        .tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 6px; }
+        .tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
         table { width: 100%; border-collapse: collapse; font-size: 0.68rem; }
-        th { background: var(--bg-secondary); color: var(--text2); font-weight: 600; text-align: left; padding: 0.45rem 0.35rem; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; }
-        th:hover { background: var(--bg-hover); }
-        th .sort-icon { margin-left: 0.2rem; opacity: 0.5; }
-        th.sorted .sort-icon { opacity: 1; color: var(--green); }
-        td { padding: 0.4rem 0.35rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        th { background: var(--bg-secondary); color: var(--text2); font-weight: 600; text-align: left; padding: 0.45rem 0.4rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        td { padding: 0.4rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
         tr:hover td { background: var(--bg-hover); }
         tr:last-child td { border-bottom: none; }
         
-        .badge { display: inline-block; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.55rem; font-weight: 600; }
+        .badge { display: inline-block; padding: 0.12rem 0.4rem; border-radius: 4px; font-size: 0.55rem; font-weight: 600; }
         .badge.green { background: rgba(16,185,129,0.2); color: var(--green); }
         .badge.yellow { background: rgba(245,158,11,0.2); color: var(--yellow); }
         .badge.red { background: rgba(239,68,68,0.2); color: var(--red); }
         .badge.blue { background: rgba(59,130,246,0.2); color: var(--blue); }
         .badge.purple { background: rgba(139,92,246,0.2); color: var(--purple); }
-        .badge.cyan { background: rgba(6,182,212,0.2); color: var(--cyan); }
         .badge.orange { background: rgba(249,115,22,0.2); color: var(--orange); }
         .badge.pink { background: rgba(236,72,153,0.2); color: var(--pink); }
         
         .mono { font-family: 'Space Mono', monospace; }
         
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.4rem; }
-        .field { margin-bottom: 0.4rem; }
-        .field label { display: block; color: var(--text2); font-size: 0.6rem; margin-bottom: 0.1rem; font-weight: 500; }
-        .field input, .field select { width: 100%; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.45rem; color: var(--text); font-family: inherit; font-size: 0.75rem; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; }
+        .field { margin-bottom: 0.5rem; }
+        .field label { display: block; color: var(--text2); font-size: 0.65rem; margin-bottom: 0.15rem; font-weight: 500; }
+        .field input, .field select { width: 100%; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.6rem; color: var(--text); font-family: inherit; font-size: 0.8rem; }
         .field input:focus, .field select:focus { outline: none; border-color: var(--green); }
+        .field-inline { display: flex; gap: 0.4rem; align-items: flex-end; }
+        .field-inline .field { flex: 1; margin-bottom: 0; }
+        .field-inline .field.sm { flex: 0 0 80px; }
         
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem 0.9rem; border: none; border-radius: 6px; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.15s; min-height: 36px; touch-action: manipulation; position: relative; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem 0.9rem; border: none; border-radius: 6px; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.15s; min-height: 36px; position: relative; }
         .btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-p { background: linear-gradient(135deg, var(--green), var(--blue)); color: white; }
-        .btn-p:hover:not(:disabled), .btn-p:active:not(:disabled) { opacity: 0.9; }
+        .btn-p:hover:not(:disabled) { opacity: 0.9; }
         .btn-d { background: rgba(239,68,68,0.15); color: var(--red); }
         .btn-e { background: rgba(59,130,246,0.15); color: var(--blue); }
         .btn-s { background: var(--bg-secondary); color: var(--text); border: 1px solid var(--border); }
-        .btn-sm { padding: 0.35rem 0.45rem; font-size: 0.6rem; min-height: 30px; min-width: 30px; }
-        .btn-loading .btn-text { visibility: hidden; }
+        .btn-sm { padding: 0.35rem 0.5rem; font-size: 0.6rem; min-height: 30px; }
         .btn-loading::after { content: ''; position: absolute; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .actions { display: flex; gap: 0.2rem; justify-content: flex-end; }
@@ -130,94 +122,73 @@
         .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px 16px 0 0; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 1rem; animation: slideUp 0.2s ease; }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-        .modal-head h3 { font-size: 0.85rem; }
-        .modal-close { background: var(--bg-secondary); border: none; color: var(--text); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+        .modal-head h3 { font-size: 0.9rem; }
+        .modal-close { background: var(--bg-secondary); border: none; color: var(--text); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
         .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 0.8rem; }
-        @media (min-width: 600px) { .modal-bg { align-items: center; padding: 1rem; } .modal { border-radius: 12px; } .modal-handle { display: none; } }
+        @media (min-width: 600px) { .modal-bg { align-items: center; padding: 1rem; } .modal { border-radius: 12px; max-height: 85vh; } .modal-handle { display: none; } }
+        
+        .section-title { font-size: 0.7rem; color: var(--green); margin: 0.8rem 0 0.4rem; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; display: flex; align-items: center; gap: 0.3rem; }
+        
+        .cmv-display { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
+        .cmv-box { background: var(--bg-secondary); border-radius: 8px; padding: 0.6rem; text-align: center; }
+        .cmv-box.ifood { border-left: 3px solid #ea4335; }
+        .cmv-box.anota { border-left: 3px solid #34a853; }
+        .cmv-box .plat { font-size: 0.6rem; color: var(--text3); margin-bottom: 0.2rem; }
+        .cmv-box .cmv-val { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; }
+        .cmv-box .cmv-price { font-size: 0.6rem; color: var(--text2); }
+        
+        .upload-box { border: 2px dashed var(--border); border-radius: 10px; padding: 1.2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
+        .upload-box:hover, .upload-box.dragover { border-color: var(--green); background: rgba(16,185,129,0.05); }
+        .upload-box.has-file { border-color: var(--green); border-style: solid; }
+        .upload-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+        .upload-text { font-size: 0.75rem; color: var(--text2); }
+        .upload-file { font-size: 0.7rem; color: var(--green); margin-top: 0.3rem; font-weight: 600; }
+        
+        .alert { padding: 0.5rem 0.7rem; border-radius: 6px; font-size: 0.7rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
+        .alert.info { background: rgba(59,130,246,0.15); color: var(--blue); }
+        .alert.warn { background: rgba(245,158,11,0.15); color: var(--yellow); }
+        .alert.ok { background: rgba(16,185,129,0.15); color: var(--green); }
+        
+        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; }
+        .toast { background: var(--bg-card); border: 1px solid var(--green); padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        .toast.error { border-color: var(--red); }
+        
+        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+        .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        
+        .ing-list { border: 1px solid var(--border); border-radius: 6px; max-height: 200px; overflow-y: auto; margin-top: 0.4rem; }
+        .ing-item { display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); font-size: 0.7rem; }
+        .ing-item:last-child { border-bottom: none; }
+        
+        .res-box { background: var(--bg-secondary); border-radius: 8px; padding: 0.6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-top: 0.6rem; }
+        .res-item { text-align: center; }
+        .res-item .lbl { font-size: 0.5rem; color: var(--text3); text-transform: uppercase; }
+        .res-item .val { font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; }
+        
+        .empty { text-align: center; padding: 1.5rem; color: var(--text3); font-size: 0.75rem; }
+        .empty-icon { font-size: 1.8rem; margin-bottom: 0.3rem; opacity: 0.5; }
+        
+        .chart-box { height: 200px; }
+        .chart-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
+        @media (min-width: 700px) { .chart-grid { grid-template-columns: 1fr 1fr; } }
+        
+        .preview { background: var(--bg-secondary); border-radius: 8px; padding: 0.8rem; margin-top: 0.8rem; }
+        
+        .tag { display: inline-flex; align-items: center; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.55rem; font-weight: 600; }
+        .tag.ifood { background: rgba(234,67,53,0.2); color: #ea4335; }
+        .tag.anota { background: rgba(52,168,83,0.2); color: #34a853; }
         
         .confirm-modal { text-align: center; padding: 1rem; }
         .confirm-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .confirm-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
         .confirm-text { font-size: 0.75rem; color: var(--text2); margin-bottom: 1rem; }
         .confirm-btns { display: flex; gap: 0.5rem; justify-content: center; }
-        
-        .upload-box { border: 2px dashed var(--border); border-radius: 10px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .upload-box:hover, .upload-box.dragover { border-color: var(--green); background: rgba(16,185,129,0.05); }
-        .upload-box.has-file { border-color: var(--green); border-style: solid; }
-        .upload-icon { font-size: 1.5rem; margin-bottom: 0.2rem; }
-        .upload-text { font-size: 0.7rem; color: var(--text2); }
-        .upload-file { font-size: 0.65rem; color: var(--green); margin-top: 0.2rem; font-weight: 600; }
-        
-        .alert { padding: 0.45rem 0.6rem; border-radius: 6px; font-size: 0.65rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
-        .alert.info { background: rgba(59,130,246,0.15); color: var(--blue); }
-        .alert.warn { background: rgba(245,158,11,0.15); color: var(--yellow); }
-        .alert.ok { background: rgba(16,185,129,0.15); color: var(--green); }
-        .alert.error { background: rgba(239,68,68,0.15); color: var(--red); }
-        
-        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; }
-        .toast { background: var(--bg-card); border: 1px solid var(--green); padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.7rem; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 20px rgba(0,0,0,0.4); animation: toastIn 0.3s ease; }
-        .toast.error { border-color: var(--red); }
-        @keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
-        .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        
-        .ing-list { border: 1px solid var(--border); border-radius: 6px; max-height: 150px; overflow-y: auto; }
-        .ing-item { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0.45rem; border-bottom: 1px solid var(--border); font-size: 0.65rem; }
-        .ing-item:last-child { border-bottom: none; }
-        
-        .res-box { background: var(--bg-secondary); border-radius: 6px; padding: 0.5rem; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.3rem; margin-top: 0.5rem; }
-        @media (max-width: 400px) { .res-box { grid-template-columns: repeat(3, 1fr); } }
-        .res-item { text-align: center; }
-        .res-item .lbl { font-size: 0.45rem; color: var(--text3); text-transform: uppercase; }
-        .res-item .val { font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700; }
-        
-        .empty { text-align: center; padding: 1rem; color: var(--text3); font-size: 0.7rem; }
-        .empty-icon { font-size: 1.3rem; margin-bottom: 0.3rem; opacity: 0.5; }
-        
-        .chart-box { height: 170px; }
-        .chart-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
-        @media (min-width: 650px) { .chart-grid { grid-template-columns: repeat(2, 1fr); } }
-        
-        .preview { background: var(--bg-secondary); border-radius: 6px; padding: 0.6rem; margin-top: 0.6rem; }
-        .prev-group { background: var(--bg-card); border-radius: 4px; padding: 0.4rem; margin-bottom: 0.3rem; display: flex; justify-content: space-between; font-size: 0.65rem; }
-        
-        .cardapio-tag { display: inline-flex; align-items: center; gap: 0.2rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.55rem; font-weight: 600; }
-        .cardapio-tag.ifood { background: rgba(234,67,53,0.2); color: #ea4335; }
-        .cardapio-tag.anotaai { background: rgba(52,168,83,0.2); color: #34a853; }
-        
-        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-        @media (max-width: 500px) { .compare-grid { grid-template-columns: 1fr; } }
-        .compare-col { background: var(--bg-secondary); border-radius: 6px; padding: 0.5rem; }
-        .compare-header { font-weight: 600; font-size: 0.75rem; margin-bottom: 0.4rem; text-align: center; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
-        .compare-item { display: flex; justify-content: space-between; font-size: 0.65rem; padding: 0.2rem 0; }
-        .compare-diff { font-size: 0.55rem; margin-left: 0.2rem; }
-        .compare-diff.up { color: var(--green); }
-        .compare-diff.down { color: var(--red); }
 
-        .section-title { font-size: 0.7rem; color: var(--text2); margin: 0.6rem 0 0.3rem; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; }
-        
-        .ranking-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--bg-secondary); border-radius: 6px; margin-bottom: 0.3rem; }
-        .ranking-pos { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; }
-        .ranking-pos.gold { background: linear-gradient(135deg, #ffd700, #ffb800); color: #000; }
-        .ranking-pos.silver { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #000; }
-        .ranking-pos.bronze { background: linear-gradient(135deg, #cd7f32, #b87333); color: #fff; }
-        .ranking-pos.normal { background: var(--bg-card); color: var(--text2); }
-        .ranking-info { flex: 1; }
-        .ranking-name { font-size: 0.7rem; font-weight: 600; }
-        .ranking-stats { font-size: 0.55rem; color: var(--text3); }
-        .ranking-value { text-align: right; }
-        .ranking-cmv { font-family: 'Space Mono', monospace; font-size: 0.75rem; font-weight: 700; }
-        .ranking-lucro { font-size: 0.55rem; color: var(--text3); }
-
-        ::-webkit-scrollbar { width: 3px; height: 3px; }
-        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-        
-        .tab-bar { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
-        .tab-btn { padding: 0.4rem 0.8rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; font-size: 0.65rem; color: var(--text2); cursor: pointer; transition: all 0.15s; }
-        .tab-btn:hover { background: var(--bg-hover); }
-        .tab-btn.active { background: var(--green); color: white; border-color: var(--green); }
+        .produto-cmv-row { display: flex; gap: 0.3rem; margin-top: 0.3rem; }
+        .produto-cmv-item { flex: 1; background: var(--bg-secondary); border-radius: 4px; padding: 0.3rem; text-align: center; font-size: 0.55rem; }
+        .produto-cmv-item.ifood { border-top: 2px solid #ea4335; }
+        .produto-cmv-item.anota { border-top: 2px solid #34a853; }
+        .produto-cmv-item .cmv-pct { font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -227,30 +198,20 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.1</span></div>
             </div>
-            <div class="header-right">
-                <div class="sync-status online" id="sync-status">☁️ Online</div>
-                <div class="header-date" id="dataAtual"></div>
-            </div>
+            <div class="sync-status online" id="sync-status">☁️ Online</div>
         </div>
     </header>
 
     <nav class="nav">
         <div class="nav-content">
-            <button class="nav-btn active" data-p="dashboard">📊 Dash</button>
-            <button class="nav-btn" data-p="ingredientes">🧅 Ingred.</button>
-            <button class="nav-btn" data-p="massas">🍝 Massas</button>
-            <button class="nav-btn" data-p="extras">➕ Extras</button>
-            <button class="nav-btn" data-p="bebidas">🥤 Bebidas</button>
-            <button class="nav-btn" data-p="brindes">🎁 Brindes</button>
+            <button class="nav-btn active" data-p="dashboard">📊 Dashboard</button>
             <button class="nav-btn" data-p="produtos">🍽️ Produtos</button>
-            <button class="nav-btn" data-p="combos">🎯 Combos</button>
+            <button class="nav-btn" data-p="ingredientes">🧅 Ingredientes</button>
             <button class="nav-btn" data-p="fichas">📋 Fichas</button>
-            <button class="nav-btn" data-p="importar">📥 Import</button>
+            <button class="nav-btn" data-p="importar">📥 Importar</button>
             <button class="nav-btn" data-p="analise">📈 Análise</button>
-            <button class="nav-btn" data-p="ranking">🏆 Ranking</button>
-            <button class="nav-btn" data-p="comparar">⚖️ Comparar</button>
             <button class="nav-btn" data-p="config">⚙️ Config</button>
         </div>
     </nav>
@@ -260,92 +221,17 @@
         <div class="page active" id="p-dashboard">
             <div class="grid-kpi">
                 <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value" id="k-fat">R$ 0</div></div>
-                <div class="kpi blue"><div class="kpi-label">Custo Real</div><div class="kpi-value" id="k-custo">R$ 0</div></div>
-                <div class="kpi yellow"><div class="kpi-label">CMV</div><div class="kpi-value" id="k-cmv">0%</div></div>
-                <div class="kpi purple"><div class="kpi-label">Lucro</div><div class="kpi-value" id="k-lucro">R$ 0</div></div>
-                <div class="kpi red"><div class="kpi-label">Itens</div><div class="kpi-value" id="k-itens">0</div></div>
+                <div class="kpi blue"><div class="kpi-label">Custo Total</div><div class="kpi-value" id="k-custo">R$ 0</div></div>
+                <div class="kpi yellow"><div class="kpi-label">CMV Geral</div><div class="kpi-value" id="k-cmv">0%</div></div>
+                <div class="kpi purple"><div class="kpi-label">Lucro Bruto</div><div class="kpi-value" id="k-lucro">R$ 0</div></div>
             </div>
             <div class="chart-grid">
-                <div class="card"><div class="card-title">📊 Por Grupo</div><div class="chart-box"><canvas id="chart1"></canvas></div></div>
-                <div class="card"><div class="card-title">📈 CMV por Mês</div><div class="chart-box"><canvas id="chart2"></canvas></div></div>
+                <div class="card"><div class="card-title">📊 CMV por Produto</div><div class="chart-box"><canvas id="chart1"></canvas></div></div>
+                <div class="card"><div class="card-title">📈 CMV Mensal</div><div class="chart-box"><canvas id="chart2"></canvas></div></div>
             </div>
             <div class="card">
-                <div class="card-title">📋 Top Vendas</div>
-                <div class="tbl-wrap" style="margin-top:0.4rem;"><table><thead><tr><th>Grupo</th><th>Qtd</th><th>Fat.</th><th>%</th></tr></thead><tbody id="tbl-dash"></tbody></table></div>
-            </div>
-        </div>
-
-        <!-- INGREDIENTES -->
-        <div class="page" id="p-ingredientes">
-            <div class="card">
-                <div class="card-head">
-                    <span class="card-title">🧅 Ingredientes</span>
-                    <div class="card-actions">
-                        <div class="search-box"><span>🔍</span><input type="text" id="search-ing" placeholder="Buscar..." oninput="filtrarIng()"></div>
-                        <button class="btn btn-s btn-sm" onclick="exportarTabela('ingredientes')">📥 Excel</button>
-                        <button class="btn btn-p" onclick="abrirModal('mod-ing')">+ Novo</button>
-                    </div>
-                </div>
-                <div class="tbl-wrap"><table><thead><tr><th onclick="ordenar('ingredientes','nome')">Nome <span class="sort-icon">↕</span></th><th>Un</th><th onclick="ordenar('ingredientes','custo')">Custo <span class="sort-icon">↕</span></th><th>Forn.</th><th></th></tr></thead><tbody id="tbl-ing"></tbody></table></div>
-            </div>
-        </div>
-
-        <!-- MASSAS -->
-        <div class="page" id="p-massas">
-            <div class="card">
-                <div class="card-head">
-                    <span class="card-title">🍝 Massas</span>
-                    <div class="card-actions">
-                        <div class="search-box"><span>🔍</span><input type="text" id="search-massa" placeholder="Buscar..." oninput="filtrarMassa()"></div>
-                        <button class="btn btn-s btn-sm" onclick="exportarTabela('massas')">📥 Excel</button>
-                        <button class="btn btn-p" onclick="abrirModal('mod-massa')">+ Nova</button>
-                    </div>
-                </div>
-                <div class="alert info">💡 Custo da massa por tamanho (Box P 450g / Box G 800g)</div>
-                <div class="tbl-wrap"><table><thead><tr><th onclick="ordenar('massas','nome')">Tipo <span class="sort-icon">↕</span></th><th onclick="ordenar('massas','custo_p')">Custo P <span class="sort-icon">↕</span></th><th onclick="ordenar('massas','custo_g')">Custo G <span class="sort-icon">↕</span></th><th></th></tr></thead><tbody id="tbl-massa"></tbody></table></div>
-            </div>
-        </div>
-
-        <!-- EXTRAS -->
-        <div class="page" id="p-extras">
-            <div class="card">
-                <div class="card-head">
-                    <span class="card-title">➕ Extras</span>
-                    <div class="card-actions">
-                        <div class="search-box"><span>🔍</span><input type="text" id="search-extra" placeholder="Buscar..." oninput="filtrarExtra()"></div>
-                        <button class="btn btn-s btn-sm" onclick="exportarTabela('extras')">📥 Excel</button>
-                        <button class="btn btn-p" onclick="abrirModal('mod-extra')">+ Novo</button>
-                    </div>
-                </div>
-                <div class="tbl-wrap"><table><thead><tr><th onclick="ordenar('extras','nome')">Nome <span class="sort-icon">↕</span></th><th>Preço</th><th>Custo</th><th onclick="ordenar('extras','cmv')">CMV <span class="sort-icon">↕</span></th><th></th></tr></thead><tbody id="tbl-extra"></tbody></table></div>
-            </div>
-        </div>
-
-        <!-- BEBIDAS -->
-        <div class="page" id="p-bebidas">
-            <div class="card">
-                <div class="card-head">
-                    <span class="card-title">🥤 Bebidas</span>
-                    <div class="card-actions">
-                        <div class="search-box"><span>🔍</span><input type="text" id="search-bebida" placeholder="Buscar..." oninput="filtrarBebida()"></div>
-                        <button class="btn btn-s btn-sm" onclick="exportarTabela('bebidas')">📥 Excel</button>
-                        <button class="btn btn-p" onclick="abrirModal('mod-bebida')">+ Nova</button>
-                    </div>
-                </div>
-                <div class="tbl-wrap"><table><thead><tr><th onclick="ordenar('bebidas','nome')">Nome <span class="sort-icon">↕</span></th><th>Preço</th><th>Custo</th><th onclick="ordenar('bebidas','cmv')">CMV <span class="sort-icon">↕</span></th><th></th></tr></thead><tbody id="tbl-bebida"></tbody></table></div>
-            </div>
-        </div>
-
-        <!-- BRINDES -->
-        <div class="page" id="p-brindes">
-            <div class="card">
-                <div class="card-head">
-                    <span class="card-title">🎁 Brindes</span>
-                    <div class="card-actions">
-                        <button class="btn btn-p" onclick="abrirModal('mod-brinde')">+ Novo</button>
-                    </div>
-                </div>
-                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th></th></tr></thead><tbody id="tbl-brinde"></tbody></table></div>
+                <div class="card-title">🏆 Ranking CMV (últimas vendas)</div>
+                <div class="tbl-wrap" style="margin-top:0.5rem;"><table><thead><tr><th>Produto</th><th>Custo</th><th>CMV iFood</th><th>CMV Anota</th></tr></thead><tbody id="tbl-ranking"></tbody></table></div>
             </div>
         </div>
 
@@ -356,57 +242,54 @@
                     <span class="card-title">🍽️ Produtos</span>
                     <div class="card-actions">
                         <div class="search-box"><span>🔍</span><input type="text" id="search-prod" placeholder="Buscar..." oninput="filtrarProd()"></div>
-                        <button class="btn btn-s btn-sm" onclick="exportarTabela('produtos')">📥 Excel</button>
                         <button class="btn btn-p" onclick="abrirModal('mod-prod')">+ Novo</button>
                     </div>
                 </div>
-                <div class="alert info">💡 Preços por cardápio: <span class="cardapio-tag ifood">iFood</span> <span class="cardapio-tag anotaai">AnotaAi</span></div>
-                <div class="tbl-wrap"><table><thead><tr><th onclick="ordenar('produtos','nome')">Nome <span class="sort-icon">↕</span></th><th>Cat</th><th>iFood P</th><th>iFood G</th><th>Anota P</th><th>Anota G</th><th></th></tr></thead><tbody id="tbl-prod"></tbody></table></div>
+                <div class="alert info">💡 Custo = ficha técnica (ingredientes + embalagem). CMV = Custo ÷ Preço</div>
+                <div class="tbl-wrap"><table><thead><tr><th>Produto</th><th>Cat</th><th>Tam</th><th>Custo</th><th>iFood</th><th>Anota</th><th></th></tr></thead><tbody id="tbl-prod"></tbody></table></div>
             </div>
         </div>
 
-        <!-- COMBOS -->
-        <div class="page" id="p-combos">
+        <!-- INGREDIENTES -->
+        <div class="page" id="p-ingredientes">
             <div class="card">
                 <div class="card-head">
-                    <span class="card-title">🎯 Combos</span>
+                    <span class="card-title">🧅 Ingredientes</span>
                     <div class="card-actions">
-                        <button class="btn btn-s btn-sm" onclick="exportarTabela('combos')">📥 Excel</button>
-                        <button class="btn btn-p" onclick="abrirModal('mod-combo')">+ Novo</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-ing" placeholder="Buscar..." oninput="filtrarIng()"></div>
+                        <button class="btn btn-p" onclick="abrirModal('mod-ing')">+ Novo</button>
                     </div>
                 </div>
-                <div class="alert info">💡 Itens dos combos são redistribuídos na análise de CMV</div>
-                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Comp.</th><th>iFood</th><th>AnotaAi</th><th></th></tr></thead><tbody id="tbl-combo"></tbody></table></div>
+                <div class="alert info">💡 Cadastre ingredientes E embalagens (box, tampa, sacola)</div>
+                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Un</th><th>Custo/Un</th><th>Forn.</th><th></th></tr></thead><tbody id="tbl-ing"></tbody></table></div>
             </div>
         </div>
 
-        <!-- FICHAS -->
+        <!-- FICHAS TÉCNICAS -->
         <div class="page" id="p-fichas">
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.5rem;">📋 Fichas Técnicas</div>
-                <div class="alert info">💡 Configure os ingredientes de cada produto para cálculo real do CMV</div>
+                <div class="card-title" style="margin-bottom:0.6rem;">📋 Fichas Técnicas</div>
+                <div class="alert info">💡 Monte a ficha com ingredientes + embalagem. O custo será salvo no produto.</div>
                 <div class="form-row">
                     <div class="field"><label>Produto</label><select id="ficha-prod" onchange="carregarFicha()"></select></div>
-                    <div class="field"><label>Tamanho</label><select id="ficha-tam" onchange="carregarFicha()"><option value="P">Box P (450g)</option><option value="G" selected>Box G (800g)</option></select></div>
-                    <div class="field"><label>Massa</label><select id="ficha-massa" onchange="calcFicha()"></select></div>
                 </div>
                 <div id="ficha-area" style="display:none;">
-                    <div style="background:var(--bg-secondary);border-radius:6px;padding:0.5rem;margin-top:0.4rem;">
-                        <div style="font-size:0.65rem;font-weight:600;margin-bottom:0.3rem;">🧅 Ingredientes</div>
-                        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.3rem;">
-                            <select id="ficha-ing" style="flex:1;min-width:80px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:0.35rem;color:var(--text);font-size:0.65rem;"></select>
-                            <input type="number" id="ficha-qtd" placeholder="Qtd" step="0.001" style="width:55px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:0.35rem;color:var(--text);font-size:0.65rem;">
+                    <div style="background:var(--bg-secondary);border-radius:8px;padding:0.6rem;margin-top:0.5rem;">
+                        <div style="font-size:0.7rem;font-weight:600;margin-bottom:0.4rem;">🧅 Adicionar Item</div>
+                        <div class="field-inline">
+                            <div class="field"><select id="ficha-ing"></select></div>
+                            <div class="field sm"><input type="number" id="ficha-qtd" placeholder="Qtd" step="0.001"></div>
+                            <div class="field sm"><select id="ficha-un"><option>kg</option><option selected>g</option><option>L</option><option>ml</option><option>un</option></select></div>
                             <button class="btn btn-p btn-sm" onclick="addIngFicha()">+</button>
                         </div>
                         <div class="ing-list" id="ficha-list"></div>
                     </div>
                     <div class="res-box">
-                        <div class="res-item"><div class="lbl">Ingred.</div><div class="val" style="color:var(--yellow);" id="f-cing">R$0</div></div>
-                        <div class="res-item"><div class="lbl">Massa</div><div class="val" style="color:var(--blue);" id="f-cmassa">R$0</div></div>
-                        <div class="res-item"><div class="lbl">Total</div><div class="val" style="color:var(--green);" id="f-ctotal">R$0</div></div>
-                        <div class="res-item"><div class="lbl">Preço iF</div><div class="val" style="color:var(--red);" id="f-preco-if">R$0</div></div>
-                        <div class="res-item"><div class="lbl">CMV</div><div class="val" style="color:var(--purple);" id="f-cmv">0%</div></div>
+                        <div class="res-item"><div class="lbl">Custo Total</div><div class="val" style="color:var(--green);" id="f-custo">R$0</div></div>
+                        <div class="res-item"><div class="lbl">CMV iFood</div><div class="val" style="color:#ea4335;" id="f-cmv-if">0%</div></div>
+                        <div class="res-item"><div class="lbl">CMV Anota</div><div class="val" style="color:#34a853;" id="f-cmv-an">0%</div></div>
                     </div>
+                    <button class="btn btn-p" style="width:100%;margin-top:0.6rem;" onclick="salvarCustoFicha()">💾 Salvar Custo no Produto</button>
                 </div>
             </div>
         </div>
@@ -414,10 +297,10 @@
         <!-- IMPORTAR -->
         <div class="page" id="p-importar">
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.5rem;">📥 Importar Vendas</div>
+                <div class="card-title" style="margin-bottom:0.6rem;">📥 Importar Vendas</div>
                 <div class="upload-box" id="upload-box">
                     <div class="upload-icon">📁</div>
-                    <p class="upload-text">Toque para selecionar</p>
+                    <p class="upload-text">Arraste ou clique para selecionar Excel</p>
                     <p class="upload-file" id="upload-file"></p>
                     <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none">
                 </div>
@@ -425,7 +308,7 @@
             </div>
             <div class="card">
                 <div class="card-head"><span class="card-title">📅 Importações</span></div>
-                <div class="tbl-wrap"><table><thead><tr><th>Período</th><th>Card.</th><th>Fat.</th><th>Custo</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-meses"></tbody></table></div>
+                <div class="tbl-wrap"><table><thead><tr><th>Período</th><th>Plataforma</th><th>Faturamento</th><th>Custo</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-vendas"></tbody></table></div>
             </div>
         </div>
 
@@ -434,58 +317,28 @@
             <div class="card">
                 <div class="card-head">
                     <span class="card-title">📈 Análise Detalhada</span>
-                    <select id="sel-mes" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:4px;padding:0.35rem;color:var(--text);font-size:0.65rem;"></select>
+                    <select id="sel-venda" onchange="mostrarAnalise()"></select>
                 </div>
             </div>
             <div id="analise-area"></div>
         </div>
 
-        <!-- RANKING -->
-        <div class="page" id="p-ranking">
-            <div class="card">
-                <div class="card-head">
-                    <span class="card-title">🏆 Ranking de Lucratividade</span>
-                </div>
-                <div class="tab-bar">
-                    <button class="tab-btn active" onclick="mostrarRanking('lucro')">💰 Mais Lucrativos</button>
-                    <button class="tab-btn" onclick="mostrarRanking('cmv-alto')">⚠️ CMV Alto</button>
-                    <button class="tab-btn" onclick="mostrarRanking('vendidos')">📊 Mais Vendidos</button>
-                </div>
-                <div id="ranking-area"></div>
-            </div>
-        </div>
-
-        <!-- COMPARAR -->
-        <div class="page" id="p-comparar">
-            <div class="card">
-                <div class="card-title" style="margin-bottom:0.5rem;">⚖️ Comparar Períodos</div>
-                <div class="form-row">
-                    <div class="field"><label>Período 1</label><select id="comp-mes1"></select></div>
-                    <div class="field"><label>Período 2</label><select id="comp-mes2"></select></div>
-                    <div class="field" style="display:flex;align-items:flex-end;"><button class="btn btn-p" onclick="compararMeses()">Comparar</button></div>
-                </div>
-            </div>
-            <div id="compare-area"></div>
-        </div>
-
         <!-- CONFIG -->
         <div class="page" id="p-config">
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.5rem;">⚙️ Configurações</div>
-                <div class="alert info">☁️ Dados salvos no servidor (Neon PostgreSQL)</div>
-                <div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <div class="card-title" style="margin-bottom:0.6rem;">⚙️ Configurações</div>
+                <div class="alert info">☁️ Dados salvos no servidor PostgreSQL (Neon)</div>
+                <div style="margin-top:0.6rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
                     <button class="btn btn-s" onclick="setupDB()">🔧 Setup DB</button>
-                    <button class="btn btn-s" onclick="seedDB()">🌱 Dados Iniciais</button>
-                    <button class="btn btn-s" onclick="exportarBackup()">📤 Exportar Backup</button>
-                    <button class="btn btn-s" onclick="recalcularCMV()">🔄 Recalcular CMV</button>
-                    <button class="btn btn-d" onclick="confirmarAcao('limpar')">🗑️ Limpar Tudo</button>
+                    <button class="btn btn-s" onclick="seedDB()">🌱 Dados Exemplo</button>
+                    <button class="btn btn-s" onclick="exportarBackup()">📤 Backup JSON</button>
                 </div>
             </div>
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.5rem;">📊 Estatísticas</div>
+                <div class="card-title">📊 Estatísticas</div>
                 <div class="res-box" style="grid-template-columns:repeat(4,1fr);">
-                    <div class="res-item"><div class="lbl">Ingredientes</div><div class="val" style="color:var(--yellow);" id="stat-ing">0</div></div>
                     <div class="res-item"><div class="lbl">Produtos</div><div class="val" style="color:var(--blue);" id="stat-prod">0</div></div>
+                    <div class="res-item"><div class="lbl">Ingredientes</div><div class="val" style="color:var(--yellow);" id="stat-ing">0</div></div>
                     <div class="res-item"><div class="lbl">Fichas</div><div class="val" style="color:var(--green);" id="stat-fichas">0</div></div>
                     <div class="res-item"><div class="lbl">Vendas</div><div class="val" style="color:var(--purple);" id="stat-vendas">0</div></div>
                 </div>
@@ -493,69 +346,53 @@
         </div>
     </main>
 
-    <!-- MODALS -->
-    <div class="modal-bg" id="mod-ing"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Ingrediente</h3><button class="modal-close" onclick="fecharModal('mod-ing')">×</button></div>
-        <form id="form-ing"><input type="hidden" id="ing-id">
-            <div class="form-row"><div class="field"><label>Nome *</label><input type="text" id="ing-nome" required></div><div class="field"><label>Unidade *</label><select id="ing-un" required><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="ml">ml</option><option value="un">un</option></select></div></div>
-            <div class="form-row"><div class="field"><label>Custo/Un (R$) *</label><input type="number" id="ing-custo" step="0.01" min="0"></div><div class="field"><label>Fornecedor</label><input type="text" id="ing-forn"></div></div>
-            <button type="submit" class="btn btn-p" style="width:100%;"><span class="btn-text">💾 Salvar</span></button>
-        </form>
-    </div></div>
-
-    <div class="modal-bg" id="mod-massa"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Massa</h3><button class="modal-close" onclick="fecharModal('mod-massa')">×</button></div>
-        <form id="form-massa"><input type="hidden" id="massa-id">
-            <div class="field"><label>Tipo *</label><input type="text" id="massa-nome" required></div>
-            <div class="form-row"><div class="field"><label>Custo Box P (R$) *</label><input type="number" id="massa-cp" step="0.01" min="0"></div><div class="field"><label>Custo Box G (R$) *</label><input type="number" id="massa-cg" step="0.01" min="0"></div></div>
-            <button type="submit" class="btn btn-p" style="width:100%;"><span class="btn-text">💾 Salvar</span></button>
-        </form>
-    </div></div>
-
-    <div class="modal-bg" id="mod-extra"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Extra</h3><button class="modal-close" onclick="fecharModal('mod-extra')">×</button></div>
-        <form id="form-extra"><input type="hidden" id="extra-id">
-            <div class="field"><label>Nome *</label><input type="text" id="extra-nome" required></div>
-            <div class="form-row"><div class="field"><label>Preço Venda (R$)</label><input type="number" id="extra-preco" step="0.01" min="0"></div><div class="field"><label>Custo (R$)</label><input type="number" id="extra-custo" step="0.01" min="0"></div></div>
-            <button type="submit" class="btn btn-p" style="width:100%;"><span class="btn-text">💾 Salvar</span></button>
-        </form>
-    </div></div>
-
-    <div class="modal-bg" id="mod-bebida"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Bebida</h3><button class="modal-close" onclick="fecharModal('mod-bebida')">×</button></div>
-        <form id="form-bebida"><input type="hidden" id="bebida-id">
-            <div class="field"><label>Nome *</label><input type="text" id="bebida-nome" required></div>
-            <div class="form-row"><div class="field"><label>Preço Venda (R$)</label><input type="number" id="bebida-preco" step="0.01" min="0"></div><div class="field"><label>Custo (R$)</label><input type="number" id="bebida-custo" step="0.01" min="0"></div></div>
-            <button type="submit" class="btn btn-p" style="width:100%;"><span class="btn-text">💾 Salvar</span></button>
-        </form>
-    </div></div>
-
-    <div class="modal-bg" id="mod-brinde"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Brinde</h3><button class="modal-close" onclick="fecharModal('mod-brinde')">×</button></div>
-        <form id="form-brinde"><input type="hidden" id="brinde-id">
-            <div class="field"><label>Nome *</label><input type="text" id="brinde-nome" required></div>
-            <button type="submit" class="btn btn-p" style="width:100%;"><span class="btn-text">💾 Salvar</span></button>
-        </form>
-    </div></div>
-
-    <div class="modal-bg" id="mod-prod"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Produto</h3><button class="modal-close" onclick="fecharModal('mod-prod')">×</button></div>
+    <!-- MODAL PRODUTO -->
+    <div class="modal-bg" id="mod-prod"><div class="modal"><div class="modal-handle"></div>
+        <div class="modal-head"><h3>Produto</h3><button class="modal-close" onclick="fecharModal('mod-prod')">×</button></div>
         <form id="form-prod"><input type="hidden" id="prod-id">
-            <div class="form-row"><div class="field"><label>Nome *</label><input type="text" id="prod-nome" required></div><div class="field"><label>Categoria *</label><select id="prod-cat" required><option value="macarrao">Macarrão</option><option value="risoto">Risoto</option><option value="nhoque">Nhoque</option><option value="salada">Salada</option><option value="sobremesa">Sobremesa</option><option value="outros">Outros</option></select></div></div>
-            <div class="section-title">📱 Preços iFood</div>
-            <div class="form-row"><div class="field"><label>Box P (R$)</label><input type="number" id="prod-if-p" step="0.01" min="0"></div><div class="field"><label>Box G (R$)</label><input type="number" id="prod-if-g" step="0.01" min="0"></div></div>
-            <div class="section-title">📲 Preços AnotaAi</div>
-            <div class="form-row"><div class="field"><label>Box P (R$)</label><input type="number" id="prod-an-p" step="0.01" min="0"></div><div class="field"><label>Box G (R$)</label><input type="number" id="prod-an-g" step="0.01" min="0"></div></div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.5rem;"><span class="btn-text">💾 Salvar</span></button>
+            <div class="form-row">
+                <div class="field"><label>Nome *</label><input type="text" id="prod-nome" required placeholder="Ex: Bolonhesa"></div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Categoria</label><select id="prod-cat"><option value="macarrao">Macarrão</option><option value="risoto">Risoto</option><option value="nhoque">Nhoque</option><option value="combo">Combo</option><option value="outros">Outros</option></select></div>
+                <div class="field"><label>Tamanho</label><select id="prod-tam"><option value="P">Box P (450g)</option><option value="G" selected>Box G (800g)</option></select></div>
+            </div>
+            
+            <div class="section-title">💰 Custo (da Ficha Técnica)</div>
+            <div class="field"><label>Custo (R$)</label><input type="number" id="prod-custo" step="0.01" min="0" placeholder="0.00"></div>
+            
+            <div class="section-title">📱 Preço de Venda iFood</div>
+            <div class="field"><label>Preço iFood (R$)</label><input type="number" id="prod-preco-if" step="0.01" min="0" placeholder="0.00"></div>
+            
+            <div class="section-title">📲 Preço de Venda AnotaAi</div>
+            <div class="field"><label>Preço AnotaAi (R$)</label><input type="number" id="prod-preco-an" step="0.01" min="0" placeholder="0.00"></div>
+            
+            <div class="cmv-display" id="prod-cmv-preview">
+                <div class="cmv-box ifood"><div class="plat">📱 iFood</div><div class="cmv-val" id="prev-cmv-if">0%</div><div class="cmv-price" id="prev-price-if">-</div></div>
+                <div class="cmv-box anota"><div class="plat">📲 AnotaAi</div><div class="cmv-val" id="prev-cmv-an">0%</div><div class="cmv-price" id="prev-price-an">-</div></div>
+            </div>
+            
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.8rem;"><span class="btn-text">💾 Salvar</span></button>
         </form>
     </div></div>
 
-    <div class="modal-bg" id="mod-combo"><div class="modal"><div class="modal-handle"></div><div class="modal-head"><h3>Combo</h3><button class="modal-close" onclick="fecharModal('mod-combo')">×</button></div>
-        <form id="form-combo"><input type="hidden" id="combo-id">
-            <div class="field"><label>Nome *</label><input type="text" id="combo-nome" required></div>
-            <div class="section-title">💰 Preços</div>
-            <div class="form-row"><div class="field"><label>iFood (R$)</label><input type="number" id="combo-preco-if" step="0.01" min="0"></div><div class="field"><label>AnotaAi (R$)</label><input type="number" id="combo-preco-an" step="0.01" min="0"></div></div>
-            <div class="section-title">📦 Composição</div>
-            <div class="form-row"><div class="field"><label>Qtd Box P</label><input type="number" id="combo-qp" value="0" min="0"></div><div class="field"><label>Qtd Box G</label><input type="number" id="combo-qg" value="0" min="0"></div></div>
-            <div class="form-row"><div class="field"><label>Bebida</label><select id="combo-bebida"><option value="">Nenhuma</option></select></div><div class="field"><label>Brinde</label><select id="combo-brinde"><option value="">Nenhum</option></select></div></div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.5rem;"><span class="btn-text">💾 Salvar</span></button>
+    <!-- MODAL INGREDIENTE -->
+    <div class="modal-bg" id="mod-ing"><div class="modal"><div class="modal-handle"></div>
+        <div class="modal-head"><h3>Ingrediente</h3><button class="modal-close" onclick="fecharModal('mod-ing')">×</button></div>
+        <form id="form-ing"><input type="hidden" id="ing-id">
+            <div class="form-row">
+                <div class="field"><label>Nome *</label><input type="text" id="ing-nome" required placeholder="Ex: Carne Moída"></div>
+                <div class="field"><label>Unidade</label><select id="ing-un"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="ml">ml</option><option value="un">un</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Custo por Unidade (R$)</label><input type="number" id="ing-custo" step="0.0001" min="0" placeholder="0.00"></div>
+                <div class="field"><label>Fornecedor</label><input type="text" id="ing-forn" placeholder="Opcional"></div>
+            </div>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.5rem;">💾 Salvar</button>
         </form>
     </div></div>
 
+    <!-- MODAL CONFIRMAR -->
     <div class="modal-bg" id="mod-confirm"><div class="modal" style="max-width:350px;">
         <div class="confirm-modal">
             <div class="confirm-icon" id="confirm-icon">⚠️</div>
@@ -563,58 +400,28 @@
             <div class="confirm-text" id="confirm-text">Deseja continuar?</div>
             <div class="confirm-btns">
                 <button class="btn btn-s" onclick="fecharModal('mod-confirm')">Cancelar</button>
-                <button class="btn btn-d" id="confirm-btn" onclick="">Confirmar</button>
+                <button class="btn btn-d" id="confirm-btn">Confirmar</button>
             </div>
         </div>
     </div></div>
 
 <script>
-// ==================== API HELPERS ====================
+// ==================== CONFIG ====================
 const API = '/api';
-let pendingDelete = null;
-
-async function api(endpoint, method = 'GET', body = null) {
-    try {
-        const opts = { method, headers: { 'Content-Type': 'application/json' } };
-        if (body) opts.body = JSON.stringify(body);
-        const res = await fetch(API + '/' + endpoint, opts);
-        if (!res.ok) {
-            const errText = await res.text();
-            throw new Error(errText || 'Erro de rede');
-        }
-        return await res.json();
-    } catch (e) {
-        console.error('API Error:', e);
-        setSyncStatus(false);
-        throw e;
-    }
-}
-
-function setSyncStatus(online) {
-    const el = $('sync-status');
-    if (online) {
-        el.className = 'sync-status online';
-        el.innerHTML = '☁️ Online';
-    } else {
-        el.className = 'sync-status offline';
-        el.innerHTML = '⚠️ Offline';
-    }
-}
-
-// ==================== DATABASE ====================
-const DB = { ingredientes: [], massas: [], extras: [], bebidas: [], brindes: [], produtos: [], combos: [], fichas: [], vendas: [] };
-let importData = null, chart1 = null, chart2 = null;
-let sortConfig = {};
+const DB = { produtos: [], ingredientes: [], fichas: [], vendas: [] };
+let chart1 = null, chart2 = null;
 let filterText = {};
 
 // ==================== UTILS ====================
 const $ = id => document.getElementById(id);
 const R$ = v => 'R$ ' + (parseFloat(v)||0).toFixed(2).replace('.',',');
-const pct = (a,b) => b > 0 ? ((a/b)*100).toFixed(1) : '0';
+const pct = v => (parseFloat(v)||0).toFixed(1) + '%';
+const calcCMV = (custo, preco) => preco > 0 ? ((custo / preco) * 100) : 0;
+const cmvClass = cmv => cmv <= 25 ? 'green' : cmv <= 35 ? 'yellow' : 'red';
 
 function toast(msg, err) { 
     $('toast-container').innerHTML = `<div class="toast ${err?'error':''}">${err?'❌':'✅'} ${msg}</div>`; 
-    setTimeout(() => $('toast-container').innerHTML = '', 2500); 
+    setTimeout(() => $('toast-container').innerHTML = '', 3000); 
 }
 
 function showLoading(show) { 
@@ -623,119 +430,144 @@ function showLoading(show) {
         el = document.createElement('div'); 
         el.id = 'loading-overlay'; 
         el.className = 'loading-overlay'; 
-        el.innerHTML = '<div class="spinner"></div><div style="color:var(--text2);font-size:0.75rem;">Carregando...</div>'; 
+        el.innerHTML = '<div class="spinner"></div><div style="color:var(--text2);">Carregando...</div>'; 
         document.body.appendChild(el); 
     } else if(!show && el) el.remove(); 
 }
 
-function setBtnLoading(btn, loading) {
-    if(loading) {
-        btn.classList.add('btn-loading');
-        btn.disabled = true;
-    } else {
-        btn.classList.remove('btn-loading');
-        btn.disabled = false;
+function setSyncStatus(ok) {
+    const el = $('sync-status');
+    el.className = 'sync-status ' + (ok ? 'online' : 'offline');
+    el.innerHTML = ok ? '☁️ Online' : '⚠️ Offline';
+}
+
+// ==================== API ====================
+async function api(endpoint, method = 'GET', body = null) {
+    try {
+        const opts = { method, headers: { 'Content-Type': 'application/json' } };
+        if (body) opts.body = JSON.stringify(body);
+        const res = await fetch(API + '/' + endpoint, opts);
+        if (!res.ok) throw new Error(await res.text());
+        setSyncStatus(true);
+        return await res.json();
+    } catch (e) {
+        console.error('API Error:', e);
+        setSyncStatus(false);
+        throw e;
     }
 }
 
-function abrirModal(id, editId) {
-    // Limpar formulário primeiro
-    const form = $(id).querySelector('form');
-    if(form) {
-        form.reset();
-        // Limpar campo hidden explicitamente
-        const hiddenField = form.querySelector('input[type="hidden"]');
-        if(hiddenField) hiddenField.value = '';
+// ==================== LOAD ====================
+async function loadAll() {
+    showLoading(true);
+    try {
+        DB.produtos = await api('produtos');
+        DB.ingredientes = await api('ingredientes');
+        DB.fichas = await api('fichas');
+        DB.vendas = await api('vendas');
+        renderAll();
+    } catch (e) {
+        toast('Erro ao carregar: ' + e.message, true);
     }
-    
-    // Se for edição, preencher os dados
-    if(editId) preencherForm(id, editId);
-    
+    showLoading(false);
+}
+
+// ==================== MODAL ====================
+function abrirModal(id, editId) {
+    const form = $(id).querySelector('form');
+    if (form) {
+        form.reset();
+        const h = form.querySelector('input[type="hidden"]');
+        if (h) h.value = '';
+    }
+    if (editId) preencherForm(id, editId);
     $(id).classList.add('show');
-    if(id === 'mod-combo') atualizarSelectsCombo();
     document.body.style.overflow = 'hidden';
+    
+    // Atualizar preview CMV ao abrir
+    if (id === 'mod-prod') atualizarPreviewCMV();
 }
 
 function fecharModal(id) {
     $(id).classList.remove('show');
     document.body.style.overflow = '';
-    const form = $(id).querySelector('form');
-    if(form) {
-        form.reset();
-        // Limpar campos hidden explicitamente
-        const hiddenFields = form.querySelectorAll('input[type="hidden"]');
-        hiddenFields.forEach(f => f.value = '');
-    }
-    pendingDelete = null;
 }
 
 function confirmarAcao(tipo, id) {
-    const configs = {
-        'delete-ing': { icon: '🗑️', title: 'Excluir Ingrediente?', text: 'Esta ação não pode ser desfeita.', action: () => execDelete('ingredientes', id) },
-        'delete-massa': { icon: '🗑️', title: 'Excluir Massa?', text: 'Esta ação não pode ser desfeita.', action: () => execDelete('massas', id) },
-        'delete-extra': { icon: '🗑️', title: 'Excluir Extra?', text: 'Esta ação não pode ser desfeita.', action: () => execDelete('extras', id) },
-        'delete-bebida': { icon: '🗑️', title: 'Excluir Bebida?', text: 'Esta ação não pode ser desfeita.', action: () => execDelete('bebidas', id) },
-        'delete-brinde': { icon: '🗑️', title: 'Excluir Brinde?', text: 'Esta ação não pode ser desfeita.', action: () => execDelete('brindes', id) },
-        'delete-prod': { icon: '🗑️', title: 'Excluir Produto?', text: 'Isso também removerá as fichas técnicas.', action: () => execDelete('produtos', id) },
-        'delete-combo': { icon: '🗑️', title: 'Excluir Combo?', text: 'Esta ação não pode ser desfeita.', action: () => execDelete('combos', id) },
-        'delete-venda': { icon: '🗑️', title: 'Excluir Importação?', text: 'Os dados de venda serão removidos.', action: () => execDelete('vendas', id) },
-        'limpar': { icon: '⚠️', title: 'Limpar Todos os Dados?', text: 'ATENÇÃO: Isso apagará TUDO permanentemente!', action: () => limparTudo() }
-    };
-    const cfg = configs[tipo];
-    if(!cfg) return;
+    const cfg = {
+        'delete-prod': { icon: '🗑️', title: 'Excluir Produto?', text: 'Também remove fichas técnicas associadas.', fn: () => execDelete('produtos', id) },
+        'delete-ing': { icon: '🗑️', title: 'Excluir Ingrediente?', text: 'Remove de todas as fichas.', fn: () => execDelete('ingredientes', id) },
+        'delete-venda': { icon: '🗑️', title: 'Excluir Importação?', text: 'Remove dados de vendas do período.', fn: () => execDelete('vendas', id) },
+    }[tipo];
+    if (!cfg) return;
     
     $('confirm-icon').textContent = cfg.icon;
     $('confirm-title').textContent = cfg.title;
     $('confirm-text').textContent = cfg.text;
-    $('confirm-btn').onclick = () => { cfg.action(); fecharModal('mod-confirm'); };
+    $('confirm-btn').onclick = () => { cfg.fn(); fecharModal('mod-confirm'); };
     abrirModal('mod-confirm');
 }
 
 async function execDelete(tabela, id) {
     try {
-        await api(tabela, 'DELETE', {id});
+        await api(tabela, 'DELETE', { id });
         DB[tabela] = DB[tabela].filter(x => x.id !== id);
         renderAll();
-        toast('Excluído com sucesso!');
-    } catch(e) {
-        toast('Erro ao excluir!', true);
+        toast('Excluído!');
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
     }
 }
 
 function preencherForm(mid, id) {
-    const m = { 
-        'mod-ing': () => { const i = DB.ingredientes.find(x=>x.id===id); if(i){ $('ing-id').value=id; $('ing-nome').value=i.nome; $('ing-un').value=i.un; $('ing-custo').value=i.custo; $('ing-forn').value=i.forn||''; }},
-        'mod-massa': () => { const i = DB.massas.find(x=>x.id===id); if(i){ $('massa-id').value=id; $('massa-nome').value=i.nome; $('massa-cp').value=i.custo_p; $('massa-cg').value=i.custo_g; }},
-        'mod-extra': () => { const i = DB.extras.find(x=>x.id===id); if(i){ $('extra-id').value=id; $('extra-nome').value=i.nome; $('extra-preco').value=i.preco; $('extra-custo').value=i.custo; }},
-        'mod-bebida': () => { const i = DB.bebidas.find(x=>x.id===id); if(i){ $('bebida-id').value=id; $('bebida-nome').value=i.nome; $('bebida-preco').value=i.preco; $('bebida-custo').value=i.custo; }},
-        'mod-brinde': () => { const i = DB.brindes.find(x=>x.id===id); if(i){ $('brinde-id').value=id; $('brinde-nome').value=i.nome; }},
-        'mod-prod': () => { const i = DB.produtos.find(x=>x.id===id); if(i){ $('prod-id').value=id; $('prod-nome').value=i.nome; $('prod-cat').value=i.cat; $('prod-if-p').value=i.ifood_p||''; $('prod-if-g').value=i.ifood_g||''; $('prod-an-p').value=i.anota_p||''; $('prod-an-g').value=i.anota_g||''; }},
-        'mod-combo': () => { const i = DB.combos.find(x=>x.id===id); if(i){ $('combo-id').value=id; $('combo-nome').value=i.nome; $('combo-preco-if').value=i.preco_ifood; $('combo-preco-an').value=i.preco_anota; $('combo-qp').value=i.qp||0; $('combo-qg').value=i.qg||0; setTimeout(()=>{ $('combo-bebida').value=i.bebida_id||''; $('combo-brinde').value=i.brinde_id||''; },50); }}
-    }; 
-    if(m[mid]) m[mid]();
+    if (mid === 'mod-prod') {
+        const p = DB.produtos.find(x => x.id === id);
+        if (p) {
+            $('prod-id').value = id;
+            $('prod-nome').value = p.nome;
+            $('prod-cat').value = p.cat || 'macarrao';
+            $('prod-tam').value = p.tam || 'G';
+            $('prod-custo').value = p.custo || '';
+            $('prod-preco-if').value = p.preco_ifood || '';
+            $('prod-preco-an').value = p.preco_anota || '';
+            atualizarPreviewCMV();
+        }
+    } else if (mid === 'mod-ing') {
+        const i = DB.ingredientes.find(x => x.id === id);
+        if (i) {
+            $('ing-id').value = id;
+            $('ing-nome').value = i.nome;
+            $('ing-un').value = i.un || 'kg';
+            $('ing-custo').value = i.custo || '';
+            $('ing-forn').value = i.forn || '';
+        }
+    }
 }
 
-// ==================== LOAD DATA ====================
-async function loadAll() {
-    showLoading(true);
-    try {
-        DB.ingredientes = await api('ingredientes');
-        DB.massas = await api('massas');
-        DB.extras = await api('extras');
-        DB.bebidas = await api('bebidas');
-        DB.brindes = await api('brindes');
-        DB.produtos = await api('produtos');
-        DB.combos = await api('combos');
-        DB.fichas = await api('fichas');
-        DB.vendas = await api('vendas');
-        setSyncStatus(true);
-        renderAll();
-        atualizarStats();
-    } catch (e) {
-        toast('Erro ao carregar dados!', true);
-    }
-    showLoading(false);
+// ==================== PREVIEW CMV NO MODAL ====================
+function atualizarPreviewCMV() {
+    const custo = parseFloat($('prod-custo').value) || 0;
+    const precoIf = parseFloat($('prod-preco-if').value) || 0;
+    const precoAn = parseFloat($('prod-preco-an').value) || 0;
+    
+    const cmvIf = calcCMV(custo, precoIf);
+    const cmvAn = calcCMV(custo, precoAn);
+    
+    $('prev-cmv-if').textContent = pct(cmvIf);
+    $('prev-cmv-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('prev-price-if').textContent = precoIf > 0 ? R$(precoIf) : '-';
+    
+    $('prev-cmv-an').textContent = pct(cmvAn);
+    $('prev-cmv-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('prev-price-an').textContent = precoAn > 0 ? R$(precoAn) : '-';
 }
+
+// Listeners para atualizar preview em tempo real
+['prod-custo', 'prod-preco-if', 'prod-preco-an'].forEach(id => {
+    document.addEventListener('DOMContentLoaded', () => {
+        $(id).addEventListener('input', atualizarPreviewCMV);
+    });
+});
 
 // ==================== NAVIGATION ====================
 document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -748,466 +580,413 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     };
 });
 
-// ==================== SORTING ====================
-function ordenar(tabela, campo) {
-    if(!sortConfig[tabela]) sortConfig[tabela] = { campo: null, asc: true };
-    if(sortConfig[tabela].campo === campo) {
-        sortConfig[tabela].asc = !sortConfig[tabela].asc;
-    } else {
-        sortConfig[tabela].campo = campo;
-        sortConfig[tabela].asc = true;
-    }
-    renderAll();
-}
-
-function getSorted(arr, tabela) {
-    const cfg = sortConfig[tabela];
-    if(!cfg || !cfg.campo) return arr;
-    return [...arr].sort((a,b) => {
-        let va = a[cfg.campo], vb = b[cfg.campo];
-        if(typeof va === 'string') va = va.toLowerCase();
-        if(typeof vb === 'string') vb = vb.toLowerCase();
-        if(va < vb) return cfg.asc ? -1 : 1;
-        if(va > vb) return cfg.asc ? 1 : -1;
-        return 0;
-    });
-}
-
 // ==================== FILTERING ====================
-function filtrarIng() { filterText.ingredientes = $('search-ing').value.toLowerCase(); renderIng(); }
-function filtrarMassa() { filterText.massas = $('search-massa').value.toLowerCase(); renderMassa(); }
-function filtrarExtra() { filterText.extras = $('search-extra').value.toLowerCase(); renderExtra(); }
-function filtrarBebida() { filterText.bebidas = $('search-bebida').value.toLowerCase(); renderBebida(); }
 function filtrarProd() { filterText.produtos = $('search-prod').value.toLowerCase(); renderProd(); }
+function filtrarIng() { filterText.ingredientes = $('search-ing').value.toLowerCase(); renderIng(); }
 
-function getFiltered(arr, tabela, campo = 'nome') {
-    const txt = filterText[tabela];
-    if(!txt) return arr;
-    return arr.filter(x => x[campo].toLowerCase().includes(txt));
+function filtrar(arr, key) {
+    const txt = filterText[key];
+    if (!txt) return arr;
+    return arr.filter(x => x.nome.toLowerCase().includes(txt));
 }
 
 // ==================== RENDERS ====================
-function renderIng() { 
-    let data = getFiltered(DB.ingredientes, 'ingredientes');
-    data = getSorted(data, 'ingredientes');
-    $('tbl-ing').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🧅</div>Nenhum</div></td></tr>' : data.map(i => `<tr><td><b>${i.nome}</b></td><td>${i.un}</td><td class="mono">${R$(i.custo)}</td><td>${i.forn||'-'}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-ing',${i.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-ing',${i.id})">🗑️</button></td></tr>`).join(''); 
+function renderProd() {
+    let data = filtrar(DB.produtos, 'produtos');
+    $('tbl-prod').innerHTML = data.length === 0 ? 
+        '<tr><td colspan="7"><div class="empty"><div class="empty-icon">🍽️</div>Nenhum produto</div></td></tr>' :
+        data.map(p => {
+            const cmvIf = calcCMV(p.custo, p.preco_ifood);
+            const cmvAn = calcCMV(p.custo, p.preco_anota);
+            const catBadge = { macarrao: 'blue', risoto: 'orange', nhoque: 'pink', combo: 'purple', outros: 'cyan' }[p.cat] || 'cyan';
+            return `<tr>
+                <td><b>${p.nome}</b></td>
+                <td><span class="badge ${catBadge}">${(p.cat||'').slice(0,3)}</span></td>
+                <td>${p.tam || 'G'}</td>
+                <td class="mono">${p.custo > 0 ? R$(p.custo) : '-'}</td>
+                <td><span class="badge ${cmvClass(cmvIf)}">${pct(cmvIf)}</span></td>
+                <td><span class="badge ${cmvClass(cmvAn)}">${pct(cmvAn)}</span></td>
+                <td class="actions">
+                    <button class="btn btn-e btn-sm" onclick="abrirModal('mod-prod',${p.id})">✏️</button>
+                    <button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-prod',${p.id})">🗑️</button>
+                </td>
+            </tr>`;
+        }).join('');
 }
 
-function renderMassa() { 
-    let data = getFiltered(DB.massas, 'massas');
-    data = getSorted(data, 'massas');
-    $('tbl-massa').innerHTML = data.length === 0 ? '<tr><td colspan="4"><div class="empty"><div class="empty-icon">🍝</div>Nenhum</div></td></tr>' : data.map(m => `<tr><td><b>${m.nome}</b></td><td class="mono">${R$(m.custo_p)}</td><td class="mono">${R$(m.custo_g)}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-massa',${m.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-massa',${m.id})">🗑️</button></td></tr>`).join(''); 
+function renderIng() {
+    let data = filtrar(DB.ingredientes, 'ingredientes');
+    $('tbl-ing').innerHTML = data.length === 0 ?
+        '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🧅</div>Nenhum ingrediente</div></td></tr>' :
+        data.map(i => `<tr>
+            <td><b>${i.nome}</b></td>
+            <td>${i.un || 'kg'}</td>
+            <td class="mono">${R$(i.custo)}</td>
+            <td>${i.forn || '-'}</td>
+            <td class="actions">
+                <button class="btn btn-e btn-sm" onclick="abrirModal('mod-ing',${i.id})">✏️</button>
+                <button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-ing',${i.id})">🗑️</button>
+            </td>
+        </tr>`).join('');
 }
 
-function renderExtra() { 
-    let data = getFiltered(DB.extras, 'extras');
-    data = data.map(e => ({...e, cmv: e.preco > 0 ? (e.custo/e.preco)*100 : 0}));
-    data = getSorted(data, 'extras');
-    $('tbl-extra').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty"><div class="empty-icon">➕</div>Nenhum</div></td></tr>' : data.map(e => `<tr><td><b>${e.nome}</b></td><td class="mono">${R$(e.preco)}</td><td class="mono">${R$(e.custo)}</td><td><span class="badge ${e.cmv<=30?'green':e.cmv<=40?'yellow':'red'}">${e.cmv.toFixed(0)}%</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-extra',${e.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-extra',${e.id})">🗑️</button></td></tr>`).join(''); 
+function renderVendas() {
+    $('tbl-vendas').innerHTML = DB.vendas.length === 0 ?
+        '<tr><td colspan="6"><div class="empty"><div class="empty-icon">📅</div>Nenhuma importação</div></td></tr>' :
+        DB.vendas.map(v => {
+            const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
+            return `<tr>
+                <td><b>${v.mes}/${v.ano}</b></td>
+                <td><span class="tag ${v.cardapio}">${v.cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}</span></td>
+                <td class="mono">${R$(v.total_fat)}</td>
+                <td class="mono">${R$(v.total_custo)}</td>
+                <td><span class="badge ${cmvClass(cmv)}">${pct(cmv)}</span></td>
+                <td class="actions"><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-venda',${v.id})">🗑️</button></td>
+            </tr>`;
+        }).join('');
+    
+    // Atualizar select de análise
+    $('sel-venda').innerHTML = '<option value="">Selecione...</option>' + 
+        DB.vendas.map(v => `<option value="${v.id}">${v.mes}/${v.ano} - ${v.cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}</option>`).join('');
 }
 
-function renderBebida() { 
-    let data = getFiltered(DB.bebidas, 'bebidas');
-    data = data.map(b => ({...b, cmv: b.preco > 0 ? (b.custo/b.preco)*100 : 0}));
-    data = getSorted(data, 'bebidas');
-    $('tbl-bebida').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🥤</div>Nenhum</div></td></tr>' : data.map(b => `<tr><td><b>${b.nome}</b></td><td class="mono">${R$(b.preco)}</td><td class="mono">${R$(b.custo)}</td><td><span class="badge ${b.cmv<=40?'green':b.cmv<=50?'yellow':'red'}">${b.cmv.toFixed(0)}%</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-bebida',${b.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-bebida',${b.id})">🗑️</button></td></tr>`).join(''); 
+function renderFichaSelects() {
+    $('ficha-prod').innerHTML = '<option value="">Selecione produto...</option>' + 
+        DB.produtos.map(p => `<option value="${p.id}">${p.nome} (${p.tam || 'G'})</option>`).join('');
+    $('ficha-ing').innerHTML = '<option value="">Selecione ingrediente...</option>' + 
+        DB.ingredientes.map(i => `<option value="${i.id}">${i.nome} (${R$(i.custo)}/${i.un})</option>`).join('');
 }
 
-function renderBrinde() { 
-    $('tbl-brinde').innerHTML = DB.brindes.length === 0 ? '<tr><td colspan="2"><div class="empty"><div class="empty-icon">🎁</div>Nenhum</div></td></tr>' : DB.brindes.map(b => `<tr><td><b>${b.nome}</b></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-brinde',${b.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-brinde',${b.id})">🗑️</button></td></tr>`).join(''); 
-}
-
-function renderProd() { 
-    let data = getFiltered(DB.produtos, 'produtos');
-    data = getSorted(data, 'produtos');
-    $('tbl-prod').innerHTML = data.length === 0 ? '<tr><td colspan="7"><div class="empty"><div class="empty-icon">🍽️</div>Nenhum</div></td></tr>' : data.map(p => `<tr><td><b>${p.nome}</b></td><td><span class="badge ${p.cat==='macarrao'?'blue':p.cat==='risoto'?'orange':p.cat==='nhoque'?'pink':'cyan'}">${p.cat.slice(0,3)}</span></td><td class="mono">${p.ifood_p>0?R$(p.ifood_p):'-'}</td><td class="mono">${p.ifood_g>0?R$(p.ifood_g):'-'}</td><td class="mono">${p.anota_p>0?R$(p.anota_p):'-'}</td><td class="mono">${p.anota_g>0?R$(p.anota_g):'-'}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-prod',${p.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-prod',${p.id})">🗑️</button></td></tr>`).join(''); 
-}
-
-function renderCombo() { 
-    $('tbl-combo').innerHTML = DB.combos.length === 0 ? '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🎯</div>Nenhum</div></td></tr>' : DB.combos.map(c => { 
-        let comp = []; 
-        if(c.qp>0) comp.push(`${c.qp}xP`); 
-        if(c.qg>0) comp.push(`${c.qg}xG`); 
-        if(c.bebida_id) comp.push('🥤'); 
-        if(c.brinde_id) comp.push('🎁'); 
-        return `<tr><td><b>${c.nome}</b></td><td style="font-size:0.55rem;">${comp.join('+')}</td><td class="mono">${R$(c.preco_ifood)}</td><td class="mono">${R$(c.preco_anota)}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-combo',${c.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-combo',${c.id})">🗑️</button></td></tr>`; 
-    }).join(''); 
-}
-
-function renderMeses() { 
-    $('tbl-meses').innerHTML = DB.vendas.length === 0 ? '<tr><td colspan="6"><div class="empty"><div class="empty-icon">📅</div>Nenhum</div></td></tr>' : DB.vendas.map(v => { 
-        const cmv = v.total_fat > 0 ? ((v.total_custo/v.total_fat)*100).toFixed(0) : '0'; 
-        return `<tr><td><b>${v.mes}/${v.ano}</b></td><td><span class="cardapio-tag ${v.cardapio}">${v.cardapio==='ifood'?'iFood':'AnotaAi'}</span></td><td class="mono">${R$(v.total_fat)}</td><td class="mono">${R$(v.total_custo)}</td><td><span class="badge ${cmv<=30?'green':cmv<=40?'yellow':'red'}">${cmv}%</span></td><td class="actions"><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-venda',${v.id})">🗑️</button></td></tr>`; 
-    }).join(''); 
-    atualizarSelectsMeses(); 
-}
-
-function atualizarSelectsMeses() {
-    const opts = '<option value="">Selecione</option>' + DB.vendas.map(v => `<option value="${v.id}">${v.mes}/${v.ano} - ${v.cardapio==='ifood'?'iFood':'AnotaAi'}</option>`).join('');
-    $('sel-mes').innerHTML = opts;
-    $('comp-mes1').innerHTML = opts;
-    $('comp-mes2').innerHTML = opts;
-}
-
-function atualizarStats() {
-    $('stat-ing').textContent = DB.ingredientes.length;
+function renderStats() {
     $('stat-prod').textContent = DB.produtos.length;
+    $('stat-ing').textContent = DB.ingredientes.length;
     $('stat-fichas').textContent = DB.fichas.length;
     $('stat-vendas').textContent = DB.vendas.length;
 }
 
+function renderRanking() {
+    const prods = DB.produtos.filter(p => p.custo > 0).map(p => ({
+        ...p,
+        cmvIf: calcCMV(p.custo, p.preco_ifood),
+        cmvAn: calcCMV(p.custo, p.preco_anota)
+    })).sort((a, b) => b.cmvIf - a.cmvIf).slice(0, 10);
+    
+    $('tbl-ranking').innerHTML = prods.length === 0 ?
+        '<tr><td colspan="4"><div class="empty">Cadastre produtos com custo</div></td></tr>' :
+        prods.map(p => `<tr>
+            <td><b>${p.nome}</b> <span class="badge ${p.tam === 'P' ? 'cyan' : 'blue'}">${p.tam}</span></td>
+            <td class="mono">${R$(p.custo)}</td>
+            <td><span class="badge ${cmvClass(p.cmvIf)}">${pct(p.cmvIf)}</span></td>
+            <td><span class="badge ${cmvClass(p.cmvAn)}">${pct(p.cmvAn)}</span></td>
+        </tr>`).join('');
+}
+
+function renderAll() {
+    renderProd();
+    renderIng();
+    renderVendas();
+    renderFichaSelects();
+    renderStats();
+    renderRanking();
+    atualizarDash();
+}
+
 // ==================== FORMS ====================
-async function submitForm(formId, tabela, getData, renderFn, modalId) {
+async function submitForm(formId, tabela, getData, modalId) {
     const form = $(formId);
     const btn = form.querySelector('button[type="submit"]');
     const idField = form.querySelector('input[type="hidden"]');
-    const idValue = idField ? idField.value.trim() : '';
-    const id = idValue ? parseInt(idValue) : null;
+    const id = idField && idField.value ? parseInt(idField.value) : null;
     
-    setBtnLoading(btn, true);
+    btn.classList.add('btn-loading');
+    btn.disabled = true;
+    
     try {
-        const d = getData();
-        if(id && !isNaN(id) && id > 0) {
-            // EDIÇÃO - PUT
-            const r = await api(tabela, 'PUT', {...d, id});
-            const i = DB[tabela].findIndex(x => x.id === id);
-            if(i >= 0) DB[tabela][i] = r;
+        const data = getData();
+        let result;
+        if (id && id > 0) {
+            result = await api(tabela, 'PUT', { ...data, id });
+            const idx = DB[tabela].findIndex(x => x.id === id);
+            if (idx >= 0) DB[tabela][idx] = result;
         } else {
-            // NOVO - POST
-            const r = await api(tabela, 'POST', d);
-            DB[tabela].push(r);
+            result = await api(tabela, 'POST', data);
+            DB[tabela].push(result);
         }
-        renderFn();
+        renderAll();
         fecharModal(modalId);
         toast('Salvo com sucesso!');
-    } catch(e) {
-        toast('Erro ao salvar: ' + e.message, true);
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
     }
-    setBtnLoading(btn, false);
+    
+    btn.classList.remove('btn-loading');
+    btn.disabled = false;
 }
 
-$('form-ing').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('ing-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
-    submitForm('form-ing', 'ingredientes', () => ({
-        nome, un: $('ing-un').value, custo: parseFloat($('ing-custo').value)||0, forn: $('ing-forn').value.trim()
-    }), () => { renderIng(); atualizarFichaSelects(); }, 'mod-ing');
-};
-
-$('form-massa').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('massa-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
-    submitForm('form-massa', 'massas', () => ({
-        nome, custo_p: parseFloat($('massa-cp').value)||0, custo_g: parseFloat($('massa-cg').value)||0
-    }), () => { renderMassa(); atualizarFichaSelects(); }, 'mod-massa');
-};
-
-$('form-extra').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('extra-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
-    submitForm('form-extra', 'extras', () => ({
-        nome, preco: parseFloat($('extra-preco').value)||0, custo: parseFloat($('extra-custo').value)||0
-    }), renderExtra, 'mod-extra');
-};
-
-$('form-bebida').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('bebida-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
-    submitForm('form-bebida', 'bebidas', () => ({
-        nome, preco: parseFloat($('bebida-preco').value)||0, custo: parseFloat($('bebida-custo').value)||0
-    }), renderBebida, 'mod-bebida');
-};
-
-$('form-brinde').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('brinde-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
-    submitForm('form-brinde', 'brindes', () => ({ nome }), renderBrinde, 'mod-brinde');
-};
-
-$('form-prod').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('prod-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
+$('form-prod').onsubmit = function(e) {
+    e.preventDefault();
     submitForm('form-prod', 'produtos', () => ({
-        nome, cat: $('prod-cat').value, 
-        ifood_p: parseFloat($('prod-if-p').value)||0, ifood_g: parseFloat($('prod-if-g').value)||0,
-        anota_p: parseFloat($('prod-an-p').value)||0, anota_g: parseFloat($('prod-an-g').value)||0
-    }), () => { renderProd(); atualizarFichaSelects(); }, 'mod-prod');
+        nome: $('prod-nome').value.trim(),
+        cat: $('prod-cat').value,
+        tam: $('prod-tam').value,
+        custo: parseFloat($('prod-custo').value) || 0,
+        preco_ifood: parseFloat($('prod-preco-if').value) || 0,
+        preco_anota: parseFloat($('prod-preco-an').value) || 0
+    }), 'mod-prod');
 };
 
-$('form-combo').onsubmit = function(e) { 
-    e.preventDefault(); 
-    const nome = $('combo-nome').value.trim();
-    if(!nome) { toast('Preencha o nome!', true); return; }
-    submitForm('form-combo', 'combos', () => ({
-        nome, preco_ifood: parseFloat($('combo-preco-if').value)||0, preco_anota: parseFloat($('combo-preco-an').value)||0,
-        qp: parseInt($('combo-qp').value)||0, qg: parseInt($('combo-qg').value)||0,
-        bebida_id: parseInt($('combo-bebida').value)||null, brinde_id: parseInt($('combo-brinde').value)||null
-    }), renderCombo, 'mod-combo');
+$('form-ing').onsubmit = function(e) {
+    e.preventDefault();
+    submitForm('form-ing', 'ingredientes', () => ({
+        nome: $('ing-nome').value.trim(),
+        un: $('ing-un').value,
+        custo: parseFloat($('ing-custo').value) || 0,
+        forn: $('ing-forn').value.trim()
+    }), 'mod-ing');
 };
 
-function atualizarSelectsCombo() {
-    $('combo-bebida').innerHTML = '<option value="">Nenhuma</option>' + DB.bebidas.map(b=>`<option value="${b.id}">${b.nome}</option>`).join('');
-    $('combo-brinde').innerHTML = '<option value="">Nenhum</option>' + DB.brindes.map(b=>`<option value="${b.id}">${b.nome}</option>`).join('');
-}
-
-// ==================== FICHAS ====================
-function atualizarFichaSelects() {
-    $('ficha-prod').innerHTML = '<option value="">Selecione...</option>' + DB.produtos.filter(p=>['macarrao','risoto','nhoque','salada'].includes(p.cat)).map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
-    $('ficha-ing').innerHTML = '<option value="">Selecione...</option>' + DB.ingredientes.map(i=>`<option value="${i.id}">${i.nome} (${R$(i.custo)}/${i.un})</option>`).join('');
-    $('ficha-massa').innerHTML = '<option value="">Média</option>' + DB.massas.map(m=>`<option value="${m.id}">${m.nome}</option>`).join('');
-}
-
+// ==================== FICHA TÉCNICA ====================
 function carregarFicha() {
-    const prodId = $('ficha-prod').value, tam = $('ficha-tam').value;
-    if(!prodId) { $('ficha-area').style.display = 'none'; return; }
+    const prodId = parseInt($('ficha-prod').value);
+    if (!prodId) {
+        $('ficha-area').style.display = 'none';
+        return;
+    }
     $('ficha-area').style.display = 'block';
-    renderFichaIngs(prodId, tam);
+    renderFichaItens();
 }
 
-function renderFichaIngs(prodId, tam) {
-    const fichaItems = DB.fichas.filter(f => f.produto_id == prodId && f.tamanho === tam);
-    $('ficha-list').innerHTML = fichaItems.length === 0 ? '<div class="empty" style="padding:0.3rem;font-size:0.65rem;">Nenhum ingrediente</div>' : fichaItems.map(fi => {
-        const ing = DB.ingredientes.find(i=>i.id===fi.ingrediente_id);
-        if(!ing) return '';
-        const custo = parseFloat(ing.custo) * parseFloat(fi.qtd);
-        return `<div class="ing-item"><div><b>${ing.nome}</b> <span style="color:var(--text3);font-size:0.55rem;">${fi.qtd}${ing.un}</span></div><div style="display:flex;align-items:center;gap:0.2rem;"><span class="mono" style="color:var(--green);font-size:0.6rem;">${R$(custo)}</span><button class="btn btn-d btn-sm" onclick="remIngFicha(${fi.id})">×</button></div></div>`;
-    }).join('');
-    calcFicha();
+function renderFichaItens() {
+    const prodId = parseInt($('ficha-prod').value);
+    const itens = DB.fichas.filter(f => f.produto_id === prodId);
+    
+    $('ficha-list').innerHTML = itens.length === 0 ?
+        '<div class="empty" style="padding:0.5rem;">Nenhum item na ficha</div>' :
+        itens.map(f => {
+            const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
+            if (!ing) return '';
+            const custoItem = parseFloat(ing.custo) * parseFloat(f.qtd);
+            return `<div class="ing-item">
+                <div><b>${ing.nome}</b> <span style="color:var(--text3)">${f.qtd} ${f.un || ing.un}</span></div>
+                <div style="display:flex;align-items:center;gap:0.3rem;">
+                    <span class="mono" style="color:var(--green)">${R$(custoItem)}</span>
+                    <button class="btn btn-d btn-sm" onclick="remFichaItem(${f.id})" style="padding:0.2rem 0.4rem;">×</button>
+                </div>
+            </div>`;
+        }).join('');
+    
+    calcFichaCusto();
+}
+
+function calcFichaCusto() {
+    const prodId = parseInt($('ficha-prod').value);
+    const prod = DB.produtos.find(p => p.id === prodId);
+    const itens = DB.fichas.filter(f => f.produto_id === prodId);
+    
+    let custoTotal = 0;
+    itens.forEach(f => {
+        const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
+        if (ing) custoTotal += parseFloat(ing.custo) * parseFloat(f.qtd);
+    });
+    
+    const cmvIf = prod ? calcCMV(custoTotal, prod.preco_ifood) : 0;
+    const cmvAn = prod ? calcCMV(custoTotal, prod.preco_anota) : 0;
+    
+    $('f-custo').textContent = R$(custoTotal);
+    $('f-cmv-if').textContent = pct(cmvIf);
+    $('f-cmv-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('f-cmv-an').textContent = pct(cmvAn);
+    $('f-cmv-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
 }
 
 async function addIngFicha() {
-    const prodId = $('ficha-prod').value, tam = $('ficha-tam').value, ingId = parseInt($('ficha-ing').value), qtd = parseFloat($('ficha-qtd').value);
-    if(!prodId || !ingId || !qtd || qtd <= 0) { toast('Preencha todos os campos!', true); return; }
+    const prodId = parseInt($('ficha-prod').value);
+    const ingId = parseInt($('ficha-ing').value);
+    const qtd = parseFloat($('ficha-qtd').value);
+    const un = $('ficha-un').value;
+    
+    if (!prodId || !ingId || !qtd) {
+        toast('Preencha todos os campos!', true);
+        return;
+    }
+    
     try {
-        await api('fichas', 'POST', { produto_id: parseInt(prodId), tamanho: tam, ingrediente_id: ingId, qtd });
-        DB.fichas = await api('fichas');
-        carregarFicha(); 
-        $('ficha-qtd').value = ''; 
-        toast('Ingrediente adicionado!');
-    } catch(e) { toast('Erro ao adicionar!', true); }
+        const result = await api('fichas', 'POST', { produto_id: prodId, ingrediente_id: ingId, qtd, un });
+        DB.fichas.push(result);
+        $('ficha-qtd').value = '';
+        renderFichaItens();
+        toast('Adicionado!');
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
+    }
 }
 
-async function remIngFicha(id) {
+async function remFichaItem(id) {
     try {
         await api('fichas', 'DELETE', { id });
         DB.fichas = DB.fichas.filter(f => f.id !== id);
-        carregarFicha();
-        toast('Removido!');
-    } catch(e) { toast('Erro!', true); }
-}
-
-function calcFicha() {
-    const prodId = $('ficha-prod').value, tam = $('ficha-tam').value, massaId = $('ficha-massa').value;
-    const prod = DB.produtos.find(p=>p.id==prodId); 
-    if(!prod) return;
-    
-    const fichaItems = DB.fichas.filter(f => f.produto_id == prodId && f.tamanho === tam);
-    let cIng = 0;
-    fichaItems.forEach(fi => {
-        const ing = DB.ingredientes.find(i=>i.id===fi.ingrediente_id);
-        if(ing) cIng += parseFloat(ing.custo) * parseFloat(fi.qtd);
-    });
-    
-    let cMassa = 0;
-    if(massaId) {
-        const massa = DB.massas.find(m => m.id == massaId);
-        if(massa) cMassa = tam === 'P' ? parseFloat(massa.custo_p) : parseFloat(massa.custo_g);
-    } else if(DB.massas.length > 0) {
-        cMassa = (tam === 'P' ? 
-            DB.massas.reduce((s,m) => s + parseFloat(m.custo_p), 0) : 
-            DB.massas.reduce((s,m) => s + parseFloat(m.custo_g), 0)) / DB.massas.length;
+        renderFichaItens();
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
     }
-    
-    const cTotal = cIng + cMassa;
-    const preco = tam === 'P' ? parseFloat(prod.ifood_p) : parseFloat(prod.ifood_g);
-    const cmv = preco > 0 ? (cTotal / preco) * 100 : 0;
-    
-    $('f-cing').textContent = R$(cIng); 
-    $('f-cmassa').textContent = R$(cMassa); 
-    $('f-ctotal').textContent = R$(cTotal);
-    $('f-preco-if').textContent = R$(preco);
-    $('f-cmv').textContent = cmv.toFixed(1) + '%';
-    $('f-cmv').style.color = cmv <= 30 ? 'var(--green)' : cmv <= 40 ? 'var(--yellow)' : 'var(--red)';
 }
 
-// ==================== CÁLCULO REAL DO CMV ====================
-function calcularCustoProduto(prodId, tam) {
-    const fichaItems = DB.fichas.filter(f => f.produto_id == prodId && f.tamanho === tam);
-    let custoIng = 0;
-    fichaItems.forEach(fi => {
-        const ing = DB.ingredientes.find(i => i.id === fi.ingrediente_id);
-        if(ing) custoIng += parseFloat(ing.custo) * parseFloat(fi.qtd);
-    });
+async function salvarCustoFicha() {
+    const prodId = parseInt($('ficha-prod').value);
+    const prod = DB.produtos.find(p => p.id === prodId);
+    if (!prod) return;
     
-    // Média de massas
-    let custoMassa = 0;
-    if(DB.massas.length > 0) {
-        custoMassa = (tam === 'P' ? 
-            DB.massas.reduce((s,m) => s + parseFloat(m.custo_p), 0) : 
-            DB.massas.reduce((s,m) => s + parseFloat(m.custo_g), 0)) / DB.massas.length;
-    }
-    
-    return custoIng + custoMassa;
-}
-
-function calcularCMVReal(venda) {
-    const grupos = typeof venda.grupos === 'string' ? JSON.parse(venda.grupos) : venda.grupos;
+    const itens = DB.fichas.filter(f => f.produto_id === prodId);
     let custoTotal = 0;
-    
-    grupos.forEach(g => {
-        // Tenta encontrar produto correspondente
-        const prod = DB.produtos.find(p => g.nome.toLowerCase().includes(p.nome.toLowerCase()));
-        if(prod) {
-            // Determinar tamanho
-            const tam = g.nome.toLowerCase().includes('box p') || g.nome.toLowerCase().includes('450g') ? 'P' : 'G';
-            const custoProd = calcularCustoProduto(prod.id, tam);
-            custoTotal += custoProd * g.qty;
-        } else {
-            // Se não encontrar, usa estimativa de 32%
-            custoTotal += g.valor * 0.32;
-        }
+    itens.forEach(f => {
+        const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
+        if (ing) custoTotal += parseFloat(ing.custo) * parseFloat(f.qtd);
     });
     
-    return custoTotal;
-}
-
-async function recalcularCMV() {
-    showLoading(true);
-    let atualizados = 0;
-    
-    for(const v of DB.vendas) {
-        const custoReal = calcularCMVReal(v);
-        if(Math.abs(custoReal - v.total_custo) > 1) {
-            try {
-                await api('vendas', 'POST', {
-                    mes: v.mes, ano: v.ano, cardapio: v.cardapio,
-                    grupos: typeof v.grupos === 'string' ? JSON.parse(v.grupos) : v.grupos,
-                    itens_combo: typeof v.itens_combo === 'string' ? JSON.parse(v.itens_combo) : v.itens_combo || [],
-                    total_qtd: v.total_qtd,
-                    total_fat: v.total_fat,
-                    total_custo: custoReal
-                });
-                atualizados++;
-            } catch(e) { console.error(e); }
-        }
+    try {
+        const result = await api('produtos', 'PUT', { ...prod, custo: custoTotal });
+        const idx = DB.produtos.findIndex(p => p.id === prodId);
+        if (idx >= 0) DB.produtos[idx] = result;
+        renderAll();
+        toast(`Custo ${R$(custoTotal)} salvo no produto!`);
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
     }
-    
-    DB.vendas = await api('vendas');
-    renderMeses();
-    atualizarDash();
-    showLoading(false);
-    toast(`CMV recalculado! ${atualizados} períodos atualizados.`);
 }
 
-// ==================== IMPORT EXCEL ====================
-const uploadBox = $('upload-box'), fileInput = $('file-input');
+// ==================== IMPORTAR EXCEL ====================
+const uploadBox = $('upload-box');
+const fileInput = $('file-input');
+
 uploadBox.onclick = () => fileInput.click();
 uploadBox.ondragover = e => { e.preventDefault(); uploadBox.classList.add('dragover'); };
 uploadBox.ondragleave = () => uploadBox.classList.remove('dragover');
-uploadBox.ondrop = e => { e.preventDefault(); uploadBox.classList.remove('dragover'); if(e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); };
-fileInput.onchange = e => { if(e.target.files[0]) processFile(e.target.files[0]); };
+uploadBox.ondrop = e => { e.preventDefault(); uploadBox.classList.remove('dragover'); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); };
+fileInput.onchange = e => { if (e.target.files[0]) processFile(e.target.files[0]); };
+
+let importData = null;
 
 function processFile(file) {
     $('upload-file').textContent = '📄 ' + file.name;
     uploadBox.classList.add('has-file');
     showLoading(true);
-    setTimeout(() => {
-        const reader = new FileReader();
-        reader.onload = ev => { 
-            try { 
-                const wb = XLSX.read(new Uint8Array(ev.target.result), {type:'array'}); 
-                processarExcel(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1})); 
-            } catch(e) { 
-                toast('Erro ao processar arquivo!', true); 
-                console.error(e);
-            } 
-            showLoading(false); 
-        };
-        reader.onerror = () => { showLoading(false); toast('Erro ao ler arquivo!', true); };
-        reader.readAsArrayBuffer(file);
-    }, 100);
-}
-
-function identificarTamanho(nl) {
-    if(nl.includes('box g') || nl.includes('800g')) return 'G';
-    if(nl.includes('650g') || nl.includes('risoto')) return 'G';
-    if(nl.includes('nhoque')) return 'G';
-    if(nl.includes('box p') || nl.includes('450g') || nl.includes('box kids')) return 'P';
-    return null;
+    
+    const reader = new FileReader();
+    reader.onload = ev => {
+        try {
+            const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 });
+            processarExcel(data);
+        } catch (e) {
+            toast('Erro ao ler arquivo: ' + e.message, true);
+        }
+        showLoading(false);
+    };
+    reader.readAsArrayBuffer(file);
 }
 
 function processarExcel(data) {
-    let periodoDetectado = '';
-    if(data[1] && data[1][0]) {
-        const parts = String(data[1][0]).split('/');
-        if(parts.length >= 2) periodoDetectado = parts[1] + '/' + parts[2];
+    // Detectar período da planilha
+    let periodo = '';
+    if (data[1] && data[1][0]) {
+        const txt = String(data[1][0]);
+        const match = txt.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+        if (match) periodo = match[2] + '/' + match[3];
     }
     
-    const vendas = { grupos: [], itensCombo: [], totalQtd: 0, totalFat: 0 };
-    let isInsideCombo = false;
+    // Processar itens vendidos
+    const vendas = { itens: [], totalFat: 0, totalQtd: 0 };
     
-    for(let i = 5; i < data.length; i++) {
+    for (let i = 5; i < data.length; i++) {
         const row = data[i];
-        if(!row || row[0] === undefined) continue;
+        if (!row || !row[0]) continue;
         
-        const rawNome = String(row[0]).trim();
-        const qty = parseInt(row[1]) || 0;
+        const nome = String(row[0]).trim();
+        const qtd = parseInt(row[1]) || 0;
         const valor = parseFloat(row[2]) || 0;
         
-        if(!rawNome || rawNome === 'nan') continue;
+        if (!nome || nome === 'nan') continue;
         
-        const isSubItem = rawNome.startsWith('-') || rawNome.startsWith(' ');
-        const nome = rawNome.replace(/^[\s\-]+/, '').trim();
-        const nl = nome.toLowerCase();
+        const isSubItem = nome.startsWith('-') || nome.startsWith(' ');
+        const nomeLimpo = nome.replace(/^[\s\-]+/, '').trim().toLowerCase();
         
-        if(!isSubItem && qty > 0) {
-            isInsideCombo = nl.includes('combo');
-            vendas.grupos.push({ nome, qty, valor, isCombo: isInsideCombo });
-            vendas.totalFat += valor;
-            vendas.totalQtd += qty;
-        } else if(isSubItem && isInsideCombo && qty > 0) {
-            const tam = identificarTamanho(nl);
-            if(tam) {
-                vendas.itensCombo.push({ nome, qty, tam, tipo: nl.includes('risoto') ? 'risoto' : nl.includes('nhoque') ? 'nhoque' : 'macarrao' });
+        // Procurar por Box P ou Box G
+        if (isSubItem && qtd > 0) {
+            let tam = null;
+            if (nomeLimpo.includes('box p') || nomeLimpo.includes('450g')) tam = 'P';
+            else if (nomeLimpo.includes('box g') || nomeLimpo.includes('800g') || nomeLimpo.includes('750g') || nomeLimpo.includes('650g')) tam = 'G';
+            
+            if (tam) {
+                // Extrair nome do produto (antes de "Box")
+                const prodNome = nomeLimpo.replace(/box\s*[pg].*$/i, '').replace(/\(.*\)/g, '').trim();
+                
+                // Procurar produto no banco
+                const prod = DB.produtos.find(p => {
+                    const pNome = p.nome.toLowerCase();
+                    return prodNome.includes(pNome) || pNome.includes(prodNome);
+                });
+                
+                vendas.itens.push({
+                    nome: prodNome,
+                    tam,
+                    qtd,
+                    valor,
+                    produtoId: prod ? prod.id : null,
+                    custo: prod ? prod.custo : 0
+                });
             }
+        }
+        
+        // Somar faturamento total (itens principais, não subitens)
+        if (!isSubItem && valor > 0) {
+            vendas.totalFat += valor;
+            vendas.totalQtd += qtd;
         }
     }
     
-    importData = { periodoDetectado, vendas };
+    importData = { periodo, vendas };
     mostrarPreview();
 }
 
 function mostrarPreview() {
     const v = importData.vendas;
-    const meses = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     const anoAtual = new Date().getFullYear();
     
-    let mesOpts = meses.map((m,i) => i > 0 ? `<option value="${String(i).padStart(2,'0')}" ${importData.periodoDetectado.startsWith(String(i).padStart(2,'0')) ? 'selected' : ''}>${m}</option>` : '').join('');
-    let anoOpts = ''; for(let a = anoAtual - 2; a <= anoAtual + 1; a++) anoOpts += `<option value="${a}" ${importData.periodoDetectado.includes(String(a)) ? 'selected' : ''}>${a}</option>`;
+    // Calcular custo total
+    let custoTotal = 0;
+    let itensEncontrados = 0;
+    v.itens.forEach(item => {
+        if (item.produtoId) {
+            custoTotal += item.custo * item.qtd;
+            itensEncontrados++;
+        }
+    });
+    
+    const cmvEstimado = v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0;
     
     $('import-preview').innerHTML = `
         <div class="preview">
-            <div class="form-row" style="margin-bottom:0.5rem;">
-                <div class="field"><label>Mês</label><select id="import-mes">${mesOpts}</select></div>
-                <div class="field"><label>Ano</label><select id="import-ano">${anoOpts}</select></div>
-                <div class="field"><label>Cardápio *</label><select id="import-cardapio"><option value="">Selecione</option><option value="ifood">📱 iFood</option><option value="anotaai">📲 AnotaAi</option></select></div>
+            <div class="form-row" style="margin-bottom:0.6rem;">
+                <div class="field"><label>Mês</label><select id="imp-mes">${meses.map((m, i) => i > 0 ? `<option value="${String(i).padStart(2, '0')}" ${importData.periodo.startsWith(String(i).padStart(2, '0')) ? 'selected' : ''}>${m}</option>` : '').join('')}</select></div>
+                <div class="field"><label>Ano</label><select id="imp-ano">${[anoAtual - 1, anoAtual, anoAtual + 1].map(a => `<option value="${a}" ${importData.periodo.includes(String(a)) ? 'selected' : ''}>${a}</option>`).join('')}</select></div>
+                <div class="field"><label>Plataforma *</label><select id="imp-plat"><option value="">Selecione</option><option value="ifood">📱 iFood</option><option value="anota">📲 AnotaAi</option></select></div>
             </div>
-            <div class="res-box" style="margin-bottom:0.4rem;grid-template-columns:repeat(3,1fr);">
-                <div class="res-item"><div class="lbl">Grupos</div><div class="val" style="color:var(--blue);">${v.grupos.length}</div></div>
-                <div class="res-item"><div class="lbl">Itens</div><div class="val" style="color:var(--purple);">${v.totalQtd}</div></div>
-                <div class="res-item"><div class="lbl">Faturamento</div><div class="val" style="color:var(--green);">${R$(v.totalFat)}</div></div>
+            <div class="res-box" style="grid-template-columns:repeat(4,1fr);">
+                <div class="res-item"><div class="lbl">Itens</div><div class="val" style="color:var(--blue)">${v.itens.length}</div></div>
+                <div class="res-item"><div class="lbl">Encontrados</div><div class="val" style="color:var(--green)">${itensEncontrados}</div></div>
+                <div class="res-item"><div class="lbl">Faturamento</div><div class="val" style="color:var(--purple)">${R$(v.totalFat)}</div></div>
+                <div class="res-item"><div class="lbl">CMV Est.</div><div class="val" style="color:${cmvEstimado <= 25 ? 'var(--green)' : cmvEstimado <= 35 ? 'var(--yellow)' : 'var(--red)'};">${pct(cmvEstimado)}</div></div>
             </div>
-            <div style="max-height:100px;overflow-y:auto;margin-bottom:0.4rem;">
-                ${v.grupos.sort((a,b)=>b.valor-a.valor).slice(0,5).map(g => `<div class="prev-group"><span>${g.nome.slice(0,25)}${g.isCombo?' 🎯':''}</span><span class="mono">${R$(g.valor)}</span></div>`).join('')}
+            <div style="margin-top:0.6rem;max-height:120px;overflow-y:auto;font-size:0.65rem;">
+                ${v.itens.slice(0, 10).map(it => `<div style="display:flex;justify-content:space-between;padding:0.2rem 0;border-bottom:1px solid var(--border);">
+                    <span>${it.nome} (${it.tam}) × ${it.qtd}</span>
+                    <span class="mono" style="color:${it.produtoId ? 'var(--green)' : 'var(--red)'};">${it.produtoId ? R$(it.custo * it.qtd) : 'N/E'}</span>
+                </div>`).join('')}
+                ${v.itens.length > 10 ? `<div style="color:var(--text3);padding:0.2rem;">... e mais ${v.itens.length - 10} itens</div>` : ''}
             </div>
-            <div style="display:flex;gap:0.3rem;">
-                <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Confirmar</button>
+            <div style="display:flex;gap:0.4rem;margin-top:0.6rem;">
+                <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Importar</button>
                 <button class="btn btn-s" onclick="cancelarImport()">❌</button>
             </div>
         </div>
@@ -1215,41 +994,59 @@ function mostrarPreview() {
 }
 
 async function confirmarImport() {
-    const mes = $('import-mes').value, ano = $('import-ano').value, cardapio = $('import-cardapio').value;
-    if(!mes || !ano || !cardapio) { toast('Preencha mês, ano e cardápio!', true); return; }
+    const mes = $('imp-mes').value;
+    const ano = $('imp-ano').value;
+    const plat = $('imp-plat').value;
+    
+    if (!mes || !ano || !plat) {
+        toast('Selecione mês, ano e plataforma!', true);
+        return;
+    }
     
     showLoading(true);
-    const v = importData.vendas;
     
-    // Calcular CMV real baseado nas fichas técnicas
-    let totalCusto = 0;
-    v.grupos.forEach(g => {
-        const prod = DB.produtos.find(p => g.nome.toLowerCase().includes(p.nome.toLowerCase()));
-        if(prod) {
-            const tam = g.nome.toLowerCase().includes('box p') || g.nome.toLowerCase().includes('450g') ? 'P' : 'G';
-            const custoProd = calcularCustoProduto(prod.id, tam);
-            totalCusto += custoProd * g.qty;
-        } else {
-            totalCusto += g.valor * 0.32; // Fallback para 32%
+    // Calcular custos usando o preço da plataforma correta
+    let custoTotal = 0;
+    const detalhes = [];
+    
+    importData.vendas.itens.forEach(item => {
+        if (item.produtoId) {
+            const prod = DB.produtos.find(p => p.id === item.produtoId);
+            if (prod) {
+                const custo = item.custo * item.qtd;
+                custoTotal += custo;
+                detalhes.push({
+                    produto_id: prod.id,
+                    nome: prod.nome,
+                    tam: item.tam,
+                    qtd: item.qtd,
+                    custo_un: item.custo,
+                    custo_total: custo
+                });
+            }
         }
     });
     
     try {
-        await api('vendas', 'POST', {
-            mes, ano, cardapio,
-            grupos: v.grupos,
-            itens_combo: v.itensCombo,
-            total_qtd: v.totalQtd,
-            total_fat: v.totalFat,
-            total_custo: totalCusto
+        const result = await api('vendas', 'POST', {
+            mes, ano,
+            cardapio: plat,
+            itens: detalhes,
+            total_qtd: importData.vendas.totalQtd,
+            total_fat: importData.vendas.totalFat,
+            total_custo: custoTotal
         });
+        DB.vendas.push(result);
         
-        DB.vendas = await api('vendas');
-        toast(`Importado: ${mes}/${ano} - ${cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}`);
+        const cmv = importData.vendas.totalFat > 0 ? (custoTotal / importData.vendas.totalFat * 100) : 0;
+        toast(`Importado! CMV: ${pct(cmv)}`);
+        
         cancelarImport();
-        renderMeses();
-        atualizarDash();
-    } catch(e) { toast('Erro ao importar!', true); }
+        renderAll();
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
+    }
+    
     showLoading(false);
 }
 
@@ -1262,351 +1059,187 @@ function cancelarImport() {
 }
 
 // ==================== ANÁLISE ====================
-$('sel-mes').onchange = function() {
-    const id = parseInt(this.value);
+function mostrarAnalise() {
+    const id = parseInt($('sel-venda').value);
     const v = DB.vendas.find(x => x.id === id);
-    if(!v) { $('analise-area').innerHTML = ''; return; }
-    
-    const grupos = typeof v.grupos === 'string' ? JSON.parse(v.grupos) : v.grupos;
-    const cmv = v.total_fat > 0 ? ((v.total_custo/v.total_fat)*100).toFixed(1) : '0';
-    const lucro = v.total_fat - v.total_custo;
-    
-    $('analise-area').innerHTML = `
-        <div class="alert ${v.cardapio==='ifood'?'info':'ok'}">📊 Análise: <span class="cardapio-tag ${v.cardapio}">${v.cardapio==='ifood'?'iFood':'AnotaAi'}</span> - ${v.mes}/${v.ano}</div>
-        <div class="grid-kpi" style="grid-template-columns:repeat(4,1fr);">
-            <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value">${R$(v.total_fat)}</div></div>
-            <div class="kpi blue"><div class="kpi-label">Custo Real</div><div class="kpi-value">${R$(v.total_custo)}</div></div>
-            <div class="kpi ${cmv<=30?'green':cmv<=40?'yellow':'red'}"><div class="kpi-label">CMV</div><div class="kpi-value">${cmv}%</div></div>
-            <div class="kpi purple"><div class="kpi-label">Lucro</div><div class="kpi-value">${R$(lucro)}</div></div>
-        </div>
-        <div class="card">
-            <div class="card-head">
-                <span class="card-title">📋 Detalhamento por Grupo</span>
-                <button class="btn btn-s btn-sm" onclick="exportarAnalise(${v.id})">📥 Excel</button>
-            </div>
-            <div class="tbl-wrap"><table><thead><tr><th>Grupo</th><th>Qtd</th><th>Fat.</th><th>%</th></tr></thead>
-            <tbody>${grupos.sort((a,b)=>b.valor-a.valor).map(g => `<tr><td><b>${g.nome.slice(0,25)}</b>${g.isCombo?' 🎯':''}</td><td class="mono">${g.qty}</td><td class="mono">${R$(g.valor)}</td><td class="mono">${pct(g.valor, v.total_fat)}%</td></tr>`).join('')}</tbody></table></div>
-        </div>
-    `;
-};
-
-// ==================== RANKING ====================
-function mostrarRanking(tipo) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    
-    const produtos = DB.produtos.map(p => {
-        const custoG = calcularCustoProduto(p.id, 'G');
-        const precoG = parseFloat(p.ifood_g) || 0;
-        const cmv = precoG > 0 ? (custoG / precoG) * 100 : 0;
-        const lucro = precoG - custoG;
-        
-        // Contar vendas
-        let qtdVendida = 0;
-        DB.vendas.forEach(v => {
-            const grupos = typeof v.grupos === 'string' ? JSON.parse(v.grupos) : v.grupos;
-            grupos.forEach(g => {
-                if(g.nome.toLowerCase().includes(p.nome.toLowerCase())) {
-                    qtdVendida += g.qty;
-                }
-            });
-        });
-        
-        return { ...p, custoG, precoG, cmv, lucro, qtdVendida };
-    }).filter(p => p.precoG > 0);
-    
-    let sorted = [];
-    let titulo = '';
-    
-    switch(tipo) {
-        case 'lucro':
-            sorted = produtos.sort((a,b) => b.lucro - a.lucro);
-            titulo = '💰 Produtos Mais Lucrativos (por unidade)';
-            break;
-        case 'cmv-alto':
-            sorted = produtos.filter(p => p.cmv > 35).sort((a,b) => b.cmv - a.cmv);
-            titulo = '⚠️ Produtos com CMV Alto (> 35%)';
-            break;
-        case 'vendidos':
-            sorted = produtos.sort((a,b) => b.qtdVendida - a.qtdVendida);
-            titulo = '📊 Produtos Mais Vendidos';
-            break;
-    }
-    
-    if(sorted.length === 0) {
-        $('ranking-area').innerHTML = '<div class="empty"><div class="empty-icon">📊</div>Sem dados disponíveis.<br>Cadastre produtos e fichas técnicas.</div>';
+    if (!v) {
+        $('analise-area').innerHTML = '';
         return;
     }
     
-    $('ranking-area').innerHTML = `
-        <div class="section-title">${titulo}</div>
-        ${sorted.slice(0,10).map((p, i) => {
-            const posClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'normal';
-            return `
-                <div class="ranking-item">
-                    <div class="ranking-pos ${posClass}">${i+1}</div>
-                    <div class="ranking-info">
-                        <div class="ranking-name">${p.nome}</div>
-                        <div class="ranking-stats">Custo: ${R$(p.custoG)} | Preço: ${R$(p.precoG)} | Vendidos: ${p.qtdVendida}</div>
-                    </div>
-                    <div class="ranking-value">
-                        <div class="ranking-cmv" style="color:${p.cmv<=30?'var(--green)':p.cmv<=40?'var(--yellow)':'var(--red)'}">${p.cmv.toFixed(1)}%</div>
-                        <div class="ranking-lucro">Lucro: ${R$(p.lucro)}</div>
-                    </div>
-                </div>
-            `;
-        }).join('')}
-    `;
-}
-
-// ==================== COMPARAR ====================
-function compararMeses() {
-    const id1 = parseInt($('comp-mes1').value), id2 = parseInt($('comp-mes2').value);
-    const v1 = DB.vendas.find(x => x.id === id1), v2 = DB.vendas.find(x => x.id === id2);
-    if(!v1 || !v2) { toast('Selecione 2 períodos!', true); return; }
+    const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
+    const lucro = v.total_fat - v.total_custo;
     
-    const cmv1 = v1.total_fat > 0 ? (v1.total_custo/v1.total_fat)*100 : 0;
-    const cmv2 = v2.total_fat > 0 ? (v2.total_custo/v2.total_fat)*100 : 0;
-    const lucro1 = v1.total_fat - v1.total_custo;
-    const lucro2 = v2.total_fat - v2.total_custo;
+    let itens = [];
+    try {
+        itens = typeof v.itens === 'string' ? JSON.parse(v.itens) : (v.itens || []);
+    } catch (e) {}
     
-    const diff = (a, b) => { 
-        const d = b - a; 
-        const p = a > 0 ? ((d/a)*100).toFixed(0) : 0; 
-        return d >= 0 ? `<span class="compare-diff up">▲${p}%</span>` : `<span class="compare-diff down">▼${Math.abs(p)}%</span>`; 
-    };
-    
-    $('compare-area').innerHTML = `
-        <div class="card">
-            <div class="card-title">📊 Comparativo</div>
-            <div class="compare-grid" style="margin-top:0.4rem;">
-                <div class="compare-col">
-                    <div class="compare-header"><span class="cardapio-tag ${v1.cardapio}">${v1.cardapio==='ifood'?'iFood':'AnotaAi'}</span> ${v1.mes}/${v1.ano}</div>
-                    <div class="compare-item"><span>Faturamento</span><span class="mono">${R$(v1.total_fat)}</span></div>
-                    <div class="compare-item"><span>Custo</span><span class="mono">${R$(v1.total_custo)}</span></div>
-                    <div class="compare-item"><span>CMV</span><span class="mono">${cmv1.toFixed(1)}%</span></div>
-                    <div class="compare-item"><span>Lucro</span><span class="mono">${R$(lucro1)}</span></div>
-                    <div class="compare-item"><span>Itens</span><span class="mono">${v1.total_qtd}</span></div>
-                </div>
-                <div class="compare-col">
-                    <div class="compare-header"><span class="cardapio-tag ${v2.cardapio}">${v2.cardapio==='ifood'?'iFood':'AnotaAi'}</span> ${v2.mes}/${v2.ano}</div>
-                    <div class="compare-item"><span>Faturamento</span><span class="mono">${R$(v2.total_fat)} ${diff(v1.total_fat,v2.total_fat)}</span></div>
-                    <div class="compare-item"><span>Custo</span><span class="mono">${R$(v2.total_custo)} ${diff(v1.total_custo,v2.total_custo)}</span></div>
-                    <div class="compare-item"><span>CMV</span><span class="mono">${cmv2.toFixed(1)}% ${cmv2<=cmv1?'<span class="compare-diff up">▼</span>':'<span class="compare-diff down">▲</span>'}</span></div>
-                    <div class="compare-item"><span>Lucro</span><span class="mono">${R$(lucro2)} ${diff(lucro1,lucro2)}</span></div>
-                    <div class="compare-item"><span>Itens</span><span class="mono">${v2.total_qtd} ${diff(v1.total_qtd,v2.total_qtd)}</span></div>
-                </div>
-            </div>
+    $('analise-area').innerHTML = `
+        <div class="grid-kpi" style="grid-template-columns:repeat(4,1fr);">
+            <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value">${R$(v.total_fat)}</div></div>
+            <div class="kpi blue"><div class="kpi-label">Custo Total</div><div class="kpi-value">${R$(v.total_custo)}</div></div>
+            <div class="kpi ${cmvClass(cmv)}"><div class="kpi-label">CMV</div><div class="kpi-value">${pct(cmv)}</div></div>
+            <div class="kpi purple"><div class="kpi-label">Lucro Bruto</div><div class="kpi-value">${R$(lucro)}</div></div>
         </div>
+        ${itens.length > 0 ? `
+        <div class="card">
+            <div class="card-title">📋 Detalhamento</div>
+            <div class="tbl-wrap" style="margin-top:0.5rem;"><table>
+                <thead><tr><th>Produto</th><th>Tam</th><th>Qtd</th><th>Custo Un</th><th>Total</th></tr></thead>
+                <tbody>${itens.map(it => `<tr>
+                    <td><b>${it.nome}</b></td>
+                    <td>${it.tam}</td>
+                    <td class="mono">${it.qtd}</td>
+                    <td class="mono">${R$(it.custo_un)}</td>
+                    <td class="mono">${R$(it.custo_total)}</td>
+                </tr>`).join('')}</tbody>
+            </table></div>
+        </div>
+        ` : ''}
     `;
 }
 
 // ==================== DASHBOARD ====================
 function atualizarDash() {
-    if(DB.vendas.length === 0) {
-        $('k-fat').textContent = 'R$ 0'; 
-        $('k-custo').textContent = 'R$ 0'; 
-        $('k-cmv').textContent = '0%'; 
-        $('k-lucro').textContent = 'R$ 0'; 
-        $('k-itens').textContent = '0';
-        $('tbl-dash').innerHTML = '<tr><td colspan="4"><div class="empty"><div class="empty-icon">📊</div>Importe vendas</div></td></tr>';
-        if(chart1) { chart1.destroy(); chart1 = null; } 
-        if(chart2) { chart2.destroy(); chart2 = null; }
+    if (DB.vendas.length === 0) {
+        $('k-fat').textContent = 'R$ 0';
+        $('k-custo').textContent = 'R$ 0';
+        $('k-cmv').textContent = '0%';
+        $('k-lucro').textContent = 'R$ 0';
         return;
     }
     
-    const v = DB.vendas[DB.vendas.length - 1];
-    const grupos = typeof v.grupos === 'string' ? JSON.parse(v.grupos) : v.grupos;
+    const ultima = DB.vendas[DB.vendas.length - 1];
+    const cmv = ultima.total_fat > 0 ? (ultima.total_custo / ultima.total_fat * 100) : 0;
     
-    $('k-fat').textContent = R$(v.total_fat); 
-    $('k-custo').textContent = R$(v.total_custo);
-    const cmv = v.total_fat > 0 ? ((v.total_custo/v.total_fat)*100) : 0;
-    $('k-cmv').textContent = cmv.toFixed(0) + '%'; 
-    $('k-lucro').textContent = R$(v.total_fat - v.total_custo); 
-    $('k-itens').textContent = v.total_qtd;
+    $('k-fat').textContent = R$(ultima.total_fat);
+    $('k-custo').textContent = R$(ultima.total_custo);
+    $('k-cmv').textContent = pct(cmv);
+    $('k-lucro').textContent = R$(ultima.total_fat - ultima.total_custo);
     
-    $('tbl-dash').innerHTML = grupos.sort((a,b)=>b.valor-a.valor).slice(0,6).map(g => 
-        `<tr><td><b>${g.nome.slice(0,16)}</b></td><td class="mono">${g.qty}</td><td class="mono">${R$(g.valor)}</td><td class="mono">${pct(g.valor, v.total_fat)}%</td></tr>`
-    ).join('');
-    
-    atualizarCharts(grupos);
+    atualizarCharts();
 }
 
-function atualizarCharts(grupos) {
-    if(!grupos || grupos.length === 0) return;
+function atualizarCharts() {
+    // Chart 1 - CMV por produto
+    const prods = DB.produtos.filter(p => p.custo > 0 && p.preco_ifood > 0)
+        .map(p => ({ nome: p.nome.slice(0, 10), cmv: calcCMV(p.custo, p.preco_ifood) }))
+        .sort((a, b) => b.cmv - a.cmv).slice(0, 6);
     
-    const sorted = grupos.sort((a,b)=>b.valor-a.valor).slice(0,5);
-    const labels1 = sorted.map(g => g.nome.slice(0,10));
-    const valores1 = sorted.map(g => g.valor);
-    
-    if(chart1) chart1.destroy();
-    chart1 = new Chart($('chart1'), {
-        type: 'bar', 
-        data: { 
-            labels: labels1, 
-            datasets: [{ data: valores1, backgroundColor: ['#10b981','#3b82f6','#f59e0b','#8b5cf6','#ec4899'], borderRadius: 4 }] 
-        },
-        options: { 
-            responsive: true, 
-            maintainAspectRatio: false, 
-            plugins: { legend: { display: false } }, 
-            scales: { 
-                y: { ticks: { color: '#64748b', font: { size: 8 } } }, 
-                x: { ticks: { color: '#94a3b8', maxRotation: 45, font: { size: 7 } } } 
-            } 
-        }
-    });
-    
-    if(DB.vendas.length >= 2) {
-        const ultimos = DB.vendas.slice(-6);
-        const labels2 = ultimos.map(v => `${v.mes}/${v.ano.slice(-2)}`);
-        const cmvData = ultimos.map(v => v.total_fat > 0 ? ((v.total_custo/v.total_fat)*100).toFixed(1) : 0);
-        
-        if(chart2) chart2.destroy();
-        chart2 = new Chart($('chart2'), {
-            type: 'line', 
-            data: { 
-                labels: labels2, 
-                datasets: [{ 
-                    label: 'CMV %', 
-                    data: cmvData, 
-                    borderColor: '#f59e0b', 
-                    backgroundColor: 'rgba(245,158,11,0.1)', 
-                    fill: true, 
-                    tension: 0.3 
-                }] 
+    if (chart1) chart1.destroy();
+    if (prods.length > 0) {
+        chart1 = new Chart($('chart1'), {
+            type: 'bar',
+            data: {
+                labels: prods.map(p => p.nome),
+                datasets: [{
+                    data: prods.map(p => p.cmv),
+                    backgroundColor: prods.map(p => p.cmv <= 25 ? '#10b981' : p.cmv <= 35 ? '#f59e0b' : '#ef4444'),
+                    borderRadius: 4
+                }]
             },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                plugins: { legend: { display: false } }, 
-                scales: { 
-                    y: { ticks: { color: '#64748b', font: { size: 8 }, callback: v => v + '%' } }, 
-                    x: { ticks: { color: '#94a3b8', font: { size: 7 } } } 
-                } 
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#64748b', callback: v => v + '%' } },
+                    x: { ticks: { color: '#94a3b8', maxRotation: 45 } }
+                }
+            }
+        });
+    }
+    
+    // Chart 2 - CMV mensal
+    if (chart2) chart2.destroy();
+    if (DB.vendas.length > 0) {
+        const ultimas = DB.vendas.slice(-6);
+        chart2 = new Chart($('chart2'), {
+            type: 'line',
+            data: {
+                labels: ultimas.map(v => `${v.mes}/${v.ano.slice(-2)}`),
+                datasets: [{
+                    data: ultimas.map(v => v.total_fat > 0 ? (v.total_custo / v.total_fat * 100).toFixed(1) : 0),
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'rgba(245,158,11,0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { ticks: { color: '#64748b', callback: v => v + '%' } },
+                    x: { ticks: { color: '#94a3b8' } }
+                }
             }
         });
     }
 }
 
-// ==================== EXPORT ====================
-function exportarTabela(tabela) {
-    const data = DB[tabela];
-    if(data.length === 0) { toast('Nenhum dado para exportar!', true); return; }
-    
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, tabela);
-    XLSX.writeFile(wb, `${tabela}_${new Date().toISOString().slice(0,10)}.xlsx`);
-    toast('Exportado com sucesso!');
-}
-
-function exportarAnalise(vendaId) {
-    const v = DB.vendas.find(x => x.id === vendaId);
-    if(!v) return;
-    
-    const grupos = typeof v.grupos === 'string' ? JSON.parse(v.grupos) : v.grupos;
-    const data = grupos.map(g => ({
-        Grupo: g.nome,
-        Quantidade: g.qty,
-        Valor: g.valor,
-        Percentual: pct(g.valor, v.total_fat) + '%',
-        Combo: g.isCombo ? 'Sim' : 'Não'
-    }));
-    
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Análise');
-    XLSX.writeFile(wb, `analise_${v.mes}_${v.ano}_${v.cardapio}.xlsx`);
-    toast('Exportado com sucesso!');
-}
-
-function exportarBackup() {
-    const backup = {
-        versao: '9.0',
-        data: new Date().toISOString(),
-        dados: DB
-    };
-    
-    const blob = new Blob([JSON.stringify(backup, null, 2)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `backup_cmv_${new Date().toISOString().slice(0,10)}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast('Backup exportado!');
-}
-
 // ==================== CONFIG ====================
 async function setupDB() {
-    if(!confirm('Criar tabelas no banco de dados?')) return;
+    if (!confirm('Criar/atualizar tabelas?')) return;
     showLoading(true);
     try {
         await api('setup', 'POST');
-        toast('Tabelas criadas com sucesso!');
-    } catch(e) { toast('Erro: ' + e.message, true); }
+        toast('Tabelas criadas!');
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
+    }
     showLoading(false);
 }
 
 async function seedDB() {
-    if(!confirm('Popular dados iniciais? (Isso vai substituir dados existentes)')) return;
+    if (!confirm('Carregar dados de exemplo?')) return;
     showLoading(true);
     try {
         await api('seed', 'POST');
         await loadAll();
-        toast('Dados iniciais carregados!');
-    } catch(e) { toast('Erro: ' + e.message, true); }
+        toast('Dados carregados!');
+    } catch (e) {
+        toast('Erro: ' + e.message, true);
+    }
     showLoading(false);
 }
 
-async function limparTudo() {
-    toast('Use o console do Neon para limpar as tabelas', true);
+function exportarBackup() {
+    const backup = { versao: '9.1', data: new Date().toISOString(), dados: DB };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `backup_cmv_${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    toast('Backup exportado!');
 }
 
 // ==================== INIT ====================
-function renderAll() { 
-    renderIng(); 
-    renderMassa(); 
-    renderExtra(); 
-    renderBebida(); 
-    renderBrinde();
-    renderProd(); 
-    renderCombo(); 
-    renderMeses(); 
-    atualizarFichaSelects(); 
-    atualizarDash(); 
-    mostrarRanking('lucro');
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-    $('dataAtual').textContent = new Date().toLocaleDateString('pt-BR');
-    
-    // Restaurar aba ativa
-    const savedTab = localStorage.getItem('cmv_tab');
-    if(savedTab) {
-        const btn = document.querySelector(`.nav-btn[data-p="${savedTab}"]`);
-        if(btn) btn.click();
+    // Restaurar aba
+    const tab = localStorage.getItem('cmv_tab');
+    if (tab) {
+        const btn = document.querySelector(`.nav-btn[data-p="${tab}"]`);
+        if (btn) btn.click();
     }
     
-    // Fechar modais clicando fora
-    document.querySelectorAll('.modal-bg').forEach(m => { 
-        m.onclick = e => { 
-            if(e.target === m) { 
-                m.classList.remove('show'); 
-                document.body.style.overflow = ''; 
-            }
-        }; 
+    // Fechar modal clicando fora
+    document.querySelectorAll('.modal-bg').forEach(m => {
+        m.onclick = e => { if (e.target === m) fecharModal(m.id); };
     });
     
-    // Atalhos de teclado
+    // ESC fecha modal
     document.addEventListener('keydown', e => {
-        if(e.key === 'Escape') {
-            document.querySelectorAll('.modal-bg.show').forEach(m => {
-                m.classList.remove('show');
-                document.body.style.overflow = '';
-            });
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-bg.show').forEach(m => fecharModal(m.id));
         }
+    });
+    
+    // Preview CMV em tempo real
+    ['prod-custo', 'prod-preco-if', 'prod-preco-an'].forEach(id => {
+        $(id).addEventListener('input', atualizarPreviewCMV);
     });
     
     loadAll();
