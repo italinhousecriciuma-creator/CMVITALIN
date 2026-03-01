@@ -894,6 +894,66 @@ function processarExcel(data) {
         if (match) periodo = match[2] + '/' + match[3];
     }
     
+    // Função para normalizar nome (remover palavras comuns)
+    const normalizarNome = (nome) => {
+        return nome
+            .toLowerCase()
+            .replace(/\(aprox\.?\s*\d+g?\)/gi, '')  // Remove (aprox. 800g)
+            .replace(/box\s*[pg]/gi, '')             // Remove Box P/G
+            .replace(/-/g, ' ')                       // Traços viram espaços
+            .replace(/\s+de\s+/g, ' ')               // Remove "de"
+            .replace(/\s+com\s+/g, ' ')              // Remove "com"
+            .replace(/\s+e\s+/g, ' ')                // Remove "e"
+            .replace(/\s+/g, ' ')                    // Múltiplos espaços
+            .replace(/rosé/g, 'rose')                // Normaliza rosé
+            .replace(/muçarela/g, 'mussarela')       // Normaliza muçarela
+            .trim();
+    };
+    
+    // Função para encontrar produto no banco
+    const encontrarProduto = (nomePlanilha, tipo, tam) => {
+        const nomeNorm = normalizarNome(nomePlanilha);
+        
+        // Filtrar por categoria e tamanho primeiro
+        let candidatos = DB.produtos.filter(p => {
+            if (p.tam !== tam) return false;
+            if (tipo === 'risoto' && p.cat !== 'risoto') return false;
+            if (tipo === 'nhoque' && p.cat !== 'nhoque') return false;
+            if (tipo === 'macarrao' && p.cat !== 'macarrao') return false;
+            return true;
+        });
+        
+        // Se não filtrou por categoria, tentar todos com mesmo tamanho
+        if (candidatos.length === 0) {
+            candidatos = DB.produtos.filter(p => p.tam === tam);
+        }
+        
+        // Procurar melhor match
+        for (const p of candidatos) {
+            const pNomeNorm = normalizarNome(p.nome);
+            
+            // Match exato
+            if (nomeNorm === pNomeNorm) return p;
+            
+            // Um contém o outro
+            if (nomeNorm.includes(pNomeNorm) || pNomeNorm.includes(nomeNorm)) return p;
+            
+            // Comparar palavras-chave
+            const palavrasPlanilha = nomeNorm.split(' ').filter(w => w.length > 2);
+            const palavrasProduto = pNomeNorm.split(' ').filter(w => w.length > 2);
+            
+            // Se 2+ palavras em comum, é match
+            const comum = palavrasPlanilha.filter(w => palavrasProduto.includes(w));
+            if (comum.length >= 2) return p;
+            
+            // Se o nome do produto (sem categoria) está no nome da planilha
+            const nomeSemCat = pNomeNorm.replace(/^(risoto|nhoque|macarrao)\s*/i, '');
+            if (nomeNorm.includes(nomeSemCat) && nomeSemCat.length > 3) return p;
+        }
+        
+        return null;
+    };
+    
     // Processar itens vendidos
     const vendas = { itens: [], totalFat: 0, totalQtd: 0 };
     
@@ -905,36 +965,85 @@ function processarExcel(data) {
         const qtd = parseInt(row[1]) || 0;
         const valor = parseFloat(row[2]) || 0;
         
-        if (!nome || nome === 'nan') continue;
+        if (!nome || nome === 'nan' || qtd <= 0) continue;
         
         const isSubItem = nome.startsWith('-') || nome.startsWith(' ');
-        const nomeLimpo = nome.replace(/^[\s\-]+/, '').trim().toLowerCase();
+        const nomeLimpo = nome.replace(/^[\s\-]+/, '').trim();
+        const nomeL = nomeLimpo.toLowerCase();
         
-        // Procurar por Box P ou Box G
-        if (isSubItem && qtd > 0) {
-            let tam = null;
-            if (nomeLimpo.includes('box p') || nomeLimpo.includes('450g')) tam = 'P';
-            else if (nomeLimpo.includes('box g') || nomeLimpo.includes('800g') || nomeLimpo.includes('750g') || nomeLimpo.includes('650g')) tam = 'G';
+        // Ignorar sub-itens que não são produtos (talheres, extras, etc)
+        if (isSubItem && (
+            nomeL.includes('talher') ||
+            nomeL.includes('extra ') ||
+            nomeL.includes('preciso de') ||
+            nomeL.includes('não preciso') ||
+            nomeL.includes('acompanhamento') ||
+            nomeL.includes('pimenta') ||
+            nomeL.includes('opção vegetariana') ||
+            nomeL.includes('talharim') ||
+            nomeL.includes('penne') ||
+            nomeL.includes('caracolino') ||
+            nomeL.includes('nhoque tradicional') ||
+            nomeL.includes('nhoque recheado de muçarela')
+        )) {
+            continue;
+        }
+        
+        // Identificar tipo de produto e tamanho
+        let tipo = null;
+        let tam = null;
+        let prodNome = nomeLimpo;
+        
+        // RISOTO
+        if (nomeL.includes('risoto')) {
+            tipo = 'risoto';
+            tam = 'G';
+            prodNome = nomeLimpo;
+        }
+        // NHOQUE (mas não "nhoque tradicional" ou "nhoque recheado" que são sub-itens)
+        else if (nomeL.includes('nhoque') && (nomeL.includes('800g') || nomeL.includes('750g') || 
+                 nomeL.includes('pomodoro') || nomeL.includes('bolonhesa') || nomeL.includes('queijos') ||
+                 nomeL.includes('camarão') || nomeL.includes('funghi') || nomeL.includes('costela') ||
+                 nomeL.includes('bacon') || nomeL.includes('broccoli') || nomeL.includes('parisiense') ||
+                 nomeL.includes('frango'))) {
+            tipo = 'nhoque';
+            tam = 'G';
+            prodNome = nomeLimpo;
+        }
+        // MACARRÃO BOX P
+        else if (nomeL.includes('box p') || (nomeL.includes('450g') && !nomeL.includes('650g'))) {
+            tipo = 'macarrao';
+            tam = 'P';
+            prodNome = nomeLimpo;
+        }
+        // MACARRÃO BOX G ou com 800g/750g
+        else if (nomeL.includes('box g') || nomeL.includes('800g') || nomeL.includes('750g')) {
+            tipo = 'macarrao';
+            tam = 'G';
+            prodNome = nomeLimpo;
+        }
+        // POLENTA
+        else if (nomeL.includes('polenta')) {
+            tipo = 'outros';
+            tam = 'G';
+            prodNome = nomeLimpo;
+        }
+        
+        // Se identificou um produto
+        if (tipo && tam && isSubItem) {
+            const prod = encontrarProduto(prodNome, tipo, tam);
             
-            if (tam) {
-                // Extrair nome do produto (antes de "Box")
-                const prodNome = nomeLimpo.replace(/box\s*[pg].*$/i, '').replace(/\(.*\)/g, '').trim();
-                
-                // Procurar produto no banco
-                const prod = DB.produtos.find(p => {
-                    const pNome = p.nome.toLowerCase();
-                    return prodNome.includes(pNome) || pNome.includes(prodNome);
-                });
-                
-                vendas.itens.push({
-                    nome: prodNome,
-                    tam,
-                    qtd,
-                    valor,
-                    produtoId: prod ? prod.id : null,
-                    custo: prod ? prod.custo : 0
-                });
-            }
+            vendas.itens.push({
+                nomeOriginal: nomeLimpo,
+                nome: prodNome,
+                tipo,
+                tam,
+                qtd,
+                valor,
+                produtoId: prod ? prod.id : null,
+                produtoNome: prod ? prod.nome : null,
+                custo: prod ? parseFloat(prod.custo) || 0 : 0
+            });
         }
         
         // Somar faturamento total (itens principais, não subitens)
@@ -956,14 +1065,26 @@ function mostrarPreview() {
     // Calcular custo total
     let custoTotal = 0;
     let itensEncontrados = 0;
+    let itensNaoEncontrados = [];
+    
     v.itens.forEach(item => {
         if (item.produtoId) {
             custoTotal += item.custo * item.qtd;
             itensEncontrados++;
+        } else {
+            itensNaoEncontrados.push(item);
         }
     });
     
     const cmvEstimado = v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0;
+    
+    // Badge por tipo
+    const tipoBadge = {
+        'macarrao': '<span class="badge blue">mac</span>',
+        'risoto': '<span class="badge orange">ris</span>',
+        'nhoque': '<span class="badge pink">nho</span>',
+        'outros': '<span class="badge cyan">out</span>'
+    };
     
     $('import-preview').innerHTML = `
         <div class="preview">
@@ -978,12 +1099,21 @@ function mostrarPreview() {
                 <div class="res-item"><div class="lbl">Faturamento</div><div class="val" style="color:var(--purple)">${R$(v.totalFat)}</div></div>
                 <div class="res-item"><div class="lbl">CMV Est.</div><div class="val" style="color:${cmvEstimado <= 25 ? 'var(--green)' : cmvEstimado <= 35 ? 'var(--yellow)' : 'var(--red)'};">${pct(cmvEstimado)}</div></div>
             </div>
-            <div style="margin-top:0.6rem;max-height:120px;overflow-y:auto;font-size:0.65rem;">
-                ${v.itens.slice(0, 10).map(it => `<div style="display:flex;justify-content:space-between;padding:0.2rem 0;border-bottom:1px solid var(--border);">
-                    <span>${it.nome} (${it.tam}) × ${it.qtd}</span>
-                    <span class="mono" style="color:${it.produtoId ? 'var(--green)' : 'var(--red)'};">${it.produtoId ? R$(it.custo * it.qtd) : 'N/E'}</span>
+            
+            ${itensNaoEncontrados.length > 0 ? `
+            <div class="alert warn" style="margin-top:0.5rem;">
+                ⚠️ ${itensNaoEncontrados.length} itens não encontrados no cadastro:
+                <div style="font-size:0.6rem;margin-top:0.2rem;">${itensNaoEncontrados.slice(0,5).map(it => it.nome).join(', ')}${itensNaoEncontrados.length > 5 ? '...' : ''}</div>
+            </div>
+            ` : ''}
+            
+            <div style="margin-top:0.6rem;max-height:150px;overflow-y:auto;font-size:0.65rem;">
+                <div style="font-weight:600;margin-bottom:0.3rem;color:var(--text2);">✅ Itens identificados:</div>
+                ${v.itens.filter(it => it.produtoId).slice(0, 15).map(it => `<div style="display:flex;justify-content:space-between;padding:0.2rem 0;border-bottom:1px solid var(--border);">
+                    <span>${tipoBadge[it.tipo] || ''} ${it.produtoNome || it.nome} (${it.tam}) × ${it.qtd}</span>
+                    <span class="mono" style="color:var(--green);">${R$(it.custo)} × ${it.qtd} = ${R$(it.custo * it.qtd)}</span>
                 </div>`).join('')}
-                ${v.itens.length > 10 ? `<div style="color:var(--text3);padding:0.2rem;">... e mais ${v.itens.length - 10} itens</div>` : ''}
+                ${v.itens.filter(it => it.produtoId).length > 15 ? `<div style="color:var(--text3);padding:0.2rem;">... e mais ${v.itens.filter(it => it.produtoId).length - 15} itens</div>` : ''}
             </div>
             <div style="display:flex;gap:0.4rem;margin-top:0.6rem;">
                 <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Importar</button>
