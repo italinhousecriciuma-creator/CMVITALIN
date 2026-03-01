@@ -3,214 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#0a0f1c">
     <title>CMV Control - Ital'in House</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        :root {
-            --bg-primary: #0a0f1c;
-            --bg-secondary: #111827;
-            --bg-card: #1a2235;
-            --bg-hover: #243049;
-            --green: #10b981;
-            --red: #ef4444;
-            --yellow: #f59e0b;
-            --blue: #3b82f6;
-            --purple: #8b5cf6;
-            --pink: #ec4899;
-            --cyan: #06b6d4;
-            --orange: #f97316;
-            --text: #f1f5f9;
-            --text2: #94a3b8;
-            --text3: #64748b;
-            --border: #2d3a52;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text); min-height: 100vh; padding-bottom: 100px; }
-        
-        .header { background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 0.7rem 1rem; position: sticky; top: 0; z-index: 100; }
-        .header-content { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { display: flex; align-items: center; gap: 0.5rem; }
-        .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--green), var(--blue)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-        .logo h1 { font-size: 0.95rem; font-weight: 700; }
-        .logo span { font-size: 0.55rem; color: var(--text3); display: block; }
-        .sync-status { display: flex; align-items: center; gap: 0.25rem; font-size: 0.55rem; padding: 0.2rem 0.5rem; border-radius: 4px; }
-        .sync-status.online { background: rgba(16,185,129,0.2); color: var(--green); }
-        .sync-status.offline { background: rgba(239,68,68,0.2); color: var(--red); }
-        
-        .nav { background: var(--bg-secondary); border-bottom: 1px solid var(--border); position: sticky; top: 48px; z-index: 99; }
-        .nav-content { display: flex; overflow-x: auto; scrollbar-width: none; padding: 0 0.5rem; }
-        .nav-content::-webkit-scrollbar { display: none; }
-        .nav-btn { background: none; border: none; color: var(--text2); padding: 0.7rem; font-family: inherit; font-size: 0.65rem; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
-        .nav-btn:hover { color: var(--text); background: var(--bg-hover); }
-        .nav-btn.active { color: var(--green); border-bottom-color: var(--green); background: rgba(16,185,129,0.1); }
-        
-        .main { max-width: 1400px; margin: 0 auto; padding: 0.9rem; }
-        .page { display: none; animation: fadeIn 0.2s ease; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .grid-kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-bottom: 0.9rem; }
-        @media (max-width: 500px) { .grid-kpi { grid-template-columns: repeat(2, 1fr); } }
-        .kpi { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem; position: relative; overflow: hidden; }
-        .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
-        .kpi.green::before { background: var(--green); }
-        .kpi.blue::before { background: var(--blue); }
-        .kpi.yellow::before { background: var(--yellow); }
-        .kpi.purple::before { background: var(--purple); }
-        .kpi.red::before { background: var(--red); }
-        .kpi-label { color: var(--text2); font-size: 0.55rem; margin-bottom: 0.15rem; text-transform: uppercase; }
-        .kpi-value { font-family: 'Space Mono', monospace; font-size: 0.95rem; font-weight: 700; }
-        .kpi.green .kpi-value { color: var(--green); }
-        .kpi.blue .kpi-value { color: var(--blue); }
-        .kpi.yellow .kpi-value { color: var(--yellow); }
-        .kpi.purple .kpi-value { color: var(--purple); }
-        .kpi.red .kpi-value { color: var(--red); }
-        
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.8rem; }
-        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.4rem; }
-        .card-title { font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.3rem; }
-        .card-actions { display: flex; gap: 0.3rem; align-items: center; flex-wrap: wrap; }
-        
-        .search-box { display: flex; align-items: center; gap: 0.3rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.3rem 0.5rem; }
-        .search-box input { background: none; border: none; color: var(--text); font-size: 0.7rem; width: 100px; outline: none; }
-        .search-box input::placeholder { color: var(--text3); }
-        
-        .tbl-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.68rem; }
-        th { background: var(--bg-secondary); color: var(--text2); font-weight: 600; text-align: left; padding: 0.45rem 0.4rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
-        td { padding: 0.4rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        tr:hover td { background: var(--bg-hover); }
-        tr:last-child td { border-bottom: none; }
-        
-        .badge { display: inline-block; padding: 0.12rem 0.4rem; border-radius: 4px; font-size: 0.55rem; font-weight: 600; }
-        .badge.green { background: rgba(16,185,129,0.2); color: var(--green); }
-        .badge.yellow { background: rgba(245,158,11,0.2); color: var(--yellow); }
-        .badge.red { background: rgba(239,68,68,0.2); color: var(--red); }
-        .badge.blue { background: rgba(59,130,246,0.2); color: var(--blue); }
-        .badge.purple { background: rgba(139,92,246,0.2); color: var(--purple); }
-        .badge.orange { background: rgba(249,115,22,0.2); color: var(--orange); }
-        .badge.pink { background: rgba(236,72,153,0.2); color: var(--pink); }
-        
-        .mono { font-family: 'Space Mono', monospace; }
-        
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.5rem; }
-        .field { margin-bottom: 0.5rem; }
-        .field label { display: block; color: var(--text2); font-size: 0.65rem; margin-bottom: 0.15rem; font-weight: 500; }
-        .field input, .field select { width: 100%; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.6rem; color: var(--text); font-family: inherit; font-size: 0.8rem; }
-        .field input:focus, .field select:focus { outline: none; border-color: var(--green); }
-        .field-inline { display: flex; gap: 0.4rem; align-items: flex-end; }
-        .field-inline .field { flex: 1; margin-bottom: 0; }
-        .field-inline .field.sm { flex: 0 0 80px; }
-        
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem 0.9rem; border: none; border-radius: 6px; font-family: inherit; font-size: 0.7rem; font-weight: 600; cursor: pointer; transition: all 0.15s; min-height: 36px; position: relative; }
-        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-        .btn-p { background: linear-gradient(135deg, var(--green), var(--blue)); color: white; }
-        .btn-p:hover:not(:disabled) { opacity: 0.9; }
-        .btn-d { background: rgba(239,68,68,0.15); color: var(--red); }
-        .btn-e { background: rgba(59,130,246,0.15); color: var(--blue); }
-        .btn-s { background: var(--bg-secondary); color: var(--text); border: 1px solid var(--border); }
-        .btn-sm { padding: 0.35rem 0.5rem; font-size: 0.6rem; min-height: 30px; }
-        .btn-loading::after { content: ''; position: absolute; width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .actions { display: flex; gap: 0.2rem; justify-content: flex-end; }
-        
-        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; align-items: flex-end; justify-content: center; }
-        .modal-bg.show { display: flex; }
-        .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px 16px 0 0; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 1rem; animation: slideUp 0.2s ease; }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
-        .modal-head h3 { font-size: 0.9rem; }
-        .modal-close { background: var(--bg-secondary); border: none; color: var(--text); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1.1rem; }
-        .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 0.8rem; }
-        @media (min-width: 600px) { .modal-bg { align-items: center; padding: 1rem; } .modal { border-radius: 12px; max-height: 85vh; } .modal-handle { display: none; } }
-        
-        .section-title { font-size: 0.7rem; color: var(--green); margin: 0.8rem 0 0.4rem; font-weight: 600; border-bottom: 1px solid var(--border); padding-bottom: 0.2rem; display: flex; align-items: center; gap: 0.3rem; }
-        
-        .cmv-display { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem; }
-        .cmv-box { background: var(--bg-secondary); border-radius: 8px; padding: 0.6rem; text-align: center; }
-        .cmv-box.ifood { border-left: 3px solid #ea4335; }
-        .cmv-box.anota { border-left: 3px solid #34a853; }
-        .cmv-box .plat { font-size: 0.6rem; color: var(--text3); margin-bottom: 0.2rem; }
-        .cmv-box .cmv-val { font-family: 'Space Mono', monospace; font-size: 1.1rem; font-weight: 700; }
-        .cmv-box .cmv-price { font-size: 0.6rem; color: var(--text2); }
-        
-        .upload-box { border: 2px dashed var(--border); border-radius: 10px; padding: 1.2rem; text-align: center; cursor: pointer; transition: all 0.2s; }
-        .upload-box:hover, .upload-box.dragover { border-color: var(--green); background: rgba(16,185,129,0.05); }
-        .upload-box.has-file { border-color: var(--green); border-style: solid; }
-        .upload-icon { font-size: 2rem; margin-bottom: 0.3rem; }
-        .upload-text { font-size: 0.75rem; color: var(--text2); }
-        .upload-file { font-size: 0.7rem; color: var(--green); margin-top: 0.3rem; font-weight: 600; }
-        
-        .alert { padding: 0.5rem 0.7rem; border-radius: 6px; font-size: 0.7rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; }
-        .alert.info { background: rgba(59,130,246,0.15); color: var(--blue); }
-        .alert.warn { background: rgba(245,158,11,0.15); color: var(--yellow); }
-        .alert.ok { background: rgba(16,185,129,0.15); color: var(--green); }
-        
-        #toast-container { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; }
-        .toast { background: var(--bg-card); border: 1px solid var(--green); padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-        .toast.error { border-color: var(--red); }
-        
-        .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 3000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
-        .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        
-        .ing-list { border: 1px solid var(--border); border-radius: 6px; max-height: 200px; overflow-y: auto; margin-top: 0.4rem; }
-        .ing-item { display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--border); font-size: 0.7rem; }
-        .ing-item:last-child { border-bottom: none; }
-        
-        .res-box { background: var(--bg-secondary); border-radius: 8px; padding: 0.6rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.4rem; margin-top: 0.6rem; }
-        .res-item { text-align: center; }
-        .res-item .lbl { font-size: 0.5rem; color: var(--text3); text-transform: uppercase; }
-        .res-item .val { font-family: 'Space Mono', monospace; font-size: 0.85rem; font-weight: 700; }
-        
-        .empty { text-align: center; padding: 1.5rem; color: var(--text3); font-size: 0.75rem; }
-        .empty-icon { font-size: 1.8rem; margin-bottom: 0.3rem; opacity: 0.5; }
-        
-        .chart-box { height: 200px; }
-        .chart-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
-        @media (min-width: 700px) { .chart-grid { grid-template-columns: 1fr 1fr; } }
-        
-        .preview { background: var(--bg-secondary); border-radius: 8px; padding: 0.8rem; margin-top: 0.8rem; }
-        
-        .tag { display: inline-flex; align-items: center; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.55rem; font-weight: 600; }
-        .tag.ifood { background: rgba(234,67,53,0.2); color: #ea4335; }
-        .tag.anota { background: rgba(52,168,83,0.2); color: #34a853; }
-        
-        .confirm-modal { text-align: center; padding: 1rem; }
-        .confirm-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .confirm-title { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
-        .confirm-text { font-size: 0.75rem; color: var(--text2); margin-bottom: 1rem; }
-        .confirm-btns { display: flex; gap: 0.5rem; justify-content: center; }
-
-        .produto-cmv-row { display: flex; gap: 0.3rem; margin-top: 0.3rem; }
-        .produto-cmv-item { flex: 1; background: var(--bg-secondary); border-radius: 4px; padding: 0.3rem; text-align: center; font-size: 0.55rem; }
-        .produto-cmv-item.ifood { border-top: 2px solid #ea4335; }
-        .produto-cmv-item.anota { border-top: 2px solid #34a853; }
-        .produto-cmv-item .cmv-pct { font-family: 'Space Mono', monospace; font-size: 0.7rem; font-weight: 700; }
+        :root { --bg1:#0a0f1c; --bg2:#111827; --bg3:#1a2235; --bgH:#243049; --green:#10b981; --red:#ef4444; --yellow:#f59e0b; --blue:#3b82f6; --purple:#8b5cf6; --pink:#ec4899; --cyan:#06b6d4; --orange:#f97316; --txt:#f1f5f9; --txt2:#94a3b8; --txt3:#64748b; --brd:#2d3a52; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'DM Sans',sans-serif; background:var(--bg1); color:var(--txt); min-height:100vh; padding-bottom:80px; }
+        .header { background:var(--bg2); border-bottom:1px solid var(--brd); padding:0.5rem 1rem; position:sticky; top:0; z-index:100; }
+        .header-content { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo { display:flex; align-items:center; gap:0.4rem; }
+        .logo-icon { width:26px; height:26px; background:linear-gradient(135deg,var(--green),var(--blue)); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:0.8rem; }
+        .logo h1 { font-size:0.8rem; } .logo span { font-size:0.45rem; color:var(--txt3); }
+        .sync { font-size:0.5rem; padding:0.15rem 0.4rem; border-radius:4px; background:rgba(16,185,129,0.2); color:var(--green); }
+        .nav { background:var(--bg2); border-bottom:1px solid var(--brd); position:sticky; top:38px; z-index:99; overflow-x:auto; }
+        .nav::-webkit-scrollbar { display:none; }
+        .nav-content { display:flex; padding:0 0.3rem; }
+        .nav-btn { background:none; border:none; color:var(--txt2); padding:0.45rem 0.5rem; font-family:inherit; font-size:0.55rem; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+        .nav-btn:hover { color:var(--txt); background:var(--bgH); }
+        .nav-btn.active { color:var(--green); border-bottom-color:var(--green); }
+        .main { max-width:1400px; margin:0 auto; padding:0.6rem; }
+        .page { display:none; } .page.active { display:block; }
+        .grid-kpi { display:grid; grid-template-columns:repeat(4,1fr); gap:0.4rem; margin-bottom:0.6rem; }
+        @media(max-width:500px) { .grid-kpi { grid-template-columns:repeat(2,1fr); } }
+        .kpi { background:var(--bg3); border:1px solid var(--brd); border-radius:6px; padding:0.45rem; position:relative; }
+        .kpi::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+        .kpi.green::before { background:var(--green); } .kpi.blue::before { background:var(--blue); }
+        .kpi.yellow::before { background:var(--yellow); } .kpi.purple::before { background:var(--purple); }
+        .kpi-label { color:var(--txt2); font-size:0.45rem; text-transform:uppercase; }
+        .kpi-value { font-family:'Space Mono',monospace; font-size:0.8rem; font-weight:700; }
+        .kpi.green .kpi-value { color:var(--green); } .kpi.blue .kpi-value { color:var(--blue); }
+        .kpi.yellow .kpi-value { color:var(--yellow); } .kpi.purple .kpi-value { color:var(--purple); }
+        .card { background:var(--bg3); border:1px solid var(--brd); border-radius:6px; padding:0.6rem; margin-bottom:0.6rem; }
+        .card-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem; flex-wrap:wrap; gap:0.3rem; }
+        .card-title { font-size:0.68rem; font-weight:600; }
+        .card-actions { display:flex; gap:0.2rem; align-items:center; }
+        .search-box { display:flex; align-items:center; gap:0.2rem; background:var(--bg2); border:1px solid var(--brd); border-radius:4px; padding:0.2rem 0.4rem; }
+        .search-box input { background:none; border:none; color:var(--txt); font-size:0.6rem; width:70px; outline:none; }
+        .tbl-wrap { overflow-x:auto; border:1px solid var(--brd); border-radius:4px; }
+        table { width:100%; border-collapse:collapse; font-size:0.58rem; }
+        th { background:var(--bg2); color:var(--txt2); font-weight:600; text-align:left; padding:0.3rem; border-bottom:1px solid var(--brd); white-space:nowrap; }
+        td { padding:0.3rem; border-bottom:1px solid var(--brd); }
+        tr:hover td { background:var(--bgH); }
+        .badge { display:inline-block; padding:0.08rem 0.3rem; border-radius:3px; font-size:0.48rem; font-weight:600; }
+        .badge.green { background:rgba(16,185,129,0.2); color:var(--green); }
+        .badge.yellow { background:rgba(245,158,11,0.2); color:var(--yellow); }
+        .badge.red { background:rgba(239,68,68,0.2); color:var(--red); }
+        .badge.blue { background:rgba(59,130,246,0.2); color:var(--blue); }
+        .badge.purple { background:rgba(139,92,246,0.2); color:var(--purple); }
+        .badge.orange { background:rgba(249,115,22,0.2); color:var(--orange); }
+        .badge.pink { background:rgba(236,72,153,0.2); color:var(--pink); }
+        .badge.cyan { background:rgba(6,182,212,0.2); color:var(--cyan); }
+        .mono { font-family:'Space Mono',monospace; }
+        .form-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(100px,1fr)); gap:0.35rem; }
+        .field { margin-bottom:0.35rem; }
+        .field label { display:block; color:var(--txt2); font-size:0.55rem; margin-bottom:0.1rem; }
+        .field input, .field select { width:100%; background:var(--bg2); border:1px solid var(--brd); border-radius:4px; padding:0.35rem; color:var(--txt); font-size:0.7rem; }
+        .field input:focus, .field select:focus { outline:none; border-color:var(--green); }
+        .btn { display:inline-flex; align-items:center; justify-content:center; gap:0.15rem; padding:0.35rem 0.6rem; border:none; border-radius:4px; font-family:inherit; font-size:0.6rem; font-weight:600; cursor:pointer; min-height:28px; }
+        .btn-p { background:linear-gradient(135deg,var(--green),var(--blue)); color:white; }
+        .btn-d { background:rgba(239,68,68,0.15); color:var(--red); }
+        .btn-e { background:rgba(59,130,246,0.15); color:var(--blue); }
+        .btn-s { background:var(--bg2); color:var(--txt); border:1px solid var(--brd); }
+        .btn-sm { padding:0.25rem 0.4rem; font-size:0.5rem; min-height:22px; }
+        .actions { display:flex; gap:0.1rem; }
+        .modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; align-items:flex-end; justify-content:center; }
+        .modal-bg.show { display:flex; }
+        .modal { background:var(--bg3); border:1px solid var(--brd); border-radius:10px 10px 0 0; width:100%; max-width:400px; max-height:85vh; overflow-y:auto; padding:0.7rem; }
+        @media(min-width:600px) { .modal-bg { align-items:center; } .modal { border-radius:8px; } }
+        .modal-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; padding-bottom:0.3rem; border-bottom:1px solid var(--brd); }
+        .modal-head h3 { font-size:0.75rem; }
+        .modal-close { background:var(--bg2); border:none; color:var(--txt); width:24px; height:24px; border-radius:50%; cursor:pointer; }
+        .alert { padding:0.35rem 0.5rem; border-radius:4px; font-size:0.55rem; margin-bottom:0.35rem; }
+        .alert.info { background:rgba(59,130,246,0.15); color:var(--blue); }
+        .alert.warn { background:rgba(245,158,11,0.15); color:var(--yellow); }
+        #toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:var(--bg3); border:1px solid var(--green); padding:0.4rem 0.7rem; border-radius:5px; font-size:0.65rem; z-index:2000; display:none; }
+        #toast.err { border-color:var(--red); }
+        #loading { position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:3000; display:none; align-items:center; justify-content:center; flex-direction:column; gap:0.6rem; }
+        .spinner { width:30px; height:30px; border:3px solid var(--brd); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+        .upload-box { border:2px dashed var(--brd); border-radius:6px; padding:0.8rem; text-align:center; cursor:pointer; }
+        .upload-box:hover { border-color:var(--green); }
+        .upload-box.has-file { border-color:var(--green); border-style:solid; }
+        .upload-icon { font-size:1.5rem; }
+        .upload-text { font-size:0.6rem; color:var(--txt2); }
+        .upload-file { font-size:0.6rem; color:var(--green); margin-top:0.2rem; }
+        .empty { text-align:center; padding:0.8rem; color:var(--txt3); font-size:0.6rem; }
+        .chart-box { height:160px; }
+        .preview { background:var(--bg2); border-radius:5px; padding:0.5rem; margin-top:0.5rem; }
+        .res-box { display:grid; grid-template-columns:repeat(4,1fr); gap:0.25rem; }
+        .res-item { text-align:center; }
+        .res-item .lbl { font-size:0.4rem; color:var(--txt3); text-transform:uppercase; }
+        .res-item .val { font-family:'Space Mono',monospace; font-size:0.7rem; font-weight:700; }
+        .cmv-preview { display:grid; grid-template-columns:1fr 1fr; gap:0.3rem; margin-top:0.3rem; }
+        .cmv-box { background:var(--bg2); border-radius:5px; padding:0.3rem; text-align:center; }
+        .cmv-box.ifood { border-left:3px solid #ea4335; }
+        .cmv-box.anota { border-left:3px solid #34a853; }
+        .cmv-box .plat { font-size:0.45rem; color:var(--txt3); }
+        .cmv-box .cmv-val { font-family:'Space Mono',monospace; font-size:0.9rem; font-weight:700; }
+        .section-title { font-size:0.6rem; color:var(--green); margin:0.5rem 0 0.25rem; font-weight:600; border-bottom:1px solid var(--brd); padding-bottom:0.1rem; }
+        .ing-list { border:1px solid var(--brd); border-radius:4px; max-height:140px; overflow-y:auto; margin-top:0.25rem; }
+        .ing-item { display:flex; justify-content:space-between; align-items:center; padding:0.3rem; border-bottom:1px solid var(--brd); font-size:0.58rem; }
+        .ing-item:last-child { border-bottom:none; }
+        .confirm-modal { text-align:center; padding:0.6rem; }
+        .confirm-icon { font-size:1.8rem; margin-bottom:0.3rem; }
+        .confirm-title { font-size:0.8rem; font-weight:700; margin-bottom:0.15rem; }
+        .confirm-text { font-size:0.65rem; color:var(--txt2); margin-bottom:0.6rem; }
+        .confirm-btns { display:flex; gap:0.3rem; justify-content:center; }
     </style>
 </head>
 <body>
-    <div id="toast-container"></div>
-    
+    <div id="toast"></div>
+    <div id="loading"><div class="spinner"></div><div style="color:var(--txt2);font-size:0.7rem;">Carregando...</div></div>
+
     <header class="header">
         <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.1</span></div>
-            </div>
-            <div class="sync-status online" id="sync-status">☁️ Online</div>
+            <div class="logo"><div class="logo-icon">🍝</div><div><h1>CMV Control</h1><span>v9.2</span></div></div>
+            <div class="sync" id="sync">☁️ Online</div>
         </div>
     </header>
 
     <nav class="nav">
         <div class="nav-content">
-            <button class="nav-btn active" data-p="dashboard">📊 Dashboard</button>
-            <button class="nav-btn" data-p="produtos">🍽️ Produtos</button>
-            <button class="nav-btn" data-p="ingredientes">🧅 Ingredientes</button>
+            <button class="nav-btn active" data-p="dashboard">📊 Dash</button>
+            <button class="nav-btn" data-p="produtos">🍽️ Pratos</button>
+            <button class="nav-btn" data-p="bebidas">🥤 Bebidas</button>
+            <button class="nav-btn" data-p="sobremesas">🍰 Doces</button>
+            <button class="nav-btn" data-p="extras">➕ Extras</button>
+            <button class="nav-btn" data-p="ingredientes">🧅 Ingred</button>
             <button class="nav-btn" data-p="fichas">📋 Fichas</button>
-            <button class="nav-btn" data-p="importar">📥 Importar</button>
+            <button class="nav-btn" data-p="importar">📥 Import</button>
             <button class="nav-btn" data-p="analise">📈 Análise</button>
             <button class="nav-btn" data-p="config">⚙️ Config</button>
         </div>
@@ -221,32 +144,66 @@
         <div class="page active" id="p-dashboard">
             <div class="grid-kpi">
                 <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value" id="k-fat">R$ 0</div></div>
-                <div class="kpi blue"><div class="kpi-label">Custo Total</div><div class="kpi-value" id="k-custo">R$ 0</div></div>
-                <div class="kpi yellow"><div class="kpi-label">CMV Geral</div><div class="kpi-value" id="k-cmv">0%</div></div>
-                <div class="kpi purple"><div class="kpi-label">Lucro Bruto</div><div class="kpi-value" id="k-lucro">R$ 0</div></div>
+                <div class="kpi blue"><div class="kpi-label">Custo</div><div class="kpi-value" id="k-custo">R$ 0</div></div>
+                <div class="kpi yellow"><div class="kpi-label">CMV</div><div class="kpi-value" id="k-cmv">0%</div></div>
+                <div class="kpi purple"><div class="kpi-label">Lucro</div><div class="kpi-value" id="k-lucro">R$ 0</div></div>
             </div>
-            <div class="chart-grid">
-                <div class="card"><div class="card-title">📊 CMV por Produto</div><div class="chart-box"><canvas id="chart1"></canvas></div></div>
-                <div class="card"><div class="card-title">📈 CMV Mensal</div><div class="chart-box"><canvas id="chart2"></canvas></div></div>
-            </div>
-            <div class="card">
-                <div class="card-title">🏆 Ranking CMV (últimas vendas)</div>
-                <div class="tbl-wrap" style="margin-top:0.5rem;"><table><thead><tr><th>Produto</th><th>Custo</th><th>CMV iFood</th><th>CMV Anota</th></tr></thead><tbody id="tbl-ranking"></tbody></table></div>
-            </div>
+            <div class="card"><div class="card-title">🏆 Top CMV</div><div class="tbl-wrap" style="margin-top:0.3rem;"><table><thead><tr><th>Produto</th><th>Cat</th><th>Custo</th><th>CMV</th></tr></thead><tbody id="tbl-ranking"></tbody></table></div></div>
         </div>
 
         <!-- PRODUTOS -->
         <div class="page" id="p-produtos">
             <div class="card">
                 <div class="card-head">
-                    <span class="card-title">🍽️ Produtos</span>
+                    <span class="card-title">🍽️ Pratos</span>
                     <div class="card-actions">
-                        <div class="search-box"><span>🔍</span><input type="text" id="search-prod" placeholder="Buscar..." oninput="filtrarProd()"></div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-prod')">+ Novo</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-prod" placeholder="Buscar..." oninput="filtrar('prod')"></div>
+                        <button class="btn btn-p btn-sm" onclick="abrirModal('mod-prod')">+ Novo</button>
                     </div>
                 </div>
-                <div class="alert info">💡 Custo = ficha técnica (ingredientes + embalagem). CMV = Custo ÷ Preço</div>
-                <div class="tbl-wrap"><table><thead><tr><th>Produto</th><th>Cat</th><th>Tam</th><th>Custo</th><th>iFood</th><th>Anota</th><th></th></tr></thead><tbody id="tbl-prod"></tbody></table></div>
+                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Cat</th><th>Tam</th><th>Custo</th><th>CMV iF</th><th>CMV An</th><th></th></tr></thead><tbody id="tbl-prod"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- BEBIDAS -->
+        <div class="page" id="p-bebidas">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title">🥤 Bebidas</span>
+                    <div class="card-actions">
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-beb" placeholder="Buscar..." oninput="filtrar('beb')"></div>
+                        <button class="btn btn-p btn-sm" onclick="abrirModal('mod-beb')">+ Nova</button>
+                    </div>
+                </div>
+                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Custo</th><th>iFood</th><th>Anota</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-beb"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- SOBREMESAS -->
+        <div class="page" id="p-sobremesas">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title">🍰 Sobremesas</span>
+                    <div class="card-actions">
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-sob" placeholder="Buscar..." oninput="filtrar('sob')"></div>
+                        <button class="btn btn-p btn-sm" onclick="abrirModal('mod-sob')">+ Nova</button>
+                    </div>
+                </div>
+                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Custo</th><th>iFood</th><th>Anota</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-sob"></tbody></table></div>
+            </div>
+        </div>
+
+        <!-- EXTRAS -->
+        <div class="page" id="p-extras">
+            <div class="card">
+                <div class="card-head">
+                    <span class="card-title">➕ Extras</span>
+                    <div class="card-actions">
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-ext" placeholder="Buscar..." oninput="filtrar('ext')"></div>
+                        <button class="btn btn-p btn-sm" onclick="abrirModal('mod-ext')">+ Novo</button>
+                    </div>
+                </div>
+                <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Custo</th><th>Preço</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-ext"></tbody></table></div>
             </div>
         </div>
 
@@ -256,40 +213,35 @@
                 <div class="card-head">
                     <span class="card-title">🧅 Ingredientes</span>
                     <div class="card-actions">
-                        <div class="search-box"><span>🔍</span><input type="text" id="search-ing" placeholder="Buscar..." oninput="filtrarIng()"></div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-ing')">+ Novo</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-ing" placeholder="Buscar..." oninput="filtrar('ing')"></div>
+                        <button class="btn btn-p btn-sm" onclick="abrirModal('mod-ing')">+ Novo</button>
                     </div>
                 </div>
-                <div class="alert info">💡 Cadastre ingredientes E embalagens (box, tampa, sacola)</div>
                 <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>Un</th><th>Custo/Un</th><th>Forn.</th><th></th></tr></thead><tbody id="tbl-ing"></tbody></table></div>
             </div>
         </div>
 
-        <!-- FICHAS TÉCNICAS -->
+        <!-- FICHAS -->
         <div class="page" id="p-fichas">
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.6rem;">📋 Fichas Técnicas</div>
-                <div class="alert info">💡 Monte a ficha com ingredientes + embalagem. O custo será salvo no produto.</div>
-                <div class="form-row">
-                    <div class="field"><label>Produto</label><select id="ficha-prod" onchange="carregarFicha()"></select></div>
-                </div>
+                <div class="card-title">📋 Fichas Técnicas</div>
+                <div class="field" style="margin-top:0.4rem;"><label>Produto</label><select id="ficha-prod" onchange="carregarFicha()"></select></div>
                 <div id="ficha-area" style="display:none;">
-                    <div style="background:var(--bg-secondary);border-radius:8px;padding:0.6rem;margin-top:0.5rem;">
-                        <div style="font-size:0.7rem;font-weight:600;margin-bottom:0.4rem;">🧅 Adicionar Item</div>
-                        <div class="field-inline">
-                            <div class="field"><select id="ficha-ing"></select></div>
-                            <div class="field sm"><input type="number" id="ficha-qtd" placeholder="Qtd" step="0.001"></div>
-                            <div class="field sm"><select id="ficha-un"><option>kg</option><option selected>g</option><option>L</option><option>ml</option><option>un</option></select></div>
+                    <div style="background:var(--bg2);border-radius:5px;padding:0.4rem;margin-top:0.3rem;">
+                        <div style="display:flex;gap:0.25rem;flex-wrap:wrap;">
+                            <select id="ficha-ing" style="flex:1;min-width:100px;background:var(--bg1);border:1px solid var(--brd);border-radius:4px;padding:0.25rem;color:var(--txt);font-size:0.6rem;"></select>
+                            <input type="number" id="ficha-qtd" placeholder="Qtd" step="0.001" style="width:50px;background:var(--bg1);border:1px solid var(--brd);border-radius:4px;padding:0.25rem;color:var(--txt);font-size:0.6rem;">
+                            <select id="ficha-un" style="width:45px;background:var(--bg1);border:1px solid var(--brd);border-radius:4px;padding:0.25rem;color:var(--txt);font-size:0.6rem;"><option>kg</option><option selected>g</option><option>L</option><option>ml</option><option>un</option></select>
                             <button class="btn btn-p btn-sm" onclick="addIngFicha()">+</button>
                         </div>
                         <div class="ing-list" id="ficha-list"></div>
                     </div>
-                    <div class="res-box">
-                        <div class="res-item"><div class="lbl">Custo Total</div><div class="val" style="color:var(--green);" id="f-custo">R$0</div></div>
-                        <div class="res-item"><div class="lbl">CMV iFood</div><div class="val" style="color:#ea4335;" id="f-cmv-if">0%</div></div>
-                        <div class="res-item"><div class="lbl">CMV Anota</div><div class="val" style="color:#34a853;" id="f-cmv-an">0%</div></div>
+                    <div class="res-box" style="margin-top:0.4rem;grid-template-columns:repeat(3,1fr);">
+                        <div class="res-item"><div class="lbl">Custo</div><div class="val" style="color:var(--green);" id="f-custo">R$0</div></div>
+                        <div class="res-item"><div class="lbl">CMV iF</div><div class="val" style="color:#ea4335;" id="f-cmv-if">0%</div></div>
+                        <div class="res-item"><div class="lbl">CMV An</div><div class="val" style="color:#34a853;" id="f-cmv-an">0%</div></div>
                     </div>
-                    <button class="btn btn-p" style="width:100%;margin-top:0.6rem;" onclick="salvarCustoFicha()">💾 Salvar Custo no Produto</button>
+                    <button class="btn btn-p" style="width:100%;margin-top:0.4rem;" onclick="salvarCustoFicha()">💾 Salvar Custo</button>
                 </div>
             </div>
         </div>
@@ -297,18 +249,18 @@
         <!-- IMPORTAR -->
         <div class="page" id="p-importar">
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.6rem;">📥 Importar Vendas</div>
-                <div class="upload-box" id="upload-box">
+                <div class="card-title">📥 Importar Vendas</div>
+                <div class="upload-box" id="upload-box" style="margin-top:0.4rem;">
                     <div class="upload-icon">📁</div>
-                    <p class="upload-text">Arraste ou clique para selecionar Excel</p>
+                    <p class="upload-text">Clique ou arraste Excel</p>
                     <p class="upload-file" id="upload-file"></p>
                     <input type="file" id="file-input" accept=".xlsx,.xls" style="display:none">
                 </div>
                 <div id="import-preview"></div>
             </div>
             <div class="card">
-                <div class="card-head"><span class="card-title">📅 Importações</span></div>
-                <div class="tbl-wrap"><table><thead><tr><th>Período</th><th>Plataforma</th><th>Faturamento</th><th>Custo</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-vendas"></tbody></table></div>
+                <div class="card-title">📅 Importações</div>
+                <div class="tbl-wrap" style="margin-top:0.3rem;"><table><thead><tr><th>Período</th><th>Plat</th><th>Fat</th><th>Custo</th><th>CMV</th><th></th></tr></thead><tbody id="tbl-vendas"></tbody></table></div>
             </div>
         </div>
 
@@ -316,8 +268,8 @@
         <div class="page" id="p-analise">
             <div class="card">
                 <div class="card-head">
-                    <span class="card-title">📈 Análise Detalhada</span>
-                    <select id="sel-venda" onchange="mostrarAnalise()"></select>
+                    <span class="card-title">📈 Análise</span>
+                    <select id="sel-venda" style="font-size:0.6rem;padding:0.25rem;background:var(--bg2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);" onchange="mostrarAnalise()"></select>
                 </div>
             </div>
             <div id="analise-area"></div>
@@ -326,730 +278,428 @@
         <!-- CONFIG -->
         <div class="page" id="p-config">
             <div class="card">
-                <div class="card-title" style="margin-bottom:0.6rem;">⚙️ Configurações</div>
-                <div class="alert info">☁️ Dados salvos no servidor PostgreSQL (Neon)</div>
-                <div style="margin-top:0.6rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <div class="card-title">⚙️ Configurações</div>
+                <div class="alert info" style="margin-top:0.4rem;">☁️ Dados salvos no PostgreSQL (Neon)</div>
+                <div style="margin-top:0.4rem;display:flex;gap:0.3rem;flex-wrap:wrap;">
                     <button class="btn btn-s" onclick="setupDB()">🔧 Setup DB</button>
                     <button class="btn btn-s" onclick="seedDB()">🌱 Dados Exemplo</button>
-                    <button class="btn btn-s" onclick="exportarBackup()">📤 Backup JSON</button>
+                    <button class="btn btn-d" onclick="confirmarLimpar()">🗑️ Limpar Tudo</button>
+                    <button class="btn btn-s" onclick="exportarBackup()">📤 Backup</button>
                 </div>
             </div>
             <div class="card">
                 <div class="card-title">📊 Estatísticas</div>
-                <div class="res-box" style="grid-template-columns:repeat(4,1fr);">
-                    <div class="res-item"><div class="lbl">Produtos</div><div class="val" style="color:var(--blue);" id="stat-prod">0</div></div>
-                    <div class="res-item"><div class="lbl">Ingredientes</div><div class="val" style="color:var(--yellow);" id="stat-ing">0</div></div>
-                    <div class="res-item"><div class="lbl">Fichas</div><div class="val" style="color:var(--green);" id="stat-fichas">0</div></div>
-                    <div class="res-item"><div class="lbl">Vendas</div><div class="val" style="color:var(--purple);" id="stat-vendas">0</div></div>
+                <div class="res-box" style="grid-template-columns:repeat(6,1fr);margin-top:0.3rem;">
+                    <div class="res-item"><div class="lbl">Pratos</div><div class="val" style="color:var(--blue);" id="st-prod">0</div></div>
+                    <div class="res-item"><div class="lbl">Bebidas</div><div class="val" style="color:var(--cyan);" id="st-beb">0</div></div>
+                    <div class="res-item"><div class="lbl">Doces</div><div class="val" style="color:var(--pink);" id="st-sob">0</div></div>
+                    <div class="res-item"><div class="lbl">Extras</div><div class="val" style="color:var(--orange);" id="st-ext">0</div></div>
+                    <div class="res-item"><div class="lbl">Ingred</div><div class="val" style="color:var(--yellow);" id="st-ing">0</div></div>
+                    <div class="res-item"><div class="lbl">Vendas</div><div class="val" style="color:var(--purple);" id="st-vendas">0</div></div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- MODAL PRODUTO -->
-    <div class="modal-bg" id="mod-prod"><div class="modal"><div class="modal-handle"></div>
+    <!-- MODAIS -->
+    <div class="modal-bg" id="mod-prod"><div class="modal">
         <div class="modal-head"><h3>Produto</h3><button class="modal-close" onclick="fecharModal('mod-prod')">×</button></div>
         <form id="form-prod"><input type="hidden" id="prod-id">
-            <div class="form-row">
-                <div class="field"><label>Nome *</label><input type="text" id="prod-nome" required placeholder="Ex: Bolonhesa"></div>
-            </div>
+            <div class="field"><label>Nome *</label><input type="text" id="prod-nome" required></div>
             <div class="form-row">
                 <div class="field"><label>Categoria</label><select id="prod-cat"><option value="macarrao">Macarrão</option><option value="risoto">Risoto</option><option value="nhoque">Nhoque</option><option value="combo">Combo</option><option value="outros">Outros</option></select></div>
-                <div class="field"><label>Tamanho</label><select id="prod-tam"><option value="P">Box P (450g)</option><option value="G" selected>Box G (800g)</option></select></div>
+                <div class="field"><label>Tamanho</label><select id="prod-tam"><option value="P">Box P</option><option value="G" selected>Box G</option></select></div>
             </div>
-            
-            <div class="section-title">💰 Custo (da Ficha Técnica)</div>
-            <div class="field"><label>Custo (R$)</label><input type="number" id="prod-custo" step="0.01" min="0" placeholder="0.00"></div>
-            
-            <div class="section-title">📱 Preço de Venda iFood</div>
-            <div class="field"><label>Preço iFood (R$)</label><input type="number" id="prod-preco-if" step="0.01" min="0" placeholder="0.00"></div>
-            
-            <div class="section-title">📲 Preço de Venda AnotaAi</div>
-            <div class="field"><label>Preço AnotaAi (R$)</label><input type="number" id="prod-preco-an" step="0.01" min="0" placeholder="0.00"></div>
-            
-            <div class="cmv-display" id="prod-cmv-preview">
-                <div class="cmv-box ifood"><div class="plat">📱 iFood</div><div class="cmv-val" id="prev-cmv-if">0%</div><div class="cmv-price" id="prev-price-if">-</div></div>
-                <div class="cmv-box anota"><div class="plat">📲 AnotaAi</div><div class="cmv-val" id="prev-cmv-an">0%</div><div class="cmv-price" id="prev-price-an">-</div></div>
-            </div>
-            
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.8rem;"><span class="btn-text">💾 Salvar</span></button>
-        </form>
-    </div></div>
-
-    <!-- MODAL INGREDIENTE -->
-    <div class="modal-bg" id="mod-ing"><div class="modal"><div class="modal-handle"></div>
-        <div class="modal-head"><h3>Ingrediente</h3><button class="modal-close" onclick="fecharModal('mod-ing')">×</button></div>
-        <form id="form-ing"><input type="hidden" id="ing-id">
+            <div class="section-title">💰 Custos</div>
             <div class="form-row">
-                <div class="field"><label>Nome *</label><input type="text" id="ing-nome" required placeholder="Ex: Carne Moída"></div>
-                <div class="field"><label>Unidade</label><select id="ing-un"><option value="kg">kg</option><option value="g">g</option><option value="L">L</option><option value="ml">ml</option><option value="un">un</option></select></div>
+                <div class="field"><label>Custo</label><input type="number" id="prod-custo" step="0.01" oninput="prevCMV()"></div>
+                <div class="field"><label>Preço iFood</label><input type="number" id="prod-pif" step="0.01" oninput="prevCMV()"></div>
+                <div class="field"><label>Preço Anota</label><input type="number" id="prod-pan" step="0.01" oninput="prevCMV()"></div>
             </div>
-            <div class="form-row">
-                <div class="field"><label>Custo por Unidade (R$)</label><input type="number" id="ing-custo" step="0.0001" min="0" placeholder="0.00"></div>
-                <div class="field"><label>Fornecedor</label><input type="text" id="ing-forn" placeholder="Opcional"></div>
+            <div class="cmv-preview">
+                <div class="cmv-box ifood"><div class="plat">iFood</div><div class="cmv-val" id="prev-if">0%</div></div>
+                <div class="cmv-box anota"><div class="plat">AnotaAi</div><div class="cmv-val" id="prev-an">0%</div></div>
             </div>
             <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.5rem;">💾 Salvar</button>
         </form>
     </div></div>
 
-    <!-- MODAL CONFIRMAR -->
-    <div class="modal-bg" id="mod-confirm"><div class="modal" style="max-width:350px;">
+    <div class="modal-bg" id="mod-beb"><div class="modal">
+        <div class="modal-head"><h3>Bebida</h3><button class="modal-close" onclick="fecharModal('mod-beb')">×</button></div>
+        <form id="form-beb"><input type="hidden" id="beb-id">
+            <div class="field"><label>Nome *</label><input type="text" id="beb-nome" required></div>
+            <div class="form-row">
+                <div class="field"><label>Custo</label><input type="number" id="beb-custo" step="0.01"></div>
+                <div class="field"><label>Preço iFood</label><input type="number" id="beb-pif" step="0.01"></div>
+                <div class="field"><label>Preço Anota</label><input type="number" id="beb-pan" step="0.01"></div>
+            </div>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.4rem;">💾 Salvar</button>
+        </form>
+    </div></div>
+
+    <div class="modal-bg" id="mod-sob"><div class="modal">
+        <div class="modal-head"><h3>Sobremesa</h3><button class="modal-close" onclick="fecharModal('mod-sob')">×</button></div>
+        <form id="form-sob"><input type="hidden" id="sob-id">
+            <div class="field"><label>Nome *</label><input type="text" id="sob-nome" required></div>
+            <div class="form-row">
+                <div class="field"><label>Custo</label><input type="number" id="sob-custo" step="0.01"></div>
+                <div class="field"><label>Preço iFood</label><input type="number" id="sob-pif" step="0.01"></div>
+                <div class="field"><label>Preço Anota</label><input type="number" id="sob-pan" step="0.01"></div>
+            </div>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.4rem;">💾 Salvar</button>
+        </form>
+    </div></div>
+
+    <div class="modal-bg" id="mod-ext"><div class="modal">
+        <div class="modal-head"><h3>Extra</h3><button class="modal-close" onclick="fecharModal('mod-ext')">×</button></div>
+        <form id="form-ext"><input type="hidden" id="ext-id">
+            <div class="field"><label>Nome *</label><input type="text" id="ext-nome" required></div>
+            <div class="form-row">
+                <div class="field"><label>Custo</label><input type="number" id="ext-custo" step="0.01"></div>
+                <div class="field"><label>Preço</label><input type="number" id="ext-preco" step="0.01"></div>
+            </div>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.4rem;">💾 Salvar</button>
+        </form>
+    </div></div>
+
+    <div class="modal-bg" id="mod-ing"><div class="modal">
+        <div class="modal-head"><h3>Ingrediente</h3><button class="modal-close" onclick="fecharModal('mod-ing')">×</button></div>
+        <form id="form-ing"><input type="hidden" id="ing-id">
+            <div class="form-row">
+                <div class="field"><label>Nome *</label><input type="text" id="ing-nome" required></div>
+                <div class="field"><label>Unidade</label><select id="ing-un"><option>kg</option><option>g</option><option>L</option><option>ml</option><option>un</option></select></div>
+            </div>
+            <div class="form-row">
+                <div class="field"><label>Custo/Un</label><input type="number" id="ing-custo" step="0.0001"></div>
+                <div class="field"><label>Fornecedor</label><input type="text" id="ing-forn"></div>
+            </div>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.4rem;">💾 Salvar</button>
+        </form>
+    </div></div>
+
+    <div class="modal-bg" id="mod-confirm"><div class="modal" style="max-width:300px;">
         <div class="confirm-modal">
-            <div class="confirm-icon" id="confirm-icon">⚠️</div>
-            <div class="confirm-title" id="confirm-title">Confirmar</div>
-            <div class="confirm-text" id="confirm-text">Deseja continuar?</div>
+            <div class="confirm-icon" id="conf-icon">⚠️</div>
+            <div class="confirm-title" id="conf-title">Confirmar</div>
+            <div class="confirm-text" id="conf-text">Deseja continuar?</div>
             <div class="confirm-btns">
                 <button class="btn btn-s" onclick="fecharModal('mod-confirm')">Cancelar</button>
-                <button class="btn btn-d" id="confirm-btn">Confirmar</button>
+                <button class="btn btn-d" id="conf-btn">Confirmar</button>
             </div>
         </div>
     </div></div>
 
 <script>
-// ==================== CONFIG ====================
 const API = '/api';
-const DB = { produtos: [], ingredientes: [], fichas: [], vendas: [] };
-let chart1 = null, chart2 = null;
+const DB = { produtos:[], bebidas:[], sobremesas:[], extras:[], ingredientes:[], fichas:[], vendas:[] };
 let filterText = {};
 
-// ==================== UTILS ====================
 const $ = id => document.getElementById(id);
-const R$ = v => 'R$ ' + (parseFloat(v)||0).toFixed(2).replace('.',',');
-const pct = v => (parseFloat(v)||0).toFixed(1) + '%';
-const calcCMV = (custo, preco) => preco > 0 ? ((custo / preco) * 100) : 0;
-const cmvClass = cmv => cmv <= 25 ? 'green' : cmv <= 35 ? 'yellow' : 'red';
+const R$ = v => 'R$ '+(parseFloat(v)||0).toFixed(2).replace('.',',');
+const pct = v => (parseFloat(v)||0).toFixed(1)+'%';
+const calcCMV = (c,p) => p > 0 ? ((c/p)*100) : 0;
+const cmvCls = c => c <= 25 ? 'green' : c <= 35 ? 'yellow' : 'red';
 
-function toast(msg, err) { 
-    $('toast-container').innerHTML = `<div class="toast ${err?'error':''}">${err?'❌':'✅'} ${msg}</div>`; 
-    setTimeout(() => $('toast-container').innerHTML = '', 3000); 
-}
+function toast(msg, err) { const t = $('toast'); t.textContent = (err?'❌ ':'✅ ') + msg; t.className = err ? 'err' : ''; t.style.display = 'block'; setTimeout(() => t.style.display = 'none', 3000); }
+function loading(s) { $('loading').style.display = s ? 'flex' : 'none'; }
 
-function showLoading(show) { 
-    let el = $('loading-overlay'); 
-    if(show && !el) { 
-        el = document.createElement('div'); 
-        el.id = 'loading-overlay'; 
-        el.className = 'loading-overlay'; 
-        el.innerHTML = '<div class="spinner"></div><div style="color:var(--text2);">Carregando...</div>'; 
-        document.body.appendChild(el); 
-    } else if(!show && el) el.remove(); 
-}
-
-function setSyncStatus(ok) {
-    const el = $('sync-status');
-    el.className = 'sync-status ' + (ok ? 'online' : 'offline');
-    el.innerHTML = ok ? '☁️ Online' : '⚠️ Offline';
-}
-
-// ==================== API ====================
-async function api(endpoint, method = 'GET', body = null) {
+async function api(ep, method='GET', body=null) {
     try {
         const opts = { method, headers: { 'Content-Type': 'application/json' } };
         if (body) opts.body = JSON.stringify(body);
-        const res = await fetch(API + '/' + endpoint, opts);
+        const res = await fetch(API + '/' + ep, opts);
         if (!res.ok) throw new Error(await res.text());
-        setSyncStatus(true);
         return await res.json();
-    } catch (e) {
-        console.error('API Error:', e);
-        setSyncStatus(false);
-        throw e;
-    }
+    } catch (e) { console.error(e); throw e; }
 }
 
-// ==================== LOAD ====================
 async function loadAll() {
-    showLoading(true);
+    loading(true);
     try {
-        DB.produtos = await api('produtos');
-        DB.ingredientes = await api('ingredientes');
-        DB.fichas = await api('fichas');
-        DB.vendas = await api('vendas');
+        DB.produtos = await api('produtos') || [];
+        DB.ingredientes = await api('ingredientes') || [];
+        DB.fichas = await api('fichas') || [];
+        DB.vendas = await api('vendas') || [];
+        try { DB.bebidas = await api('bebidas') || []; } catch(e) { DB.bebidas = []; }
+        try { DB.sobremesas = await api('sobremesas') || []; } catch(e) { DB.sobremesas = []; }
+        try { DB.extras = await api('extras') || []; } catch(e) { DB.extras = []; }
         renderAll();
-    } catch (e) {
-        toast('Erro ao carregar: ' + e.message, true);
-    }
-    showLoading(false);
+    } catch (e) { toast('Erro: ' + e.message, true); }
+    loading(false);
 }
 
-// ==================== MODAL ====================
 function abrirModal(id, editId) {
     const form = $(id).querySelector('form');
-    if (form) {
-        form.reset();
-        const h = form.querySelector('input[type="hidden"]');
-        if (h) h.value = '';
-    }
+    if (form) { form.reset(); const h = form.querySelector('input[type="hidden"]'); if (h) h.value = ''; }
     if (editId) preencherForm(id, editId);
     $(id).classList.add('show');
-    document.body.style.overflow = 'hidden';
-    
-    // Atualizar preview CMV ao abrir
-    if (id === 'mod-prod') atualizarPreviewCMV();
 }
 
-function fecharModal(id) {
-    $(id).classList.remove('show');
-    document.body.style.overflow = '';
-}
-
-function confirmarAcao(tipo, id) {
-    const cfg = {
-        'delete-prod': { icon: '🗑️', title: 'Excluir Produto?', text: 'Também remove fichas técnicas associadas.', fn: () => execDelete('produtos', id) },
-        'delete-ing': { icon: '🗑️', title: 'Excluir Ingrediente?', text: 'Remove de todas as fichas.', fn: () => execDelete('ingredientes', id) },
-        'delete-venda': { icon: '🗑️', title: 'Excluir Importação?', text: 'Remove dados de vendas do período.', fn: () => execDelete('vendas', id) },
-    }[tipo];
-    if (!cfg) return;
-    
-    $('confirm-icon').textContent = cfg.icon;
-    $('confirm-title').textContent = cfg.title;
-    $('confirm-text').textContent = cfg.text;
-    $('confirm-btn').onclick = () => { cfg.fn(); fecharModal('mod-confirm'); };
-    abrirModal('mod-confirm');
-}
-
-async function execDelete(tabela, id) {
-    try {
-        await api(tabela, 'DELETE', { id });
-        DB[tabela] = DB[tabela].filter(x => x.id !== id);
-        renderAll();
-        toast('Excluído!');
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
-}
+function fecharModal(id) { $(id).classList.remove('show'); }
 
 function preencherForm(mid, id) {
-    if (mid === 'mod-prod') {
-        const p = DB.produtos.find(x => x.id === id);
-        if (p) {
-            $('prod-id').value = id;
-            $('prod-nome').value = p.nome;
-            $('prod-cat').value = p.cat || 'macarrao';
-            $('prod-tam').value = p.tam || 'G';
-            $('prod-custo').value = p.custo || '';
-            $('prod-preco-if').value = p.preco_ifood || '';
-            $('prod-preco-an').value = p.preco_anota || '';
-            atualizarPreviewCMV();
-        }
-    } else if (mid === 'mod-ing') {
-        const i = DB.ingredientes.find(x => x.id === id);
-        if (i) {
-            $('ing-id').value = id;
-            $('ing-nome').value = i.nome;
-            $('ing-un').value = i.un || 'kg';
-            $('ing-custo').value = i.custo || '';
-            $('ing-forn').value = i.forn || '';
-        }
-    }
+    if (mid === 'mod-prod') { const p = DB.produtos.find(x => x.id === id); if (p) { $('prod-id').value = id; $('prod-nome').value = p.nome; $('prod-cat').value = p.cat||'macarrao'; $('prod-tam').value = p.tam||'G'; $('prod-custo').value = p.custo||''; $('prod-pif').value = p.preco_ifood||''; $('prod-pan').value = p.preco_anota||''; prevCMV(); } }
+    else if (mid === 'mod-beb') { const b = DB.bebidas.find(x => x.id === id); if (b) { $('beb-id').value = id; $('beb-nome').value = b.nome; $('beb-custo').value = b.custo||''; $('beb-pif').value = b.preco_ifood||''; $('beb-pan').value = b.preco_anota||''; } }
+    else if (mid === 'mod-sob') { const s = DB.sobremesas.find(x => x.id === id); if (s) { $('sob-id').value = id; $('sob-nome').value = s.nome; $('sob-custo').value = s.custo||''; $('sob-pif').value = s.preco_ifood||''; $('sob-pan').value = s.preco_anota||''; } }
+    else if (mid === 'mod-ext') { const e = DB.extras.find(x => x.id === id); if (e) { $('ext-id').value = id; $('ext-nome').value = e.nome; $('ext-custo').value = e.custo||''; $('ext-preco').value = e.preco||''; } }
+    else if (mid === 'mod-ing') { const i = DB.ingredientes.find(x => x.id === id); if (i) { $('ing-id').value = id; $('ing-nome').value = i.nome; $('ing-un').value = i.un||'kg'; $('ing-custo').value = i.custo||''; $('ing-forn').value = i.forn||''; } }
 }
 
-// ==================== PREVIEW CMV NO MODAL ====================
-function atualizarPreviewCMV() {
-    const custo = parseFloat($('prod-custo').value) || 0;
-    const precoIf = parseFloat($('prod-preco-if').value) || 0;
-    const precoAn = parseFloat($('prod-preco-an').value) || 0;
-    
-    const cmvIf = calcCMV(custo, precoIf);
-    const cmvAn = calcCMV(custo, precoAn);
-    
-    $('prev-cmv-if').textContent = pct(cmvIf);
-    $('prev-cmv-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
-    $('prev-price-if').textContent = precoIf > 0 ? R$(precoIf) : '-';
-    
-    $('prev-cmv-an').textContent = pct(cmvAn);
-    $('prev-cmv-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
-    $('prev-price-an').textContent = precoAn > 0 ? R$(precoAn) : '-';
+function prevCMV() {
+    const c = parseFloat($('prod-custo').value)||0, pif = parseFloat($('prod-pif').value)||0, pan = parseFloat($('prod-pan').value)||0;
+    const cmvIf = calcCMV(c, pif), cmvAn = calcCMV(c, pan);
+    $('prev-if').textContent = pct(cmvIf); $('prev-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('prev-an').textContent = pct(cmvAn); $('prev-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
 }
 
-// Listeners para atualizar preview em tempo real
-['prod-custo', 'prod-preco-if', 'prod-preco-an'].forEach(id => {
-    document.addEventListener('DOMContentLoaded', () => {
-        $(id).addEventListener('input', atualizarPreviewCMV);
-    });
-});
-
-// ==================== NAVIGATION ====================
+// Navegação
 document.querySelectorAll('.nav-btn').forEach(btn => {
     btn.onclick = () => {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         $('p-' + btn.dataset.p).classList.add('active');
-        localStorage.setItem('cmv_tab', btn.dataset.p);
     };
 });
 
-// ==================== FILTERING ====================
-function filtrarProd() { filterText.produtos = $('search-prod').value.toLowerCase(); renderProd(); }
-function filtrarIng() { filterText.ingredientes = $('search-ing').value.toLowerCase(); renderIng(); }
-
-function filtrar(arr, key) {
-    const txt = filterText[key];
-    if (!txt) return arr;
-    return arr.filter(x => x.nome.toLowerCase().includes(txt));
+// Filtros
+function filtrar(tipo) {
+    filterText[tipo] = $('search-' + tipo).value.toLowerCase();
+    if (tipo === 'prod') renderProd();
+    else if (tipo === 'beb') renderBeb();
+    else if (tipo === 'sob') renderSob();
+    else if (tipo === 'ext') renderExt();
+    else if (tipo === 'ing') renderIng();
 }
 
-// ==================== RENDERS ====================
+// Renders
 function renderProd() {
-    let data = filtrar(DB.produtos, 'produtos');
-    $('tbl-prod').innerHTML = data.length === 0 ? 
-        '<tr><td colspan="7"><div class="empty"><div class="empty-icon">🍽️</div>Nenhum produto</div></td></tr>' :
+    let data = DB.produtos;
+    if (filterText.prod) data = data.filter(x => x.nome.toLowerCase().includes(filterText.prod));
+    const catBadge = { macarrao:'blue', risoto:'orange', nhoque:'pink', combo:'purple', outros:'cyan' };
+    $('tbl-prod').innerHTML = data.length === 0 ? '<tr><td colspan="7"><div class="empty">Nenhum produto</div></td></tr>' :
         data.map(p => {
-            const cmvIf = calcCMV(p.custo, p.preco_ifood);
-            const cmvAn = calcCMV(p.custo, p.preco_anota);
-            const catBadge = { macarrao: 'blue', risoto: 'orange', nhoque: 'pink', combo: 'purple', outros: 'cyan' }[p.cat] || 'cyan';
-            return `<tr>
-                <td><b>${p.nome}</b></td>
-                <td><span class="badge ${catBadge}">${(p.cat||'').slice(0,3)}</span></td>
-                <td>${p.tam || 'G'}</td>
-                <td class="mono">${p.custo > 0 ? R$(p.custo) : '-'}</td>
-                <td><span class="badge ${cmvClass(cmvIf)}">${pct(cmvIf)}</span></td>
-                <td><span class="badge ${cmvClass(cmvAn)}">${pct(cmvAn)}</span></td>
-                <td class="actions">
-                    <button class="btn btn-e btn-sm" onclick="abrirModal('mod-prod',${p.id})">✏️</button>
-                    <button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-prod',${p.id})">🗑️</button>
-                </td>
-            </tr>`;
+            const cmvIf = calcCMV(p.custo, p.preco_ifood), cmvAn = calcCMV(p.custo, p.preco_anota);
+            return `<tr><td><b>${p.nome}</b></td><td><span class="badge ${catBadge[p.cat]||'cyan'}">${(p.cat||'').slice(0,3)}</span></td><td>${p.tam||'G'}</td><td class="mono">${p.custo > 0 ? R$(p.custo) : '-'}</td><td><span class="badge ${cmvCls(cmvIf)}">${pct(cmvIf)}</span></td><td><span class="badge ${cmvCls(cmvAn)}">${pct(cmvAn)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-prod',${p.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('prod',${p.id})">🗑️</button></td></tr>`;
+        }).join('');
+}
+
+function renderBeb() {
+    let data = DB.bebidas;
+    if (filterText.beb) data = data.filter(x => x.nome.toLowerCase().includes(filterText.beb));
+    $('tbl-beb').innerHTML = data.length === 0 ? '<tr><td colspan="6"><div class="empty">Nenhuma bebida</div></td></tr>' :
+        data.map(b => {
+            const cmv = calcCMV(b.custo, b.preco_ifood);
+            return `<tr><td><b>${b.nome}</b></td><td class="mono">${R$(b.custo)}</td><td class="mono">${R$(b.preco_ifood)}</td><td class="mono">${R$(b.preco_anota)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-beb',${b.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('beb',${b.id})">🗑️</button></td></tr>`;
+        }).join('');
+}
+
+function renderSob() {
+    let data = DB.sobremesas;
+    if (filterText.sob) data = data.filter(x => x.nome.toLowerCase().includes(filterText.sob));
+    $('tbl-sob').innerHTML = data.length === 0 ? '<tr><td colspan="6"><div class="empty">Nenhuma sobremesa</div></td></tr>' :
+        data.map(s => {
+            const cmv = calcCMV(s.custo, s.preco_ifood);
+            return `<tr><td><b>${s.nome}</b></td><td class="mono">${R$(s.custo)}</td><td class="mono">${R$(s.preco_ifood)}</td><td class="mono">${R$(s.preco_anota)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-sob',${s.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('sob',${s.id})">🗑️</button></td></tr>`;
+        }).join('');
+}
+
+function renderExt() {
+    let data = DB.extras;
+    if (filterText.ext) data = data.filter(x => x.nome.toLowerCase().includes(filterText.ext));
+    $('tbl-ext').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty">Nenhum extra</div></td></tr>' :
+        data.map(e => {
+            const cmv = calcCMV(e.custo, e.preco);
+            return `<tr><td><b>${e.nome}</b></td><td class="mono">${R$(e.custo)}</td><td class="mono">${R$(e.preco)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-ext',${e.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('ext',${e.id})">🗑️</button></td></tr>`;
         }).join('');
 }
 
 function renderIng() {
-    let data = filtrar(DB.ingredientes, 'ingredientes');
-    $('tbl-ing').innerHTML = data.length === 0 ?
-        '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🧅</div>Nenhum ingrediente</div></td></tr>' :
-        data.map(i => `<tr>
-            <td><b>${i.nome}</b></td>
-            <td>${i.un || 'kg'}</td>
-            <td class="mono">${R$(i.custo)}</td>
-            <td>${i.forn || '-'}</td>
-            <td class="actions">
-                <button class="btn btn-e btn-sm" onclick="abrirModal('mod-ing',${i.id})">✏️</button>
-                <button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-ing',${i.id})">🗑️</button>
-            </td>
-        </tr>`).join('');
+    let data = DB.ingredientes;
+    if (filterText.ing) data = data.filter(x => x.nome.toLowerCase().includes(filterText.ing));
+    $('tbl-ing').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty">Nenhum ingrediente</div></td></tr>' :
+        data.map(i => `<tr><td><b>${i.nome}</b></td><td>${i.un||'kg'}</td><td class="mono">${R$(i.custo)}</td><td>${i.forn||'-'}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-ing',${i.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('ing',${i.id})">🗑️</button></td></tr>`).join('');
 }
 
 function renderVendas() {
-    $('tbl-vendas').innerHTML = DB.vendas.length === 0 ?
-        '<tr><td colspan="6"><div class="empty"><div class="empty-icon">📅</div>Nenhuma importação</div></td></tr>' :
+    $('tbl-vendas').innerHTML = DB.vendas.length === 0 ? '<tr><td colspan="6"><div class="empty">Nenhuma importação</div></td></tr>' :
         DB.vendas.map(v => {
             const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
-            return `<tr>
-                <td><b>${v.mes}/${v.ano}</b></td>
-                <td><span class="tag ${v.cardapio}">${v.cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}</span></td>
-                <td class="mono">${R$(v.total_fat)}</td>
-                <td class="mono">${R$(v.total_custo)}</td>
-                <td><span class="badge ${cmvClass(cmv)}">${pct(cmv)}</span></td>
-                <td class="actions"><button class="btn btn-d btn-sm" onclick="confirmarAcao('delete-venda',${v.id})">🗑️</button></td>
-            </tr>`;
+            return `<tr><td><b>${v.mes}/${v.ano}</b></td><td><span class="badge ${v.cardapio === 'ifood' ? 'orange' : 'green'}">${v.cardapio === 'ifood' ? 'iF' : 'An'}</span></td><td class="mono">${R$(v.total_fat)}</td><td class="mono">${R$(v.total_custo)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td><td class="actions"><button class="btn btn-d btn-sm" onclick="confirmar('venda',${v.id})">🗑️</button></td></tr>`;
         }).join('');
-    
-    // Atualizar select de análise
-    $('sel-venda').innerHTML = '<option value="">Selecione...</option>' + 
-        DB.vendas.map(v => `<option value="${v.id}">${v.mes}/${v.ano} - ${v.cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}</option>`).join('');
+    $('sel-venda').innerHTML = '<option value="">Selecione...</option>' + DB.vendas.map(v => `<option value="${v.id}">${v.mes}/${v.ano} - ${v.cardapio === 'ifood' ? 'iFood' : 'Anota'}</option>`).join('');
 }
 
 function renderFichaSelects() {
-    $('ficha-prod').innerHTML = '<option value="">Selecione produto...</option>' + 
-        DB.produtos.map(p => `<option value="${p.id}">${p.nome} (${p.tam || 'G'})</option>`).join('');
-    $('ficha-ing').innerHTML = '<option value="">Selecione ingrediente...</option>' + 
-        DB.ingredientes.map(i => `<option value="${i.id}">${i.nome} (${R$(i.custo)}/${i.un})</option>`).join('');
+    $('ficha-prod').innerHTML = '<option value="">Selecione...</option>' + DB.produtos.map(p => `<option value="${p.id}">${p.nome} (${p.tam||'G'})</option>`).join('');
+    $('ficha-ing').innerHTML = '<option value="">Selecione...</option>' + DB.ingredientes.map(i => `<option value="${i.id}">${i.nome}</option>`).join('');
 }
 
 function renderStats() {
-    $('stat-prod').textContent = DB.produtos.length;
-    $('stat-ing').textContent = DB.ingredientes.length;
-    $('stat-fichas').textContent = DB.fichas.length;
-    $('stat-vendas').textContent = DB.vendas.length;
+    $('st-prod').textContent = DB.produtos.length;
+    $('st-beb').textContent = DB.bebidas.length;
+    $('st-sob').textContent = DB.sobremesas.length;
+    $('st-ext').textContent = DB.extras.length;
+    $('st-ing').textContent = DB.ingredientes.length;
+    $('st-vendas').textContent = DB.vendas.length;
 }
 
 function renderRanking() {
-    const prods = DB.produtos.filter(p => p.custo > 0).map(p => ({
-        ...p,
-        cmvIf: calcCMV(p.custo, p.preco_ifood),
-        cmvAn: calcCMV(p.custo, p.preco_anota)
-    })).sort((a, b) => b.cmvIf - a.cmvIf).slice(0, 10);
-    
-    $('tbl-ranking').innerHTML = prods.length === 0 ?
-        '<tr><td colspan="4"><div class="empty">Cadastre produtos com custo</div></td></tr>' :
-        prods.map(p => `<tr>
-            <td><b>${p.nome}</b> <span class="badge ${p.tam === 'P' ? 'cyan' : 'blue'}">${p.tam}</span></td>
-            <td class="mono">${R$(p.custo)}</td>
-            <td><span class="badge ${cmvClass(p.cmvIf)}">${pct(p.cmvIf)}</span></td>
-            <td><span class="badge ${cmvClass(p.cmvAn)}">${pct(p.cmvAn)}</span></td>
-        </tr>`).join('');
+    const prods = DB.produtos.filter(p => p.custo > 0 && p.preco_ifood > 0).map(p => ({ ...p, cmv: calcCMV(p.custo, p.preco_ifood) })).sort((a, b) => b.cmv - a.cmv).slice(0, 8);
+    const catBadge = { macarrao:'blue', risoto:'orange', nhoque:'pink', combo:'purple', outros:'cyan' };
+    $('tbl-ranking').innerHTML = prods.length === 0 ? '<tr><td colspan="4"><div class="empty">Cadastre produtos</div></td></tr>' :
+        prods.map(p => `<tr><td><b>${p.nome}</b> <span class="badge ${p.tam === 'P' ? 'cyan' : 'blue'}">${p.tam}</span></td><td><span class="badge ${catBadge[p.cat]||'cyan'}">${(p.cat||'').slice(0,3)}</span></td><td class="mono">${R$(p.custo)}</td><td><span class="badge ${cmvCls(p.cmv)}">${pct(p.cmv)}</span></td></tr>`).join('');
 }
 
-function renderAll() {
-    renderProd();
-    renderIng();
-    renderVendas();
-    renderFichaSelects();
-    renderStats();
-    renderRanking();
-    atualizarDash();
+function atualizarDash() {
+    if (DB.vendas.length === 0) { $('k-fat').textContent = 'R$ 0'; $('k-custo').textContent = 'R$ 0'; $('k-cmv').textContent = '0%'; $('k-lucro').textContent = 'R$ 0'; return; }
+    const ultima = DB.vendas[DB.vendas.length - 1];
+    const cmv = ultima.total_fat > 0 ? (ultima.total_custo / ultima.total_fat * 100) : 0;
+    $('k-fat').textContent = R$(ultima.total_fat); $('k-custo').textContent = R$(ultima.total_custo); $('k-cmv').textContent = pct(cmv); $('k-lucro').textContent = R$(ultima.total_fat - ultima.total_custo);
 }
 
-// ==================== FORMS ====================
-async function submitForm(formId, tabela, getData, modalId) {
-    const form = $(formId);
-    const btn = form.querySelector('button[type="submit"]');
-    const idField = form.querySelector('input[type="hidden"]');
-    const id = idField && idField.value ? parseInt(idField.value) : null;
-    
-    btn.classList.add('btn-loading');
+function renderAll() { renderProd(); renderBeb(); renderSob(); renderExt(); renderIng(); renderVendas(); renderFichaSelects(); renderStats(); renderRanking(); atualizarDash(); }
+
+// Confirmar exclusão
+function confirmar(tipo, id) {
+    const cfg = {
+        'prod': { title: 'Excluir Produto?', fn: () => execDel('produtos', id) },
+        'beb': { title: 'Excluir Bebida?', fn: () => execDel('bebidas', id) },
+        'sob': { title: 'Excluir Sobremesa?', fn: () => execDel('sobremesas', id) },
+        'ext': { title: 'Excluir Extra?', fn: () => execDel('extras', id) },
+        'ing': { title: 'Excluir Ingrediente?', fn: () => execDel('ingredientes', id) },
+        'venda': { title: 'Excluir Importação?', fn: () => execDel('vendas', id) },
+    }[tipo];
+    $('conf-icon').textContent = '🗑️'; $('conf-title').textContent = cfg.title; $('conf-text').textContent = 'Esta ação não pode ser desfeita.';
+    $('conf-btn').onclick = () => { cfg.fn(); fecharModal('mod-confirm'); };
+    abrirModal('mod-confirm');
+}
+
+async function execDel(tabela, id) {
+    try { await api(tabela, 'DELETE', { id }); DB[tabela] = DB[tabela].filter(x => x.id !== id); renderAll(); toast('Excluído!'); } catch (e) { toast('Erro: ' + e.message, true); }
+}
+
+// Forms
+async function submitForm(fid, tabela, getData, mid) {
+    const form = $(fid), btn = form.querySelector('button[type="submit"]'), idField = form.querySelector('input[type="hidden"]'), id = idField && idField.value ? parseInt(idField.value) : null;
     btn.disabled = true;
-    
     try {
         const data = getData();
         let result;
-        if (id && id > 0) {
-            result = await api(tabela, 'PUT', { ...data, id });
-            const idx = DB[tabela].findIndex(x => x.id === id);
-            if (idx >= 0) DB[tabela][idx] = result;
-        } else {
-            result = await api(tabela, 'POST', data);
-            DB[tabela].push(result);
-        }
-        renderAll();
-        fecharModal(modalId);
-        toast('Salvo com sucesso!');
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
-    
-    btn.classList.remove('btn-loading');
+        if (id && id > 0) { result = await api(tabela, 'PUT', { ...data, id }); const idx = DB[tabela].findIndex(x => x.id === id); if (idx >= 0) DB[tabela][idx] = result; }
+        else { result = await api(tabela, 'POST', data); DB[tabela].push(result); }
+        renderAll(); fecharModal(mid); toast('Salvo!');
+    } catch (e) { toast('Erro: ' + e.message, true); }
     btn.disabled = false;
 }
 
-$('form-prod').onsubmit = function(e) {
-    e.preventDefault();
-    submitForm('form-prod', 'produtos', () => ({
-        nome: $('prod-nome').value.trim(),
-        cat: $('prod-cat').value,
-        tam: $('prod-tam').value,
-        custo: parseFloat($('prod-custo').value) || 0,
-        preco_ifood: parseFloat($('prod-preco-if').value) || 0,
-        preco_anota: parseFloat($('prod-preco-an').value) || 0
-    }), 'mod-prod');
-};
+$('form-prod').onsubmit = e => { e.preventDefault(); submitForm('form-prod', 'produtos', () => ({ nome: $('prod-nome').value.trim(), cat: $('prod-cat').value, tam: $('prod-tam').value, custo: parseFloat($('prod-custo').value)||0, preco_ifood: parseFloat($('prod-pif').value)||0, preco_anota: parseFloat($('prod-pan').value)||0 }), 'mod-prod'); };
+$('form-beb').onsubmit = e => { e.preventDefault(); submitForm('form-beb', 'bebidas', () => ({ nome: $('beb-nome').value.trim(), custo: parseFloat($('beb-custo').value)||0, preco_ifood: parseFloat($('beb-pif').value)||0, preco_anota: parseFloat($('beb-pan').value)||0 }), 'mod-beb'); };
+$('form-sob').onsubmit = e => { e.preventDefault(); submitForm('form-sob', 'sobremesas', () => ({ nome: $('sob-nome').value.trim(), custo: parseFloat($('sob-custo').value)||0, preco_ifood: parseFloat($('sob-pif').value)||0, preco_anota: parseFloat($('sob-pan').value)||0 }), 'mod-sob'); };
+$('form-ext').onsubmit = e => { e.preventDefault(); submitForm('form-ext', 'extras', () => ({ nome: $('ext-nome').value.trim(), custo: parseFloat($('ext-custo').value)||0, preco: parseFloat($('ext-preco').value)||0 }), 'mod-ext'); };
+$('form-ing').onsubmit = e => { e.preventDefault(); submitForm('form-ing', 'ingredientes', () => ({ nome: $('ing-nome').value.trim(), un: $('ing-un').value, custo: parseFloat($('ing-custo').value)||0, forn: $('ing-forn').value.trim() }), 'mod-ing'); };
 
-$('form-ing').onsubmit = function(e) {
-    e.preventDefault();
-    submitForm('form-ing', 'ingredientes', () => ({
-        nome: $('ing-nome').value.trim(),
-        un: $('ing-un').value,
-        custo: parseFloat($('ing-custo').value) || 0,
-        forn: $('ing-forn').value.trim()
-    }), 'mod-ing');
-};
-
-// ==================== FICHA TÉCNICA ====================
-function carregarFicha() {
-    const prodId = parseInt($('ficha-prod').value);
-    if (!prodId) {
-        $('ficha-area').style.display = 'none';
-        return;
-    }
-    $('ficha-area').style.display = 'block';
-    renderFichaItens();
-}
+// Ficha Técnica
+function carregarFicha() { const prodId = parseInt($('ficha-prod').value); if (!prodId) { $('ficha-area').style.display = 'none'; return; } $('ficha-area').style.display = 'block'; renderFichaItens(); }
 
 function renderFichaItens() {
-    const prodId = parseInt($('ficha-prod').value);
-    const itens = DB.fichas.filter(f => f.produto_id === prodId);
-    
-    $('ficha-list').innerHTML = itens.length === 0 ?
-        '<div class="empty" style="padding:0.5rem;">Nenhum item na ficha</div>' :
-        itens.map(f => {
-            const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
-            if (!ing) return '';
-            const custoItem = parseFloat(ing.custo) * parseFloat(f.qtd);
-            return `<div class="ing-item">
-                <div><b>${ing.nome}</b> <span style="color:var(--text3)">${f.qtd} ${f.un || ing.un}</span></div>
-                <div style="display:flex;align-items:center;gap:0.3rem;">
-                    <span class="mono" style="color:var(--green)">${R$(custoItem)}</span>
-                    <button class="btn btn-d btn-sm" onclick="remFichaItem(${f.id})" style="padding:0.2rem 0.4rem;">×</button>
-                </div>
-            </div>`;
+    const prodId = parseInt($('ficha-prod').value), itens = DB.fichas.filter(f => f.produto_id === prodId);
+    $('ficha-list').innerHTML = itens.length === 0 ? '<div class="empty" style="padding:0.3rem;">Nenhum item</div>' :
+        itens.map(f => { const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id); if (!ing) return ''; const c = parseFloat(ing.custo) * parseFloat(f.qtd);
+            return `<div class="ing-item"><div><b>${ing.nome}</b> <span style="color:var(--txt3)">${f.qtd} ${f.un || ing.un}</span></div><div style="display:flex;align-items:center;gap:0.15rem;"><span class="mono" style="color:var(--green)">${R$(c)}</span><button class="btn btn-d btn-sm" onclick="remFichaItem(${f.id})" style="padding:0.1rem 0.2rem;">×</button></div></div>`;
         }).join('');
-    
     calcFichaCusto();
 }
 
 function calcFichaCusto() {
-    const prodId = parseInt($('ficha-prod').value);
-    const prod = DB.produtos.find(p => p.id === prodId);
-    const itens = DB.fichas.filter(f => f.produto_id === prodId);
-    
-    let custoTotal = 0;
-    itens.forEach(f => {
-        const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
-        if (ing) custoTotal += parseFloat(ing.custo) * parseFloat(f.qtd);
-    });
-    
-    const cmvIf = prod ? calcCMV(custoTotal, prod.preco_ifood) : 0;
-    const cmvAn = prod ? calcCMV(custoTotal, prod.preco_anota) : 0;
-    
+    const prodId = parseInt($('ficha-prod').value), prod = DB.produtos.find(p => p.id === prodId), itens = DB.fichas.filter(f => f.produto_id === prodId);
+    let custoTotal = 0; itens.forEach(f => { const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id); if (ing) custoTotal += parseFloat(ing.custo) * parseFloat(f.qtd); });
+    const cmvIf = prod ? calcCMV(custoTotal, prod.preco_ifood) : 0, cmvAn = prod ? calcCMV(custoTotal, prod.preco_anota) : 0;
     $('f-custo').textContent = R$(custoTotal);
-    $('f-cmv-if').textContent = pct(cmvIf);
-    $('f-cmv-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
-    $('f-cmv-an').textContent = pct(cmvAn);
-    $('f-cmv-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('f-cmv-if').textContent = pct(cmvIf); $('f-cmv-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('f-cmv-an').textContent = pct(cmvAn); $('f-cmv-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
 }
 
 async function addIngFicha() {
-    const prodId = parseInt($('ficha-prod').value);
-    const ingId = parseInt($('ficha-ing').value);
-    const qtd = parseFloat($('ficha-qtd').value);
-    const un = $('ficha-un').value;
-    
-    if (!prodId || !ingId || !qtd) {
-        toast('Preencha todos os campos!', true);
-        return;
-    }
-    
-    try {
-        const result = await api('fichas', 'POST', { produto_id: prodId, ingrediente_id: ingId, qtd, un });
-        DB.fichas.push(result);
-        $('ficha-qtd').value = '';
-        renderFichaItens();
-        toast('Adicionado!');
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
+    const prodId = parseInt($('ficha-prod').value), ingId = parseInt($('ficha-ing').value), qtd = parseFloat($('ficha-qtd').value), un = $('ficha-un').value;
+    if (!prodId || !ingId || !qtd) { toast('Preencha todos!', true); return; }
+    try { const result = await api('fichas', 'POST', { produto_id: prodId, ingrediente_id: ingId, qtd, un }); DB.fichas.push(result); $('ficha-qtd').value = ''; renderFichaItens(); toast('Adicionado!'); } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
-async function remFichaItem(id) {
-    try {
-        await api('fichas', 'DELETE', { id });
-        DB.fichas = DB.fichas.filter(f => f.id !== id);
-        renderFichaItens();
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
-}
+async function remFichaItem(id) { try { await api('fichas', 'DELETE', { id }); DB.fichas = DB.fichas.filter(f => f.id !== id); renderFichaItens(); } catch (e) { toast('Erro: ' + e.message, true); } }
 
 async function salvarCustoFicha() {
-    const prodId = parseInt($('ficha-prod').value);
-    const prod = DB.produtos.find(p => p.id === prodId);
-    if (!prod) return;
-    
-    const itens = DB.fichas.filter(f => f.produto_id === prodId);
-    let custoTotal = 0;
-    itens.forEach(f => {
-        const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
-        if (ing) custoTotal += parseFloat(ing.custo) * parseFloat(f.qtd);
-    });
-    
-    try {
-        const result = await api('produtos', 'PUT', { ...prod, custo: custoTotal });
-        const idx = DB.produtos.findIndex(p => p.id === prodId);
-        if (idx >= 0) DB.produtos[idx] = result;
-        renderAll();
-        toast(`Custo ${R$(custoTotal)} salvo no produto!`);
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
+    const prodId = parseInt($('ficha-prod').value), prod = DB.produtos.find(p => p.id === prodId); if (!prod) return;
+    const itens = DB.fichas.filter(f => f.produto_id === prodId); let custoTotal = 0; itens.forEach(f => { const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id); if (ing) custoTotal += parseFloat(ing.custo) * parseFloat(f.qtd); });
+    try { const result = await api('produtos', 'PUT', { ...prod, custo: custoTotal }); const idx = DB.produtos.findIndex(p => p.id === prodId); if (idx >= 0) DB.produtos[idx] = result; renderAll(); toast(`Custo ${R$(custoTotal)} salvo!`); } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
-// ==================== IMPORTAR EXCEL ====================
-const uploadBox = $('upload-box');
-const fileInput = $('file-input');
-
+// Upload Excel
+const uploadBox = $('upload-box'), fileInput = $('file-input');
 uploadBox.onclick = () => fileInput.click();
-uploadBox.ondragover = e => { e.preventDefault(); uploadBox.classList.add('dragover'); };
-uploadBox.ondragleave = () => uploadBox.classList.remove('dragover');
-uploadBox.ondrop = e => { e.preventDefault(); uploadBox.classList.remove('dragover'); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); };
+uploadBox.ondragover = e => { e.preventDefault(); };
+uploadBox.ondrop = e => { e.preventDefault(); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); };
 fileInput.onchange = e => { if (e.target.files[0]) processFile(e.target.files[0]); };
 
 let importData = null;
 
 function processFile(file) {
-    $('upload-file').textContent = '📄 ' + file.name;
-    uploadBox.classList.add('has-file');
-    showLoading(true);
-    
+    $('upload-file').textContent = '📄 ' + file.name; uploadBox.classList.add('has-file'); loading(true);
     const reader = new FileReader();
-    reader.onload = ev => {
-        try {
-            const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
-            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 });
-            processarExcel(data);
-        } catch (e) {
-            toast('Erro ao ler arquivo: ' + e.message, true);
-        }
-        showLoading(false);
-    };
+    reader.onload = ev => { try { const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' }); const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 }); processarExcel(data); } catch (e) { toast('Erro: ' + e.message, true); } loading(false); };
     reader.readAsArrayBuffer(file);
 }
 
 function processarExcel(data) {
-    // Detectar período da planilha
     let periodo = '';
-    if (data[1] && data[1][0]) {
-        const txt = String(data[1][0]);
-        const match = txt.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-        if (match) periodo = match[2] + '/' + match[3];
-    }
+    if (data[1] && data[1][0]) { const match = String(data[1][0]).match(/(\d{2})\/(\d{2})\/(\d{4})/); if (match) periodo = match[2] + '/' + match[3]; }
     
-    // Função para normalizar nome (remover palavras comuns)
-    const normalizarNome = (nome) => {
-        return nome
-            .toLowerCase()
-            .replace(/\(aprox\.?\s*\d+g?\)/gi, '')  // Remove (aprox. 800g)
-            .replace(/box\s*[pg]/gi, '')             // Remove Box P/G
-            .replace(/-/g, ' ')                       // Traços viram espaços
-            .replace(/\s+de\s+/g, ' ')               // Remove "de"
-            .replace(/\s+com\s+/g, ' ')              // Remove "com"
-            .replace(/\s+e\s+/g, ' ')                // Remove "e"
-            .replace(/\s+/g, ' ')                    // Múltiplos espaços
-            .replace(/rosé/g, 'rose')                // Normaliza rosé
-            .replace(/muçarela/g, 'mussarela')       // Normaliza muçarela
-            .trim();
-    };
+    const vendas = { produtos: [], bebidas: [], sobremesas: [], extras: [], totalFat: 0 };
+    const norm = n => n.toLowerCase().replace(/\(aprox\.?\s*\d+g?\)/gi,'').replace(/\(vale muito a pena!\)/gi,'').replace(/box\s*[pg]/gi,'').replace(/-/g,' ').replace(/\s+/g,' ').trim();
     
-    // Função para encontrar produto no banco
-    const encontrarProduto = (nomePlanilha, tipo, tam) => {
-        const nomeNorm = normalizarNome(nomePlanilha);
-        
-        // Filtrar por categoria e tamanho primeiro
-        let candidatos = DB.produtos.filter(p => {
+    const findProd = (nome, tam) => {
+        const n = norm(nome);
+        return DB.produtos.find(p => {
             if (p.tam !== tam) return false;
-            if (tipo === 'risoto' && p.cat !== 'risoto') return false;
-            if (tipo === 'nhoque' && p.cat !== 'nhoque') return false;
-            if (tipo === 'macarrao' && p.cat !== 'macarrao') return false;
-            return true;
+            const pn = norm(p.nome);
+            if (n.includes(pn) || pn.includes(n)) return true;
+            const palavras = ['camarão','funghi','bolonhesa','pomodoro','broccoli','parisiense','costela','ragu','frango','cheddar','queijos','bacon'];
+            for (const pc of palavras) if (n.includes(pc) && pn.includes(pc)) return true;
+            return false;
         });
-        
-        // Se não filtrou por categoria, tentar todos com mesmo tamanho
-        if (candidatos.length === 0) {
-            candidatos = DB.produtos.filter(p => p.tam === tam);
-        }
-        
-        // Procurar melhor match
-        for (const p of candidatos) {
-            const pNomeNorm = normalizarNome(p.nome);
-            
-            // Match exato
-            if (nomeNorm === pNomeNorm) return p;
-            
-            // Um contém o outro
-            if (nomeNorm.includes(pNomeNorm) || pNomeNorm.includes(nomeNorm)) return p;
-            
-            // Comparar palavras-chave
-            const palavrasPlanilha = nomeNorm.split(' ').filter(w => w.length > 2);
-            const palavrasProduto = pNomeNorm.split(' ').filter(w => w.length > 2);
-            
-            // Se 2+ palavras em comum, é match
-            const comum = palavrasPlanilha.filter(w => palavrasProduto.includes(w));
-            if (comum.length >= 2) return p;
-            
-            // Se o nome do produto (sem categoria) está no nome da planilha
-            const nomeSemCat = pNomeNorm.replace(/^(risoto|nhoque|macarrao)\s*/i, '');
-            if (nomeNorm.includes(nomeSemCat) && nomeSemCat.length > 3) return p;
-        }
-        
-        return null;
     };
-    
-    // Processar itens vendidos
-    const vendas = { itens: [], totalFat: 0, totalQtd: 0 };
     
     for (let i = 5; i < data.length; i++) {
-        const row = data[i];
-        if (!row || !row[0]) continue;
+        const row = data[i]; if (!row || !row[0]) continue;
+        const nome = String(row[0]).trim(), qtd = parseInt(row[1]) || 0, valor = parseFloat(row[2]) || 0;
+        if (!nome || nome === 'nan') continue;
         
-        const nome = String(row[0]).trim();
-        const qtd = parseInt(row[1]) || 0;
-        const valor = parseFloat(row[2]) || 0;
+        const isCategoria = !nome.startsWith('-') && !nome.startsWith(' ');
+        const nomeL = nome.toLowerCase();
         
-        if (!nome || nome === 'nan' || qtd <= 0) continue;
-        
-        const isSubItem = nome.startsWith('-') || nome.startsWith(' ');
-        const nomeLimpo = nome.replace(/^[\s\-]+/, '').trim();
-        const nomeL = nomeLimpo.toLowerCase();
-        
-        // Ignorar sub-itens que não são produtos (talheres, extras, etc)
-        if (isSubItem && (
-            nomeL.includes('talher') ||
-            nomeL.includes('extra ') ||
-            nomeL.includes('preciso de') ||
-            nomeL.includes('não preciso') ||
-            nomeL.includes('acompanhamento') ||
-            nomeL.includes('pimenta') ||
-            nomeL.includes('opção vegetariana') ||
-            nomeL.includes('talharim') ||
-            nomeL.includes('penne') ||
-            nomeL.includes('caracolino') ||
-            nomeL.includes('nhoque tradicional') ||
-            nomeL.includes('nhoque recheado de muçarela')
-        )) {
-            continue;
-        }
-        
-        // Identificar tipo de produto e tamanho
-        let tipo = null;
-        let tam = null;
-        let prodNome = nomeLimpo;
-        
-        // RISOTO
-        if (nomeL.includes('risoto')) {
-            tipo = 'risoto';
-            tam = 'G';
-            prodNome = nomeLimpo;
-        }
-        // NHOQUE (mas não "nhoque tradicional" ou "nhoque recheado" que são sub-itens)
-        else if (nomeL.includes('nhoque') && (nomeL.includes('800g') || nomeL.includes('750g') || 
-                 nomeL.includes('pomodoro') || nomeL.includes('bolonhesa') || nomeL.includes('queijos') ||
-                 nomeL.includes('camarão') || nomeL.includes('funghi') || nomeL.includes('costela') ||
-                 nomeL.includes('bacon') || nomeL.includes('broccoli') || nomeL.includes('parisiense') ||
-                 nomeL.includes('frango'))) {
-            tipo = 'nhoque';
-            tam = 'G';
-            prodNome = nomeLimpo;
-        }
-        // MACARRÃO BOX P
-        else if (nomeL.includes('box p') || (nomeL.includes('450g') && !nomeL.includes('650g'))) {
-            tipo = 'macarrao';
-            tam = 'P';
-            prodNome = nomeLimpo;
-        }
-        // MACARRÃO BOX G ou com 800g/750g
-        else if (nomeL.includes('box g') || nomeL.includes('800g') || nomeL.includes('750g')) {
-            tipo = 'macarrao';
-            tam = 'G';
-            prodNome = nomeLimpo;
-        }
-        // POLENTA
-        else if (nomeL.includes('polenta')) {
-            tipo = 'outros';
-            tam = 'G';
-            prodNome = nomeLimpo;
-        }
-        
-        // Se identificou um produto
-        if (tipo && tam && isSubItem) {
-            const prod = encontrarProduto(prodNome, tipo, tam);
-            
-            vendas.itens.push({
-                nomeOriginal: nomeLimpo,
-                nome: prodNome,
-                tipo,
-                tam,
-                qtd,
-                valor,
-                produtoId: prod ? prod.id : null,
-                produtoNome: prod ? prod.nome : null,
-                custo: prod ? parseFloat(prod.custo) || 0 : 0
-            });
-        }
-        
-        // Somar faturamento total (itens principais, não subitens)
-        if (!isSubItem && valor > 0) {
+        if (isCategoria && valor > 0) {
             vendas.totalFat += valor;
-            vendas.totalQtd += qtd;
+            
+            // Produtos (macarrão, risoto, nhoque)
+            if (qtd > 0 && (nomeL.includes('macarrão') || nomeL.includes('risoto') || nomeL.includes('nhoque'))) {
+                let tam = 'P';
+                if (nomeL.includes('800g') || nomeL.includes('750g') || nomeL.includes('650g') || nomeL.includes('box g')) tam = 'G';
+                if (nomeL.includes('risoto') || nomeL.includes('nhoque')) tam = 'G';
+                const prod = findProd(nome, tam);
+                if (prod) vendas.produtos.push({ ...prod, qtdVenda: qtd, valorVenda: valor });
+            }
+            
+            // Bebidas
+            if (qtd > 0 && (nomeL.includes('refrigerante') || nomeL.includes('água') || nomeL.includes('suco') || nomeL.includes('vinho') || nomeL.includes('energético'))) {
+                const beb = DB.bebidas.find(b => norm(nome).includes(norm(b.nome)) || norm(b.nome).includes(norm(nome)));
+                if (beb) vendas.bebidas.push({ ...beb, qtdVenda: qtd, valorVenda: valor });
+            }
+            
+            // Sobremesas
+            if (qtd > 0 && (nomeL.includes('tiramisu') || nomeL.includes('brownie') || nomeL.includes('cannoli') || nomeL.includes('palha italiana'))) {
+                const sob = DB.sobremesas.find(s => norm(nome).includes(norm(s.nome)) || norm(s.nome).includes(norm(nome)));
+                if (sob) vendas.sobremesas.push({ ...sob, qtdVenda: qtd, valorVenda: valor });
+            }
         }
     }
     
@@ -1059,63 +709,31 @@ function processarExcel(data) {
 
 function mostrarPreview() {
     const v = importData.vendas;
-    const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const meses = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
     const anoAtual = new Date().getFullYear();
     
-    // Calcular custo total
-    let custoTotal = 0;
-    let itensEncontrados = 0;
-    let itensNaoEncontrados = [];
-    
-    v.itens.forEach(item => {
-        if (item.produtoId) {
-            custoTotal += item.custo * item.qtd;
-            itensEncontrados++;
-        } else {
-            itensNaoEncontrados.push(item);
-        }
-    });
-    
-    const cmvEstimado = v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0;
-    
-    // Badge por tipo
-    const tipoBadge = {
-        'macarrao': '<span class="badge blue">mac</span>',
-        'risoto': '<span class="badge orange">ris</span>',
-        'nhoque': '<span class="badge pink">nho</span>',
-        'outros': '<span class="badge cyan">out</span>'
-    };
+    let custoProds = 0, custoBeb = 0, custoSob = 0;
+    v.produtos.forEach(p => custoProds += (parseFloat(p.custo)||0) * p.qtdVenda);
+    v.bebidas.forEach(b => custoBeb += (parseFloat(b.custo)||0) * b.qtdVenda);
+    v.sobremesas.forEach(s => custoSob += (parseFloat(s.custo)||0) * s.qtdVenda);
+    const custoTotal = custoProds + custoBeb + custoSob;
+    const cmv = v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0;
     
     $('import-preview').innerHTML = `
         <div class="preview">
-            <div class="form-row" style="margin-bottom:0.6rem;">
-                <div class="field"><label>Mês</label><select id="imp-mes">${meses.map((m, i) => i > 0 ? `<option value="${String(i).padStart(2, '0')}" ${importData.periodo.startsWith(String(i).padStart(2, '0')) ? 'selected' : ''}>${m}</option>` : '').join('')}</select></div>
-                <div class="field"><label>Ano</label><select id="imp-ano">${[anoAtual - 1, anoAtual, anoAtual + 1].map(a => `<option value="${a}" ${importData.periodo.includes(String(a)) ? 'selected' : ''}>${a}</option>`).join('')}</select></div>
-                <div class="field"><label>Plataforma *</label><select id="imp-plat"><option value="">Selecione</option><option value="ifood">📱 iFood</option><option value="anota">📲 AnotaAi</option></select></div>
+            <div class="form-row" style="margin-bottom:0.4rem;">
+                <div class="field"><label>Mês</label><select id="imp-mes">${meses.map((m,i) => i > 0 ? `<option value="${String(i).padStart(2,'0')}" ${importData.periodo.startsWith(String(i).padStart(2,'0'))?'selected':''}>${m}</option>` : '').join('')}</select></div>
+                <div class="field"><label>Ano</label><select id="imp-ano">${[anoAtual-1,anoAtual,anoAtual+1].map(a => `<option value="${a}" ${importData.periodo.includes(String(a))?'selected':''}>${a}</option>`).join('')}</select></div>
+                <div class="field"><label>Plataforma</label><select id="imp-plat"><option value="">Selecione</option><option value="ifood">iFood</option><option value="anota">AnotaAi</option></select></div>
             </div>
-            <div class="res-box" style="grid-template-columns:repeat(4,1fr);">
-                <div class="res-item"><div class="lbl">Itens</div><div class="val" style="color:var(--blue)">${v.itens.length}</div></div>
-                <div class="res-item"><div class="lbl">Encontrados</div><div class="val" style="color:var(--green)">${itensEncontrados}</div></div>
-                <div class="res-item"><div class="lbl">Faturamento</div><div class="val" style="color:var(--purple)">${R$(v.totalFat)}</div></div>
-                <div class="res-item"><div class="lbl">CMV Est.</div><div class="val" style="color:${cmvEstimado <= 25 ? 'var(--green)' : cmvEstimado <= 35 ? 'var(--yellow)' : 'var(--red)'};">${pct(cmvEstimado)}</div></div>
+            <div class="res-box">
+                <div class="res-item"><div class="lbl">Pratos</div><div class="val" style="color:var(--blue)">${v.produtos.length}</div></div>
+                <div class="res-item"><div class="lbl">Bebidas</div><div class="val" style="color:var(--cyan)">${v.bebidas.length}</div></div>
+                <div class="res-item"><div class="lbl">Doces</div><div class="val" style="color:var(--pink)">${v.sobremesas.length}</div></div>
+                <div class="res-item"><div class="lbl">CMV</div><div class="val" style="color:${cmv <= 25 ? 'var(--green)' : cmv <= 35 ? 'var(--yellow)' : 'var(--red)'};">${pct(cmv)}</div></div>
             </div>
-            
-            ${itensNaoEncontrados.length > 0 ? `
-            <div class="alert warn" style="margin-top:0.5rem;">
-                ⚠️ ${itensNaoEncontrados.length} itens não encontrados no cadastro:
-                <div style="font-size:0.6rem;margin-top:0.2rem;">${itensNaoEncontrados.slice(0,5).map(it => it.nome).join(', ')}${itensNaoEncontrados.length > 5 ? '...' : ''}</div>
-            </div>
-            ` : ''}
-            
-            <div style="margin-top:0.6rem;max-height:150px;overflow-y:auto;font-size:0.65rem;">
-                <div style="font-weight:600;margin-bottom:0.3rem;color:var(--text2);">✅ Itens identificados:</div>
-                ${v.itens.filter(it => it.produtoId).slice(0, 15).map(it => `<div style="display:flex;justify-content:space-between;padding:0.2rem 0;border-bottom:1px solid var(--border);">
-                    <span>${tipoBadge[it.tipo] || ''} ${it.produtoNome || it.nome} (${it.tam}) × ${it.qtd}</span>
-                    <span class="mono" style="color:var(--green);">${R$(it.custo)} × ${it.qtd} = ${R$(it.custo * it.qtd)}</span>
-                </div>`).join('')}
-                ${v.itens.filter(it => it.produtoId).length > 15 ? `<div style="color:var(--text3);padding:0.2rem;">... e mais ${v.itens.filter(it => it.produtoId).length - 15} itens</div>` : ''}
-            </div>
-            <div style="display:flex;gap:0.4rem;margin-top:0.6rem;">
+            <div style="margin-top:0.3rem;font-size:0.55rem;color:var(--txt2);">Fat: <span class="mono">${R$(v.totalFat)}</span> | Custo: <span class="mono">${R$(custoTotal)}</span></div>
+            <div style="display:flex;gap:0.25rem;margin-top:0.4rem;">
                 <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Importar</button>
                 <button class="btn btn-s" onclick="cancelarImport()">❌</button>
             </div>
@@ -1124,256 +742,78 @@ function mostrarPreview() {
 }
 
 async function confirmarImport() {
-    const mes = $('imp-mes').value;
-    const ano = $('imp-ano').value;
-    const plat = $('imp-plat').value;
+    const mes = $('imp-mes').value, ano = $('imp-ano').value, plat = $('imp-plat').value;
+    if (!mes || !ano || !plat) { toast('Selecione mês, ano e plataforma!', true); return; }
+    loading(true);
     
-    if (!mes || !ano || !plat) {
-        toast('Selecione mês, ano e plataforma!', true);
-        return;
-    }
-    
-    showLoading(true);
-    
-    // Calcular custos usando o preço da plataforma correta
+    const v = importData.vendas;
     let custoTotal = 0;
     const detalhes = [];
     
-    importData.vendas.itens.forEach(item => {
-        if (item.produtoId) {
-            const prod = DB.produtos.find(p => p.id === item.produtoId);
-            if (prod) {
-                const custo = item.custo * item.qtd;
-                custoTotal += custo;
-                detalhes.push({
-                    produto_id: prod.id,
-                    nome: prod.nome,
-                    tam: item.tam,
-                    qtd: item.qtd,
-                    custo_un: item.custo,
-                    custo_total: custo
-                });
-            }
-        }
-    });
+    v.produtos.forEach(p => { const c = (parseFloat(p.custo)||0) * p.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'produto', nome: p.nome, qtd: p.qtdVenda, custo: c }); });
+    v.bebidas.forEach(b => { const c = (parseFloat(b.custo)||0) * b.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'bebida', nome: b.nome, qtd: b.qtdVenda, custo: c }); });
+    v.sobremesas.forEach(s => { const c = (parseFloat(s.custo)||0) * s.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'sobremesa', nome: s.nome, qtd: s.qtdVenda, custo: c }); });
     
     try {
-        const result = await api('vendas', 'POST', {
-            mes, ano,
-            cardapio: plat,
-            itens: detalhes,
-            total_qtd: importData.vendas.totalQtd,
-            total_fat: importData.vendas.totalFat,
-            total_custo: custoTotal
-        });
+        const result = await api('vendas', 'POST', { mes, ano, cardapio: plat, itens: detalhes, total_qtd: detalhes.length, total_fat: v.totalFat, total_custo: custoTotal });
         DB.vendas.push(result);
-        
-        const cmv = importData.vendas.totalFat > 0 ? (custoTotal / importData.vendas.totalFat * 100) : 0;
-        toast(`Importado! CMV: ${pct(cmv)}`);
-        
-        cancelarImport();
-        renderAll();
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
-    
-    showLoading(false);
+        toast(`Importado! CMV: ${pct(v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0)}`);
+        cancelarImport(); renderAll();
+    } catch (e) { toast('Erro: ' + e.message, true); }
+    loading(false);
 }
 
-function cancelarImport() {
-    importData = null;
-    $('import-preview').innerHTML = '';
-    $('file-input').value = '';
-    $('upload-file').textContent = '';
-    uploadBox.classList.remove('has-file');
-}
+function cancelarImport() { importData = null; $('import-preview').innerHTML = ''; fileInput.value = ''; $('upload-file').textContent = ''; uploadBox.classList.remove('has-file'); }
 
-// ==================== ANÁLISE ====================
+// Análise
 function mostrarAnalise() {
-    const id = parseInt($('sel-venda').value);
-    const v = DB.vendas.find(x => x.id === id);
-    if (!v) {
-        $('analise-area').innerHTML = '';
-        return;
-    }
-    
-    const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
-    const lucro = v.total_fat - v.total_custo;
-    
-    let itens = [];
-    try {
-        itens = typeof v.itens === 'string' ? JSON.parse(v.itens) : (v.itens || []);
-    } catch (e) {}
+    const id = parseInt($('sel-venda').value), v = DB.vendas.find(x => x.id === id);
+    if (!v) { $('analise-area').innerHTML = ''; return; }
+    const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0, lucro = v.total_fat - v.total_custo;
+    let itens = []; try { itens = typeof v.itens === 'string' ? JSON.parse(v.itens) : (v.itens || []); } catch(e) {}
     
     $('analise-area').innerHTML = `
         <div class="grid-kpi" style="grid-template-columns:repeat(4,1fr);">
             <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value">${R$(v.total_fat)}</div></div>
-            <div class="kpi blue"><div class="kpi-label">Custo Total</div><div class="kpi-value">${R$(v.total_custo)}</div></div>
-            <div class="kpi ${cmvClass(cmv)}"><div class="kpi-label">CMV</div><div class="kpi-value">${pct(cmv)}</div></div>
-            <div class="kpi purple"><div class="kpi-label">Lucro Bruto</div><div class="kpi-value">${R$(lucro)}</div></div>
+            <div class="kpi blue"><div class="kpi-label">Custo</div><div class="kpi-value">${R$(v.total_custo)}</div></div>
+            <div class="kpi ${cmvCls(cmv)}"><div class="kpi-label">CMV</div><div class="kpi-value">${pct(cmv)}</div></div>
+            <div class="kpi purple"><div class="kpi-label">Lucro</div><div class="kpi-value">${R$(lucro)}</div></div>
         </div>
-        ${itens.length > 0 ? `
-        <div class="card">
-            <div class="card-title">📋 Detalhamento</div>
-            <div class="tbl-wrap" style="margin-top:0.5rem;"><table>
-                <thead><tr><th>Produto</th><th>Tam</th><th>Qtd</th><th>Custo Un</th><th>Total</th></tr></thead>
-                <tbody>${itens.map(it => `<tr>
-                    <td><b>${it.nome}</b></td>
-                    <td>${it.tam}</td>
-                    <td class="mono">${it.qtd}</td>
-                    <td class="mono">${R$(it.custo_un)}</td>
-                    <td class="mono">${R$(it.custo_total)}</td>
-                </tr>`).join('')}</tbody>
-            </table></div>
-        </div>
-        ` : ''}
+        ${itens.length > 0 ? `<div class="card"><div class="card-title">📋 Detalhamento</div><div class="tbl-wrap" style="margin-top:0.3rem;"><table><thead><tr><th>Tipo</th><th>Item</th><th>Qtd</th><th>Custo</th></tr></thead><tbody>${itens.map(it => `<tr><td><span class="badge ${it.tipo === 'produto' ? 'blue' : it.tipo === 'bebida' ? 'cyan' : 'pink'}">${it.tipo}</span></td><td>${it.nome}</td><td class="mono">${it.qtd}</td><td class="mono">${R$(it.custo)}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
     `;
 }
 
-// ==================== DASHBOARD ====================
-function atualizarDash() {
-    if (DB.vendas.length === 0) {
-        $('k-fat').textContent = 'R$ 0';
-        $('k-custo').textContent = 'R$ 0';
-        $('k-cmv').textContent = '0%';
-        $('k-lucro').textContent = 'R$ 0';
-        return;
-    }
-    
-    const ultima = DB.vendas[DB.vendas.length - 1];
-    const cmv = ultima.total_fat > 0 ? (ultima.total_custo / ultima.total_fat * 100) : 0;
-    
-    $('k-fat').textContent = R$(ultima.total_fat);
-    $('k-custo').textContent = R$(ultima.total_custo);
-    $('k-cmv').textContent = pct(cmv);
-    $('k-lucro').textContent = R$(ultima.total_fat - ultima.total_custo);
-    
-    atualizarCharts();
+// Config
+async function setupDB() { if (!confirm('Criar/atualizar tabelas?')) return; loading(true); try { await api('setup', 'POST'); toast('Tabelas criadas!'); await loadAll(); } catch (e) { toast('Erro: ' + e.message, true); } loading(false); }
+async function seedDB() { if (!confirm('Carregar dados exemplo?')) return; loading(true); try { await api('seed', 'POST'); await loadAll(); toast('Dados carregados!'); } catch (e) { toast('Erro: ' + e.message, true); } loading(false); }
+
+function confirmarLimpar() {
+    $('conf-icon').textContent = '⚠️'; $('conf-title').textContent = 'LIMPAR TUDO?'; $('conf-text').textContent = 'Remove TODOS os dados permanentemente!';
+    $('conf-btn').onclick = () => { limparDB(); fecharModal('mod-confirm'); };
+    abrirModal('mod-confirm');
 }
 
-function atualizarCharts() {
-    // Chart 1 - CMV por produto
-    const prods = DB.produtos.filter(p => p.custo > 0 && p.preco_ifood > 0)
-        .map(p => ({ nome: p.nome.slice(0, 10), cmv: calcCMV(p.custo, p.preco_ifood) }))
-        .sort((a, b) => b.cmv - a.cmv).slice(0, 6);
-    
-    if (chart1) chart1.destroy();
-    if (prods.length > 0) {
-        chart1 = new Chart($('chart1'), {
-            type: 'bar',
-            data: {
-                labels: prods.map(p => p.nome),
-                datasets: [{
-                    data: prods.map(p => p.cmv),
-                    backgroundColor: prods.map(p => p.cmv <= 25 ? '#10b981' : p.cmv <= 35 ? '#f59e0b' : '#ef4444'),
-                    borderRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { ticks: { color: '#64748b', callback: v => v + '%' } },
-                    x: { ticks: { color: '#94a3b8', maxRotation: 45 } }
-                }
-            }
-        });
-    }
-    
-    // Chart 2 - CMV mensal
-    if (chart2) chart2.destroy();
-    if (DB.vendas.length > 0) {
-        const ultimas = DB.vendas.slice(-6);
-        chart2 = new Chart($('chart2'), {
-            type: 'line',
-            data: {
-                labels: ultimas.map(v => `${v.mes}/${v.ano.slice(-2)}`),
-                datasets: [{
-                    data: ultimas.map(v => v.total_fat > 0 ? (v.total_custo / v.total_fat * 100).toFixed(1) : 0),
-                    borderColor: '#f59e0b',
-                    backgroundColor: 'rgba(245,158,11,0.1)',
-                    fill: true,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { ticks: { color: '#64748b', callback: v => v + '%' } },
-                    x: { ticks: { color: '#94a3b8' } }
-                }
-            }
-        });
-    }
-}
-
-// ==================== CONFIG ====================
-async function setupDB() {
-    if (!confirm('Criar/atualizar tabelas?')) return;
-    showLoading(true);
+async function limparDB() {
+    loading(true);
     try {
-        await api('setup', 'POST');
-        toast('Tabelas criadas!');
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
-    showLoading(false);
-}
-
-async function seedDB() {
-    if (!confirm('Carregar dados de exemplo?')) return;
-    showLoading(true);
-    try {
-        await api('seed', 'POST');
-        await loadAll();
-        toast('Dados carregados!');
-    } catch (e) {
-        toast('Erro: ' + e.message, true);
-    }
-    showLoading(false);
+        await api('setup', 'POST', { action: 'clear' });
+        DB.produtos = []; DB.bebidas = []; DB.sobremesas = []; DB.extras = []; DB.ingredientes = []; DB.fichas = []; DB.vendas = [];
+        renderAll();
+        toast('Banco limpo!');
+    } catch (e) { toast('Erro: ' + e.message, true); }
+    loading(false);
 }
 
 function exportarBackup() {
-    const backup = { versao: '9.1', data: new Date().toISOString(), dados: DB };
+    const backup = { versao: '9.2', data: new Date().toISOString(), dados: DB };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `backup_cmv_${new Date().toISOString().slice(0, 10)}.json`;
-    a.click();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `backup_cmv_${new Date().toISOString().slice(0, 10)}.json`; a.click();
     toast('Backup exportado!');
 }
 
-// ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', () => {
-    // Restaurar aba
-    const tab = localStorage.getItem('cmv_tab');
-    if (tab) {
-        const btn = document.querySelector(`.nav-btn[data-p="${tab}"]`);
-        if (btn) btn.click();
-    }
-    
-    // Fechar modal clicando fora
-    document.querySelectorAll('.modal-bg').forEach(m => {
-        m.onclick = e => { if (e.target === m) fecharModal(m.id); };
-    });
-    
-    // ESC fecha modal
-    document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') {
-            document.querySelectorAll('.modal-bg.show').forEach(m => fecharModal(m.id));
-        }
-    });
-    
-    // Preview CMV em tempo real
-    ['prod-custo', 'prod-preco-if', 'prod-preco-an'].forEach(id => {
-        $(id).addEventListener('input', atualizarPreviewCMV);
-    });
-    
-    loadAll();
-});
+// Init
+document.querySelectorAll('.modal-bg').forEach(m => { m.onclick = e => { if (e.target === m) fecharModal(m.id); }; });
+loadAll();
 </script>
 </body>
 </html>

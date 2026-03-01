@@ -11,13 +11,13 @@ module.exports = async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     if (req.method === 'GET') {
-      const rows = await sql`SELECT * FROM bebidas ORDER BY nome`;
+      const rows = await sql`SELECT * FROM sobremesas ORDER BY nome`;
       return res.status(200).json(rows);
     }
 
     if (req.method === 'POST') {
       const { nome, custo, preco_ifood, preco_anota } = req.body;
-      const [row] = await sql`INSERT INTO bebidas (nome, custo, preco_ifood, preco_anota) 
+      const [row] = await sql`INSERT INTO sobremesas (nome, custo, preco_ifood, preco_anota) 
                               VALUES (${nome}, ${custo || 0}, ${preco_ifood || 0}, ${preco_anota || 0}) 
                               RETURNING *`;
       return res.status(200).json(row);
@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
 
     if (req.method === 'PUT') {
       const { id, nome, custo, preco_ifood, preco_anota } = req.body;
-      const [row] = await sql`UPDATE bebidas 
+      const [row] = await sql`UPDATE sobremesas 
                               SET nome = ${nome}, custo = ${custo || 0}, 
                                   preco_ifood = ${preco_ifood || 0}, preco_anota = ${preco_anota || 0}
                               WHERE id = ${id} RETURNING *`;
@@ -34,7 +34,7 @@ module.exports = async function handler(req, res) {
 
     if (req.method === 'DELETE') {
       const { id } = req.body;
-      await sql`DELETE FROM bebidas WHERE id = ${id}`;
+      await sql`DELETE FROM sobremesas WHERE id = ${id}`;
       return res.status(200).json({ ok: true });
     }
 

@@ -10,8 +10,21 @@ module.exports = async function handler(req, res) {
 
   try {
     const sql = neon(process.env.DATABASE_URL);
+    const { action } = req.body || {};
+    
+    // Se action = 'clear', limpar todas as tabelas
+    if (action === 'clear') {
+      await sql`DELETE FROM fichas`;
+      await sql`DELETE FROM vendas`;
+      await sql`DELETE FROM ingredientes`;
+      await sql`DELETE FROM produtos`;
+      await sql`DELETE FROM bebidas`;
+      await sql`DELETE FROM sobremesas`;
+      await sql`DELETE FROM extras`;
+      return res.status(200).json({ ok: true, message: 'Banco limpo!' });
+    }
 
-    // Produtos - com custo único e preços por plataforma
+    // Produtos
     await sql`CREATE TABLE IF NOT EXISTS produtos (
       id SERIAL PRIMARY KEY,
       nome VARCHAR(255) NOT NULL,
@@ -23,20 +36,42 @@ module.exports = async function handler(req, res) {
       created_at TIMESTAMP DEFAULT NOW()
     )`;
     
-    // Migração: adicionar colunas novas se não existirem
+    // Migração produtos
     await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS tam CHAR(1) DEFAULT 'G'`;
     await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS custo DECIMAL(10,2) DEFAULT 0`;
     await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS preco_ifood DECIMAL(10,2) DEFAULT 0`;
     await sql`ALTER TABLE produtos ADD COLUMN IF NOT EXISTS preco_anota DECIMAL(10,2) DEFAULT 0`;
     
-    // Remover colunas antigas se existirem (das versões anteriores)
-    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS custo_p`; } catch(e) {}
-    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS custo_g`; } catch(e) {}
-    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS preco_p`; } catch(e) {}
-    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS preco_g`; } catch(e) {}
-    try { await sql`ALTER TABLE produtos DROP COLUMN IF EXISTS tamanho`; } catch(e) {}
+    // Bebidas
+    await sql`CREATE TABLE IF NOT EXISTS bebidas (
+      id SERIAL PRIMARY KEY,
+      nome VARCHAR(255) NOT NULL,
+      custo DECIMAL(10,2) DEFAULT 0,
+      preco_ifood DECIMAL(10,2) DEFAULT 0,
+      preco_anota DECIMAL(10,2) DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    )`;
+    
+    // Sobremesas
+    await sql`CREATE TABLE IF NOT EXISTS sobremesas (
+      id SERIAL PRIMARY KEY,
+      nome VARCHAR(255) NOT NULL,
+      custo DECIMAL(10,2) DEFAULT 0,
+      preco_ifood DECIMAL(10,2) DEFAULT 0,
+      preco_anota DECIMAL(10,2) DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    )`;
+    
+    // Extras
+    await sql`CREATE TABLE IF NOT EXISTS extras (
+      id SERIAL PRIMARY KEY,
+      nome VARCHAR(255) NOT NULL,
+      custo DECIMAL(10,2) DEFAULT 0,
+      preco DECIMAL(10,2) DEFAULT 0,
+      created_at TIMESTAMP DEFAULT NOW()
+    )`;
 
-    // Ingredientes (inclui embalagens)
+    // Ingredientes
     await sql`CREATE TABLE IF NOT EXISTS ingredientes (
       id SERIAL PRIMARY KEY,
       nome VARCHAR(255) NOT NULL,
@@ -56,14 +91,9 @@ module.exports = async function handler(req, res) {
       created_at TIMESTAMP DEFAULT NOW()
     )`;
     
-    // Migração: adicionar colunas novas na tabela fichas
     await sql`ALTER TABLE fichas ADD COLUMN IF NOT EXISTS un VARCHAR(10) DEFAULT 'g'`;
-    await sql`ALTER TABLE fichas ADD COLUMN IF NOT EXISTS qtd DECIMAL(10,4) DEFAULT 0`;
-    
-    // Remover colunas antigas de fichas se existirem
-    try { await sql`ALTER TABLE fichas DROP COLUMN IF EXISTS tamanho`; } catch(e) {}
 
-    // Vendas/Importações
+    // Vendas
     await sql`CREATE TABLE IF NOT EXISTS vendas (
       id SERIAL PRIMARY KEY,
       mes VARCHAR(2) NOT NULL,
@@ -76,17 +106,7 @@ module.exports = async function handler(req, res) {
       created_at TIMESTAMP DEFAULT NOW()
     )`;
     
-    // Migração: adicionar colunas novas na tabela vendas
     await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS itens JSONB`;
-    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS total_qtd INTEGER DEFAULT 0`;
-    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS total_fat DECIMAL(12,2) DEFAULT 0`;
-    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS total_custo DECIMAL(12,2) DEFAULT 0`;
-    
-    // Remover colunas antigas de vendas se existirem
-    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS grupos`; } catch(e) {}
-    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS massas`; } catch(e) {}
-    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS extras`; } catch(e) {}
-    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS detalhes_cmv`; } catch(e) {}
 
     return res.status(200).json({ ok: true, message: 'Tabelas criadas e migradas!' });
   } catch (e) {

@@ -98,11 +98,85 @@ module.exports = async function handler(req, res) {
       
       // Outros
       { nome: 'Polenta Ragu de Costela', cat: 'outros', tam: 'G', custo: 5.45, preco_ifood: 28.90, preco_anota: 23.90 },
+      
+      // Combos (custo médio estimado)
+      { nome: 'Combo Grande', cat: 'combo', tam: 'G', custo: 18.00, preco_ifood: 51.90, preco_anota: 45.90 },
+      { nome: 'Combo Risoto', cat: 'combo', tam: 'G', custo: 18.50, preco_ifood: 52.90, preco_anota: 47.90 },
+      { nome: 'Combo Casal', cat: 'combo', tam: 'G', custo: 32.00, preco_ifood: 100.90, preco_anota: 88.90 },
+      { nome: 'Combo Kids', cat: 'combo', tam: 'G', custo: 12.00, preco_ifood: 42.90, preco_anota: 37.90 },
+      { nome: 'Compre 3 Leve 4', cat: 'combo', tam: 'G', custo: 42.00, preco_ifood: 146.90, preco_anota: 128.90 },
+      { nome: 'Combo Turma da Boiadeirinha', cat: 'combo', tam: 'G', custo: 14.00, preco_ifood: 45.90, preco_anota: 42.90 },
+      { nome: 'Combo Um Brinde a Itália', cat: 'combo', tam: 'G', custo: 45.00, preco_ifood: 149.90, preco_anota: 139.90 },
     ];
 
     for (const p of produtos) {
       await sql`INSERT INTO produtos (nome, cat, tam, custo, preco_ifood, preco_anota) 
                 VALUES (${p.nome}, ${p.cat}, ${p.tam}, ${p.custo}, ${p.preco_ifood}, ${p.preco_anota})
+                ON CONFLICT DO NOTHING`;
+    }
+
+    // Bebidas
+    const bebidas = [
+      { nome: 'Coca-Cola Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Coca-Cola Zero Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Coca-Cola 600ml', custo: 4.50, preco_ifood: 10.00, preco_anota: 9.00 },
+      { nome: 'Coca-Cola Zero 600ml', custo: 4.50, preco_ifood: 10.00, preco_anota: 9.00 },
+      { nome: 'Coca-Cola 2L', custo: 8.00, preco_ifood: 19.00, preco_anota: 17.00 },
+      { nome: 'Coca-Cola Zero 2L', custo: 8.00, preco_ifood: 19.00, preco_anota: 17.00 },
+      { nome: 'Sprite Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Fanta Laranja Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Fanta Uva Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Sprite Lemon Fresh 510ml', custo: 3.50, preco_ifood: 6.50, preco_anota: 6.00 },
+      { nome: 'Água sem Gás', custo: 1.20, preco_ifood: 5.00, preco_anota: 4.50 },
+      { nome: 'Água com Gás', custo: 1.50, preco_ifood: 5.00, preco_anota: 4.50 },
+      { nome: 'Suco Del Valle Pêssego 290ml', custo: 3.00, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Suco Del Valle Uva 290ml', custo: 3.00, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Suco Del Valle Maracujá 290ml', custo: 3.00, preco_ifood: 8.00, preco_anota: 7.00 },
+      { nome: 'Monster Energy 473ml', custo: 8.00, preco_ifood: 16.00, preco_anota: 15.00 },
+      { nome: 'Vinho Badia al Colle 750ml', custo: 25.00, preco_ifood: 69.90, preco_anota: 65.00 },
+      { nome: 'Coca-Cola 200ml', custo: 1.80, preco_ifood: 5.00, preco_anota: 4.50 },
+    ];
+
+    for (const b of bebidas) {
+      await sql`INSERT INTO bebidas (nome, custo, preco_ifood, preco_anota) 
+                VALUES (${b.nome}, ${b.custo}, ${b.preco_ifood}, ${b.preco_anota})
+                ON CONFLICT DO NOTHING`;
+    }
+
+    // Sobremesas
+    const sobremesas = [
+      { nome: 'Tiramisu 100g', custo: 5.50, preco_ifood: 18.90, preco_anota: 16.90 },
+      { nome: 'Brownie 50g', custo: 3.00, preco_ifood: 9.90, preco_anota: 8.90 },
+      { nome: 'Cannoli 55g', custo: 3.50, preco_ifood: 11.90, preco_anota: 10.90 },
+      { nome: 'Palha Italiana 50g', custo: 3.50, preco_ifood: 11.90, preco_anota: 10.90 },
+    ];
+
+    for (const s of sobremesas) {
+      await sql`INSERT INTO sobremesas (nome, custo, preco_ifood, preco_anota) 
+                VALUES (${s.nome}, ${s.custo}, ${s.preco_ifood}, ${s.preco_anota})
+                ON CONFLICT DO NOTHING`;
+    }
+
+    // Extras
+    const extras = [
+      { nome: 'Extra Bacon 25g', custo: 1.50, preco: 6.00 },
+      { nome: 'Extra Queijo 45g', custo: 2.00, preco: 6.00 },
+      { nome: 'Extra Parmesão 15g', custo: 1.80, preco: 6.00 },
+      { nome: 'Extra Cebola Crispy 15g', custo: 0.80, preco: 5.00 },
+      { nome: 'Extra Alho Frito 10g', custo: 0.50, preco: 5.00 },
+      { nome: 'Extra Frango Desfiado', custo: 3.00, preco: 8.00 },
+      { nome: 'Extra Camarão', custo: 8.00, preco: 20.00 },
+      { nome: 'Extra Carne Moída', custo: 4.00, preco: 10.00 },
+      { nome: 'Extra Ragu de Costela', custo: 5.00, preco: 16.00 },
+      { nome: 'Extra Broccoli', custo: 2.00, preco: 7.00 },
+      { nome: 'Extra Quatro Queijos', custo: 4.00, preco: 14.00 },
+      { nome: 'Extra Presunto', custo: 2.50, preco: 6.00 },
+      { nome: 'Acompanhamento + Sobremesa', custo: 4.00, preco: 12.00 },
+    ];
+
+    for (const e of extras) {
+      await sql`INSERT INTO extras (nome, custo, preco) 
+                VALUES (${e.nome}, ${e.custo}, ${e.preco})
                 ON CONFLICT DO NOTHING`;
     }
 
