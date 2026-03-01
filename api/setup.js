@@ -66,11 +66,22 @@ module.exports = async function handler(req, res) {
       total_qtd INTEGER DEFAULT 0,
       total_fat DECIMAL(12,2) DEFAULT 0,
       total_custo DECIMAL(12,2) DEFAULT 0,
-      created_at TIMESTAMP DEFAULT NOW(),
-      UNIQUE(mes, ano, cardapio)
+      created_at TIMESTAMP DEFAULT NOW()
     )`;
+    
+    // Migração: adicionar colunas novas na tabela vendas
+    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS itens JSONB`;
+    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS total_qtd INTEGER DEFAULT 0`;
+    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS total_fat DECIMAL(12,2) DEFAULT 0`;
+    await sql`ALTER TABLE vendas ADD COLUMN IF NOT EXISTS total_custo DECIMAL(12,2) DEFAULT 0`;
+    
+    // Remover colunas antigas de vendas se existirem
+    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS grupos`; } catch(e) {}
+    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS massas`; } catch(e) {}
+    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS extras`; } catch(e) {}
+    try { await sql`ALTER TABLE vendas DROP COLUMN IF EXISTS detalhes_cmv`; } catch(e) {}
 
-    return res.status(200).json({ ok: true, message: 'Tabelas criadas!' });
+    return res.status(200).json({ ok: true, message: 'Tabelas criadas e migradas!' });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: e.message });
