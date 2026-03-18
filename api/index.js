@@ -7,7 +7,6 @@ module.exports = async function handler(req, res) {
   
   if (req.method === 'OPTIONS') return res.status(200).end();
 
-  // Extrair rota do query parameter
   const { route } = req.query;
   
   try {
@@ -19,7 +18,6 @@ module.exports = async function handler(req, res) {
       
       const { action } = req.body || {};
       
-      // Limpar banco
       if (action === 'clear') {
         await sql`DROP TABLE IF EXISTS fichas CASCADE`;
         await sql`DROP TABLE IF EXISTS vendas CASCADE`;
@@ -31,7 +29,6 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({ ok: true, message: 'Banco limpo!' });
       }
 
-      // Criar tabelas
       await sql`CREATE TABLE IF NOT EXISTS produtos (
         id SERIAL PRIMARY KEY, nome VARCHAR(255) NOT NULL, cat VARCHAR(50) DEFAULT 'macarrao',
         tam CHAR(1) DEFAULT 'G', custo DECIMAL(10,2) DEFAULT 0,
@@ -81,7 +78,6 @@ module.exports = async function handler(req, res) {
     if (route === 'seed') {
       if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-      // Ingredientes
       const ingredientes = [
         { nome: 'Carne Moída', un: 'kg', custo: 28.90 },
         { nome: 'Molho de Tomate', un: 'kg', custo: 8.50 },
@@ -97,53 +93,56 @@ module.exports = async function handler(req, res) {
         { nome: 'Costela Desfiada', un: 'kg', custo: 48.00 },
         { nome: 'Cogumelo Funghi', un: 'kg', custo: 120.00 },
         { nome: 'Requeijão', un: 'kg', custo: 22.00 },
+        { nome: 'Massa Penne', un: 'kg', custo: 8.50 },
+        { nome: 'Arroz Arbóreo', un: 'kg', custo: 25.00 },
+        { nome: 'Nhoque Fresco', un: 'kg', custo: 18.00 },
         { nome: 'Embalagem Box G', un: 'un', custo: 1.80 },
         { nome: 'Embalagem Box P', un: 'un', custo: 1.40 },
+        { nome: 'Tampa', un: 'un', custo: 0.35 },
+        { nome: 'Sacola', un: 'un', custo: 0.25 },
       ];
 
       for (const i of ingredientes) {
         await sql`INSERT INTO ingredientes (nome, un, custo) VALUES (${i.nome}, ${i.un}, ${i.custo}) ON CONFLICT DO NOTHING`;
       }
 
-      // Produtos
       const produtos = [
-        { nome: 'Pomodoro', cat: 'macarrao', tam: 'G', custo: 8.23, preco_ifood: 39.90, preco_anota: 29.90 },
-        { nome: 'Bolonhesa', cat: 'macarrao', tam: 'G', custo: 10.59, preco_ifood: 48.90, preco_anota: 42.90 },
-        { nome: 'Broccoli', cat: 'macarrao', tam: 'G', custo: 9.94, preco_ifood: 49.90, preco_anota: 42.90 },
-        { nome: 'Cheddar com Bacon', cat: 'macarrao', tam: 'G', custo: 12.79, preco_ifood: 56.90, preco_anota: 49.90 },
-        { nome: 'Parisiense', cat: 'macarrao', tam: 'G', custo: 12.13, preco_ifood: 49.90, preco_anota: 42.90 },
-        { nome: 'Quatro Queijos', cat: 'macarrao', tam: 'G', custo: 13.93, preco_ifood: 56.90, preco_anota: 48.90 },
-        { nome: 'Camarão Rosé', cat: 'macarrao', tam: 'G', custo: 20.11, preco_ifood: 69.90, preco_anota: 59.90 },
-        { nome: 'Funghi', cat: 'macarrao', tam: 'G', custo: 10.63, preco_ifood: 44.90, preco_anota: 39.90 },
-        { nome: 'Ragu de Costela', cat: 'macarrao', tam: 'G', custo: 13.24, preco_ifood: 54.90, preco_anota: 49.90 },
-        { nome: 'Cheddar com Carne e Bacon', cat: 'macarrao', tam: 'G', custo: 15.15, preco_ifood: 59.90, preco_anota: 54.90 },
-        { nome: 'Frango com Requeijão', cat: 'macarrao', tam: 'G', custo: 11.94, preco_ifood: 59.90, preco_anota: 54.90 },
-        { nome: 'Pomodoro', cat: 'macarrao', tam: 'P', custo: 4.95, preco_ifood: 24.90, preco_anota: 23.90 },
-        { nome: 'Bolonhesa', cat: 'macarrao', tam: 'P', custo: 6.15, preco_ifood: 34.90, preco_anota: 29.90 },
-        { nome: 'Broccoli', cat: 'macarrao', tam: 'P', custo: 7.28, preco_ifood: 39.90, preco_anota: 32.90 },
-        { nome: 'Cheddar com Bacon', cat: 'macarrao', tam: 'P', custo: 8.70, preco_ifood: 43.90, preco_anota: 36.90 },
-        { nome: 'Quatro Queijos', cat: 'macarrao', tam: 'P', custo: 9.46, preco_ifood: 43.90, preco_anota: 35.90 },
-        { nome: 'Camarão Rosé', cat: 'macarrao', tam: 'P', custo: 10.96, preco_ifood: 49.90, preco_anota: 43.90 },
-        { nome: 'Ragu de Costela', cat: 'macarrao', tam: 'P', custo: 7.49, preco_ifood: 47.90, preco_anota: 39.90 },
-        { nome: 'Risoto Quatro Queijos', cat: 'risoto', tam: 'G', custo: 13.28, preco_ifood: 49.90, preco_anota: 44.90 },
-        { nome: 'Risoto Ragu de Costela', cat: 'risoto', tam: 'G', custo: 13.26, preco_ifood: 59.90, preco_anota: 49.90 },
-        { nome: 'Risoto Camarão', cat: 'risoto', tam: 'G', custo: 19.22, preco_ifood: 69.90, preco_anota: 59.90 },
-        { nome: 'Risoto Funghi', cat: 'risoto', tam: 'G', custo: 11.43, preco_ifood: 44.90, preco_anota: 39.90 },
-        { nome: 'Nhoque Pomodoro', cat: 'nhoque', tam: 'G', custo: 12.43, preco_ifood: 49.90, preco_anota: 37.90 },
-        { nome: 'Nhoque Bolonhesa', cat: 'nhoque', tam: 'G', custo: 14.79, preco_ifood: 58.90, preco_anota: 50.90 },
-        { nome: 'Nhoque Quatro Queijos', cat: 'nhoque', tam: 'G', custo: 18.13, preco_ifood: 66.90, preco_anota: 56.90 },
-        { nome: 'Nhoque Ragu de Costela', cat: 'nhoque', tam: 'G', custo: 17.43, preco_ifood: 64.90, preco_anota: 57.90 },
-        { nome: 'Nhoque Camarão', cat: 'nhoque', tam: 'G', custo: 24.31, preco_ifood: 79.90, preco_anota: 67.90 },
-        { nome: 'Combo Grande', cat: 'combo', tam: 'G', custo: 18.00, preco_ifood: 63.90, preco_anota: 55.90 },
-        { nome: 'Combo Risoto', cat: 'combo', tam: 'G', custo: 18.50, preco_ifood: 66.90, preco_anota: 58.90 },
-        { nome: 'Combo Casal', cat: 'combo', tam: 'G', custo: 32.00, preco_ifood: 119.90, preco_anota: 105.90 },
+        { nome: 'Pomodoro', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 39.90, preco_anota: 29.90 },
+        { nome: 'Bolonhesa', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 48.90, preco_anota: 42.90 },
+        { nome: 'Broccoli', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 49.90, preco_anota: 42.90 },
+        { nome: 'Cheddar com Bacon', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 56.90, preco_anota: 49.90 },
+        { nome: 'Parisiense', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 49.90, preco_anota: 42.90 },
+        { nome: 'Quatro Queijos', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 56.90, preco_anota: 48.90 },
+        { nome: 'Camarão Rosé', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 69.90, preco_anota: 59.90 },
+        { nome: 'Funghi', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 44.90, preco_anota: 39.90 },
+        { nome: 'Ragu de Costela', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 54.90, preco_anota: 49.90 },
+        { nome: 'Cheddar com Carne e Bacon', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 59.90, preco_anota: 54.90 },
+        { nome: 'Frango com Requeijão', cat: 'macarrao', tam: 'G', custo: 0, preco_ifood: 59.90, preco_anota: 54.90 },
+        { nome: 'Pomodoro', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 24.90, preco_anota: 23.90 },
+        { nome: 'Bolonhesa', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 34.90, preco_anota: 29.90 },
+        { nome: 'Broccoli', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 39.90, preco_anota: 32.90 },
+        { nome: 'Cheddar com Bacon', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 43.90, preco_anota: 36.90 },
+        { nome: 'Quatro Queijos', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 43.90, preco_anota: 35.90 },
+        { nome: 'Camarão Rosé', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 49.90, preco_anota: 43.90 },
+        { nome: 'Ragu de Costela', cat: 'macarrao', tam: 'P', custo: 0, preco_ifood: 47.90, preco_anota: 39.90 },
+        { nome: 'Risoto Quatro Queijos', cat: 'risoto', tam: 'G', custo: 0, preco_ifood: 49.90, preco_anota: 44.90 },
+        { nome: 'Risoto Ragu de Costela', cat: 'risoto', tam: 'G', custo: 0, preco_ifood: 59.90, preco_anota: 49.90 },
+        { nome: 'Risoto Camarão', cat: 'risoto', tam: 'G', custo: 0, preco_ifood: 69.90, preco_anota: 59.90 },
+        { nome: 'Risoto Funghi', cat: 'risoto', tam: 'G', custo: 0, preco_ifood: 44.90, preco_anota: 39.90 },
+        { nome: 'Nhoque Pomodoro', cat: 'nhoque', tam: 'G', custo: 0, preco_ifood: 49.90, preco_anota: 37.90 },
+        { nome: 'Nhoque Bolonhesa', cat: 'nhoque', tam: 'G', custo: 0, preco_ifood: 58.90, preco_anota: 50.90 },
+        { nome: 'Nhoque Quatro Queijos', cat: 'nhoque', tam: 'G', custo: 0, preco_ifood: 66.90, preco_anota: 56.90 },
+        { nome: 'Nhoque Ragu de Costela', cat: 'nhoque', tam: 'G', custo: 0, preco_ifood: 64.90, preco_anota: 57.90 },
+        { nome: 'Nhoque Camarão', cat: 'nhoque', tam: 'G', custo: 0, preco_ifood: 79.90, preco_anota: 67.90 },
+        { nome: 'Combo Grande', cat: 'combo', tam: 'G', custo: 0, preco_ifood: 63.90, preco_anota: 55.90 },
+        { nome: 'Combo Risoto', cat: 'combo', tam: 'G', custo: 0, preco_ifood: 66.90, preco_anota: 58.90 },
+        { nome: 'Combo Casal', cat: 'combo', tam: 'G', custo: 0, preco_ifood: 119.90, preco_anota: 105.90 },
       ];
 
       for (const p of produtos) {
         await sql`INSERT INTO produtos (nome, cat, tam, custo, preco_ifood, preco_anota) VALUES (${p.nome}, ${p.cat}, ${p.tam}, ${p.custo}, ${p.preco_ifood}, ${p.preco_anota}) ON CONFLICT DO NOTHING`;
       }
 
-      // Bebidas
       const bebidas = [
         { nome: 'Coca-Cola Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
         { nome: 'Coca-Cola Zero Lata 350ml', custo: 2.80, preco_ifood: 8.00, preco_anota: 7.00 },
@@ -159,7 +158,6 @@ module.exports = async function handler(req, res) {
         await sql`INSERT INTO bebidas (nome, custo, preco_ifood, preco_anota) VALUES (${b.nome}, ${b.custo}, ${b.preco_ifood}, ${b.preco_anota}) ON CONFLICT DO NOTHING`;
       }
 
-      // Sobremesas
       const sobremesas = [
         { nome: 'Tiramisu 100g', custo: 5.50, preco_ifood: 18.90, preco_anota: 16.90 },
         { nome: 'Brownie 50g', custo: 3.00, preco_ifood: 9.90, preco_anota: 8.90 },
@@ -171,7 +169,6 @@ module.exports = async function handler(req, res) {
         await sql`INSERT INTO sobremesas (nome, custo, preco_ifood, preco_anota) VALUES (${s.nome}, ${s.custo}, ${s.preco_ifood}, ${s.preco_anota}) ON CONFLICT DO NOTHING`;
       }
 
-      // Extras
       const extras = [
         { nome: 'Extra Bacon 25g', custo: 1.50, preco: 6.00 },
         { nome: 'Extra Queijo 45g', custo: 2.00, preco: 6.00 },

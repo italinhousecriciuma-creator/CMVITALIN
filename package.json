@@ -1,8 +1,7 @@
 {
-  "name": "cmv-italin",
-  "version": "9.1.0",
-  "private": true,
+  "name": "cmv-control",
+  "version": "9.3.0",
   "dependencies": {
-    "@neondatabase/serverless": "^0.10.4"
+    "@neondatabase/serverless": "^0.9.0"
   }
 }
