@@ -9,227 +9,73 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --bg1: #0f172a;
-            --bg2: #1e293b;
-            --bg3: #334155;
-            --bgHover: #475569;
-            --green: #22c55e;
-            --red: #ef4444;
-            --yellow: #eab308;
-            --blue: #3b82f6;
-            --purple: #a855f7;
-            --pink: #ec4899;
-            --cyan: #06b6d4;
-            --orange: #f97316;
-            --txt: #f8fafc;
-            --txt2: #cbd5e1;
-            --txt3: #94a3b8;
-            --brd: #475569;
+            --bg1: #0f172a; --bg2: #1e293b; --bg3: #334155; --bgHover: #475569;
+            --green: #22c55e; --red: #ef4444; --yellow: #eab308; --blue: #3b82f6;
+            --purple: #a855f7; --pink: #ec4899; --cyan: #06b6d4; --orange: #f97316;
+            --txt: #f8fafc; --txt2: #cbd5e1; --txt3: #94a3b8; --brd: #475569;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg1); 
-            color: var(--txt); 
-            min-height: 100vh; 
-            font-size: 15px;
-            line-height: 1.5;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg1); color: var(--txt); min-height: 100vh; font-size: 16px; line-height: 1.5; }
         
-        /* HEADER */
-        .header { 
-            background: var(--bg2); 
-            border-bottom: 1px solid var(--brd); 
-            padding: 1rem 1.5rem; 
-            position: sticky; 
-            top: 0; 
-            z-index: 100; 
-        }
-        .header-content { 
-            max-width: 1600px; 
-            margin: 0 auto; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-        .logo { display: flex; align-items: center; gap: 0.75rem; }
-        .logo-icon { 
-            width: 42px; 
-            height: 42px; 
-            background: linear-gradient(135deg, var(--green), var(--blue)); 
-            border-radius: 10px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 1.5rem; 
-        }
-        .logo h1 { font-size: 1.25rem; font-weight: 700; }
-        .logo span { font-size: 0.75rem; color: var(--txt3); display: block; }
-        .sync { 
-            font-size: 0.8rem; 
-            padding: 0.4rem 0.75rem; 
-            border-radius: 6px; 
-            background: rgba(34,197,94,0.2); 
-            color: var(--green); 
-            font-weight: 500;
-        }
+        .header { background: var(--bg2); border-bottom: 1px solid var(--brd); padding: 1rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .header-content { max-width: 1800px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 1rem; }
+        .logo-icon { width: 52px; height: 52px; background: linear-gradient(135deg, var(--green), var(--blue)); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
+        .logo h1 { font-size: 1.6rem; font-weight: 700; }
+        .logo span { font-size: 0.9rem; color: var(--txt3); }
+        .sync { font-size: 0.95rem; padding: 0.5rem 1rem; border-radius: 8px; background: rgba(34,197,94,0.2); color: var(--green); font-weight: 500; }
         
-        /* NAV */
-        .nav { 
-            background: var(--bg2); 
-            border-bottom: 1px solid var(--brd); 
-            position: sticky; 
-            top: 66px; 
-            z-index: 99; 
-        }
-        .nav-content { 
-            max-width: 1600px; 
-            margin: 0 auto;
-            display: flex; 
-            gap: 0.25rem;
-            padding: 0.5rem 1rem;
-            overflow-x: auto;
-        }
-        .nav-btn { 
-            background: none; 
-            border: none; 
-            color: var(--txt2); 
-            padding: 0.75rem 1.25rem; 
-            font-family: inherit; 
-            font-size: 0.9rem; 
-            font-weight: 500;
-            cursor: pointer; 
-            border-radius: 8px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
+        .nav { background: var(--bg2); border-bottom: 1px solid var(--brd); position: sticky; top: 76px; z-index: 99; }
+        .nav-content { max-width: 1800px; margin: 0 auto; display: flex; gap: 0.5rem; padding: 0.75rem 1.5rem; overflow-x: auto; }
+        .nav-btn { background: none; border: none; color: var(--txt2); padding: 0.9rem 1.5rem; font-family: inherit; font-size: 1rem; font-weight: 500; cursor: pointer; border-radius: 10px; white-space: nowrap; transition: all 0.2s; }
         .nav-btn:hover { color: var(--txt); background: var(--bg3); }
         .nav-btn.active { color: var(--green); background: rgba(34,197,94,0.15); }
         
-        /* MAIN */
-        .main { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
+        .main { max-width: 1800px; margin: 0 auto; padding: 2rem; }
         .page { display: none; animation: fadeIn 0.2s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        /* KPIs */
-        .grid-kpi { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 1rem; 
-            margin-bottom: 1.5rem; 
-        }
-        .kpi { 
-            background: var(--bg2); 
-            border: 1px solid var(--brd); 
-            border-radius: 12px; 
-            padding: 1.25rem; 
-            position: relative; 
-            overflow: hidden; 
-        }
-        .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
-        .kpi.green::before { background: var(--green); }
-        .kpi.blue::before { background: var(--blue); }
-        .kpi.yellow::before { background: var(--yellow); }
-        .kpi.purple::before { background: var(--purple); }
-        .kpi-label { color: var(--txt3); font-size: 0.85rem; margin-bottom: 0.5rem; font-weight: 500; }
-        .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 1.75rem; font-weight: 700; }
-        .kpi.green .kpi-value { color: var(--green); }
-        .kpi.blue .kpi-value { color: var(--blue); }
-        .kpi.yellow .kpi-value { color: var(--yellow); }
-        .kpi.purple .kpi-value { color: var(--purple); }
+        .grid-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .kpi { background: var(--bg2); border: 1px solid var(--brd); border-radius: 16px; padding: 1.5rem; position: relative; overflow: hidden; }
+        .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+        .kpi.green::before { background: var(--green); } .kpi.blue::before { background: var(--blue); }
+        .kpi.yellow::before { background: var(--yellow); } .kpi.purple::before { background: var(--purple); }
+        .kpi.red::before { background: var(--red); } .kpi.cyan::before { background: var(--cyan); }
+        .kpi-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .kpi-label { color: var(--txt3); font-size: 1rem; margin-bottom: 0.5rem; font-weight: 500; }
+        .kpi-value { font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; font-weight: 700; }
+        .kpi.green .kpi-value { color: var(--green); } .kpi.blue .kpi-value { color: var(--blue); }
+        .kpi.yellow .kpi-value { color: var(--yellow); } .kpi.purple .kpi-value { color: var(--purple); }
+        .kpi.red .kpi-value { color: var(--red); } .kpi.cyan .kpi-value { color: var(--cyan); }
+        .kpi-sub { font-size: 0.9rem; color: var(--txt3); margin-top: 0.5rem; }
+        .kpi-compare { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.9rem; }
+        .kpi-compare.up { color: var(--green); } .kpi-compare.down { color: var(--red); }
         
-        /* CARDS */
-        .card { 
-            background: var(--bg2); 
-            border: 1px solid var(--brd); 
-            border-radius: 12px; 
-            padding: 1.25rem; 
-            margin-bottom: 1.25rem; 
-        }
-        .card-head { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 1rem; 
-            flex-wrap: wrap; 
-            gap: 0.75rem; 
-        }
-        .card-title { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
-        .card-actions { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+        .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        @media (max-width: 1200px) { .dash-grid { grid-template-columns: 1fr; } }
         
-        /* FILTERS */
-        .filters { 
-            display: flex; 
-            gap: 0.5rem; 
-            flex-wrap: wrap; 
-            align-items: center;
-            background: var(--bg3);
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
-        }
-        .filter-group { display: flex; align-items: center; gap: 0.25rem; }
-        .filter-group label { font-size: 0.8rem; color: var(--txt3); }
-        .filter-select {
-            background: var(--bg2);
-            border: 1px solid var(--brd);
-            border-radius: 6px;
-            padding: 0.4rem 0.6rem;
-            color: var(--txt);
-            font-size: 0.85rem;
-            cursor: pointer;
-        }
-        .search-box { 
-            display: flex; 
-            align-items: center; 
-            gap: 0.5rem; 
-            background: var(--bg2); 
-            border: 1px solid var(--brd); 
-            border-radius: 8px; 
-            padding: 0.5rem 0.75rem; 
-        }
-        .search-box input { 
-            background: none; 
-            border: none; 
-            color: var(--txt); 
-            font-size: 0.95rem; 
-            width: 150px; 
-            outline: none; 
-        }
+        .card { background: var(--bg2); border: 1px solid var(--brd); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem; }
+        .card-title { font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+        .card-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+        
+        .filters { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; background: var(--bg3); padding: 0.75rem 1rem; border-radius: 10px; }
+        .filter-group { display: flex; align-items: center; gap: 0.5rem; }
+        .filter-group label { font-size: 0.95rem; color: var(--txt3); }
+        .filter-select { background: var(--bg2); border: 1px solid var(--brd); border-radius: 8px; padding: 0.5rem 0.75rem; color: var(--txt); font-size: 1rem; cursor: pointer; }
+        .search-box { display: flex; align-items: center; gap: 0.5rem; background: var(--bg2); border: 1px solid var(--brd); border-radius: 10px; padding: 0.6rem 1rem; }
+        .search-box input { background: none; border: none; color: var(--txt); font-size: 1rem; width: 180px; outline: none; }
         .search-box input::placeholder { color: var(--txt3); }
         
-        /* TABLES */
-        .tbl-wrap { 
-            overflow-x: auto; 
-            border: 1px solid var(--brd); 
-            border-radius: 10px; 
-        }
-        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
-        th { 
-            background: var(--bg3); 
-            color: var(--txt2); 
-            font-weight: 600; 
-            text-align: left; 
-            padding: 0.875rem 1rem; 
-            border-bottom: 1px solid var(--brd); 
-            white-space: nowrap; 
-        }
-        td { 
-            padding: 0.875rem 1rem; 
-            border-bottom: 1px solid var(--brd); 
-            vertical-align: middle;
-        }
+        .tbl-wrap { overflow-x: auto; border: 1px solid var(--brd); border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; font-size: 1rem; }
+        th { background: var(--bg3); color: var(--txt2); font-weight: 600; text-align: left; padding: 1rem 1.25rem; border-bottom: 1px solid var(--brd); white-space: nowrap; }
+        td { padding: 1rem 1.25rem; border-bottom: 1px solid var(--brd); vertical-align: middle; }
         tr:hover td { background: var(--bgHover); }
         tr:last-child td { border-bottom: none; }
         
-        /* BADGES */
-        .badge { 
-            display: inline-block; 
-            padding: 0.25rem 0.6rem; 
-            border-radius: 6px; 
-            font-size: 0.8rem; 
-            font-weight: 600; 
-        }
+        .badge { display: inline-block; padding: 0.4rem 0.8rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; }
         .badge.green { background: rgba(34,197,94,0.2); color: var(--green); }
         .badge.yellow { background: rgba(234,179,8,0.2); color: var(--yellow); }
         .badge.red { background: rgba(239,68,68,0.2); color: var(--red); }
@@ -242,37 +88,13 @@
         
         .mono { font-family: 'JetBrains Mono', monospace; }
         
-        /* FORMS */
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; }
-        .field { margin-bottom: 0.75rem; }
-        .field label { display: block; color: var(--txt2); font-size: 0.85rem; margin-bottom: 0.35rem; font-weight: 500; }
-        .field input, .field select { 
-            width: 100%; 
-            background: var(--bg3); 
-            border: 1px solid var(--brd); 
-            border-radius: 8px; 
-            padding: 0.65rem 0.85rem; 
-            color: var(--txt); 
-            font-family: inherit; 
-            font-size: 1rem; 
-        }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+        .field { margin-bottom: 1rem; }
+        .field label { display: block; color: var(--txt2); font-size: 1rem; margin-bottom: 0.5rem; font-weight: 500; }
+        .field input, .field select { width: 100%; background: var(--bg3); border: 1px solid var(--brd); border-radius: 10px; padding: 0.85rem 1rem; color: var(--txt); font-family: inherit; font-size: 1rem; }
         .field input:focus, .field select:focus { outline: none; border-color: var(--green); }
         
-        /* BUTTONS */
-        .btn { 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 0.35rem; 
-            padding: 0.6rem 1rem; 
-            border: none; 
-            border-radius: 8px; 
-            font-family: inherit; 
-            font-size: 0.9rem; 
-            font-weight: 600; 
-            cursor: pointer; 
-            transition: all 0.15s;
-        }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 1.5rem; border: none; border-radius: 10px; font-family: inherit; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-p { background: linear-gradient(135deg, var(--green), #16a34a); color: white; }
         .btn-p:hover:not(:disabled) { filter: brightness(1.1); }
@@ -282,193 +104,95 @@
         .btn-e:hover { background: rgba(59,130,246,0.25); }
         .btn-s { background: var(--bg3); color: var(--txt); border: 1px solid var(--brd); }
         .btn-s:hover { background: var(--bgHover); }
-        .btn-sm { padding: 0.4rem 0.65rem; font-size: 0.8rem; }
-        .actions { display: flex; gap: 0.35rem; }
+        .btn-sm { padding: 0.5rem 0.85rem; font-size: 0.95rem; }
+        .actions { display: flex; gap: 0.5rem; }
         
-        /* MODALS */
-        .modal-bg { 
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.8); 
-            z-index: 1000; 
-            align-items: center; 
-            justify-content: center; 
-            padding: 1rem;
-        }
+        .modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
         .modal-bg.show { display: flex; }
-        .modal { 
-            background: var(--bg2); 
-            border: 1px solid var(--brd); 
-            border-radius: 16px; 
-            width: 100%; 
-            max-width: 500px; 
-            max-height: 90vh; 
-            overflow-y: auto; 
-            padding: 1.5rem; 
-        }
-        .modal-head { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 1.25rem; 
-            padding-bottom: 0.75rem; 
-            border-bottom: 1px solid var(--brd); 
-        }
-        .modal-head h3 { font-size: 1.25rem; }
-        .modal-close { 
-            background: var(--bg3); 
-            border: none; 
-            color: var(--txt); 
-            width: 32px; 
-            height: 32px; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 1.25rem;
-        }
+        .modal { background: var(--bg2); border: 1px solid var(--brd); border-radius: 20px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 2rem; }
+        .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--brd); }
+        .modal-head h3 { font-size: 1.5rem; }
+        .modal-close { background: var(--bg3); border: none; color: var(--txt); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; font-size: 1.5rem; }
         
-        /* ALERTS & TOASTS */
-        .alert { padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.9rem; margin-bottom: 0.75rem; }
+        .alert { padding: 1rem 1.25rem; border-radius: 10px; font-size: 1rem; margin-bottom: 1rem; }
         .alert.info { background: rgba(59,130,246,0.15); color: var(--blue); }
         .alert.warn { background: rgba(234,179,8,0.15); color: var(--yellow); }
         .alert.ok { background: rgba(34,197,94,0.15); color: var(--green); }
         
-        #toast { 
-            position: fixed; 
-            bottom: 24px; 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: var(--bg2); 
-            border: 1px solid var(--green); 
-            padding: 0.75rem 1.25rem; 
-            border-radius: 10px; 
-            font-size: 0.95rem; 
-            z-index: 2000; 
-            display: none;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
+        #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: var(--bg2); border: 2px solid var(--green); padding: 1rem 1.75rem; border-radius: 12px; font-size: 1.05rem; z-index: 2000; display: none; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
         #toast.err { border-color: var(--red); }
         
-        #loading { 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.85); 
-            z-index: 3000; 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            flex-direction: column; 
-            gap: 1rem; 
-        }
-        .spinner { 
-            width: 48px; 
-            height: 48px; 
-            border: 4px solid var(--brd); 
-            border-top-color: var(--green); 
-            border-radius: 50%; 
-            animation: spin 0.8s linear infinite; 
-        }
+        #loading { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 3000; display: none; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; }
+        .spinner { width: 56px; height: 56px; border: 4px solid var(--brd); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        /* UPLOAD */
-        .upload-box { 
-            border: 2px dashed var(--brd); 
-            border-radius: 12px; 
-            padding: 2rem; 
-            text-align: center; 
-            cursor: pointer; 
-            transition: all 0.2s;
-        }
+        .upload-box { border: 2px dashed var(--brd); border-radius: 16px; padding: 3rem; text-align: center; cursor: pointer; transition: all 0.2s; }
         .upload-box:hover { border-color: var(--green); background: rgba(34,197,94,0.05); }
         .upload-box.has-file { border-color: var(--green); border-style: solid; }
-        .upload-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-        .upload-text { font-size: 1rem; color: var(--txt2); }
-        .upload-file { font-size: 0.95rem; color: var(--green); margin-top: 0.5rem; font-weight: 600; }
+        .upload-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .upload-text { font-size: 1.15rem; color: var(--txt2); }
+        .upload-file { font-size: 1.1rem; color: var(--green); margin-top: 0.75rem; font-weight: 600; }
         
-        .empty { text-align: center; padding: 2rem; color: var(--txt3); font-size: 1rem; }
-        .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
+        .empty { text-align: center; padding: 3rem; color: var(--txt3); font-size: 1.15rem; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; opacity: 0.5; }
         
-        /* PREVIEW BOX */
-        .preview { background: var(--bg3); border-radius: 10px; padding: 1rem; margin-top: 1rem; }
-        .res-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.75rem; }
-        .res-item { text-align: center; padding: 0.5rem; }
-        .res-item .lbl { font-size: 0.75rem; color: var(--txt3); text-transform: uppercase; margin-bottom: 0.25rem; }
-        .res-item .val { font-family: 'JetBrains Mono', monospace; font-size: 1.25rem; font-weight: 700; }
+        .preview { background: var(--bg3); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem; }
+        .res-box { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; }
+        .res-item { text-align: center; padding: 1rem; background: var(--bg2); border-radius: 10px; }
+        .res-item .lbl { font-size: 0.9rem; color: var(--txt3); text-transform: uppercase; margin-bottom: 0.35rem; }
+        .res-item .val { font-family: 'JetBrains Mono', monospace; font-size: 1.6rem; font-weight: 700; }
         
-        /* CMV PREVIEW */
-        .cmv-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; }
-        .cmv-box { background: var(--bg3); border-radius: 10px; padding: 0.75rem; text-align: center; }
+        .cmv-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        .cmv-box { background: var(--bg3); border-radius: 12px; padding: 1.25rem; text-align: center; }
         .cmv-box.ifood { border-left: 4px solid #ea4335; }
         .cmv-box.anota { border-left: 4px solid #34a853; }
-        .cmv-box .plat { font-size: 0.8rem; color: var(--txt3); margin-bottom: 0.25rem; }
-        .cmv-box .cmv-val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; }
+        .cmv-box .plat { font-size: 1rem; color: var(--txt3); margin-bottom: 0.35rem; }
+        .cmv-box .cmv-val { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; }
         
-        .section-title { 
-            font-size: 0.9rem; 
-            color: var(--green); 
-            margin: 1rem 0 0.5rem; 
-            font-weight: 600; 
-            border-bottom: 1px solid var(--brd); 
-            padding-bottom: 0.35rem; 
-        }
+        .section-title { font-size: 1.1rem; color: var(--green); margin: 1.5rem 0 1rem; font-weight: 600; border-bottom: 1px solid var(--brd); padding-bottom: 0.5rem; }
         
-        /* FICHA INGREDIENTES */
-        .ing-list { 
-            border: 1px solid var(--brd); 
-            border-radius: 8px; 
-            max-height: 200px; 
-            overflow-y: auto; 
-            margin-top: 0.5rem; 
-        }
-        .ing-item { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            padding: 0.65rem 0.85rem; 
-            border-bottom: 1px solid var(--brd); 
-            font-size: 0.95rem; 
-        }
+        .ing-list { border: 1px solid var(--brd); border-radius: 12px; max-height: 280px; overflow-y: auto; margin-top: 1rem; }
+        .ing-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem; border-bottom: 1px solid var(--brd); font-size: 1.05rem; }
         .ing-item:last-child { border-bottom: none; }
+        .ing-item:hover { background: var(--bgHover); }
         
-        /* CONFIRM MODAL */
-        .confirm-modal { text-align: center; padding: 1rem; }
-        .confirm-icon { font-size: 3rem; margin-bottom: 0.75rem; }
-        .confirm-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .confirm-text { font-size: 1rem; color: var(--txt2); margin-bottom: 1.25rem; }
-        .confirm-btns { display: flex; gap: 0.75rem; justify-content: center; }
+        .confirm-modal { text-align: center; padding: 1.5rem; }
+        .confirm-icon { font-size: 4rem; margin-bottom: 1rem; }
+        .confirm-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .confirm-text { font-size: 1.1rem; color: var(--txt2); margin-bottom: 1.5rem; }
+        .confirm-btns { display: flex; gap: 1rem; justify-content: center; }
         
-        /* CUSTO BADGE */
-        .custo-auto { 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 0.25rem; 
-            font-size: 0.7rem; 
-            color: var(--cyan); 
-            background: rgba(6,182,212,0.15);
-            padding: 0.15rem 0.4rem;
-            border-radius: 4px;
-        }
+        .custo-auto { display: inline-flex; align-items: center; font-size: 0.8rem; color: var(--cyan); background: rgba(6,182,212,0.15); padding: 0.25rem 0.5rem; border-radius: 4px; margin-left: 0.5rem; }
+        .chart-container { height: 300px; position: relative; }
         
-        /* RESPONSIVE */
+        .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
+        .stat-card { background: var(--bg3); border-radius: 12px; padding: 1.25rem; text-align: center; }
+        .stat-card .stat-val { font-family: 'JetBrains Mono', monospace; font-size: 2rem; font-weight: 700; }
+        .stat-card .stat-lbl { font-size: 0.9rem; color: var(--txt3); margin-top: 0.25rem; }
+        
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        .compare-card { background: var(--bg3); border-radius: 12px; padding: 1.25rem; }
+        .compare-card h4 { font-size: 1rem; color: var(--txt3); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .compare-card .val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; }
+        
         @media (max-width: 768px) {
-            body { font-size: 14px; }
-            .header { padding: 0.75rem 1rem; }
+            body { font-size: 15px; }
             .main { padding: 1rem; }
-            .kpi { padding: 1rem; }
-            .kpi-value { font-size: 1.5rem; }
-            .nav-btn { padding: 0.6rem 1rem; font-size: 0.85rem; }
+            .kpi-value { font-size: 1.8rem; }
+            .nav-btn { padding: 0.75rem 1rem; }
+            .compare-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <div id="toast"></div>
-    <div id="loading"><div class="spinner"></div><div style="color:var(--txt2);font-size:1rem;">Carregando...</div></div>
+    <div id="loading"><div class="spinner"></div><div style="color:var(--txt2);font-size:1.1rem;">Carregando...</div></div>
 
     <header class="header">
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.3</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.4</span></div>
             </div>
             <div class="sync" id="sync">☁️ Online</div>
         </div>
@@ -482,7 +206,7 @@
             <button class="nav-btn" data-p="sobremesas">🍰 Sobremesas</button>
             <button class="nav-btn" data-p="extras">➕ Extras</button>
             <button class="nav-btn" data-p="ingredientes">🧅 Ingredientes</button>
-            <button class="nav-btn" data-p="fichas">📋 Fichas Técnicas</button>
+            <button class="nav-btn" data-p="fichas">📋 Fichas</button>
             <button class="nav-btn" data-p="importar">📥 Importar</button>
             <button class="nav-btn" data-p="analise">📈 Análise</button>
             <button class="nav-btn" data-p="config">⚙️ Config</button>
@@ -493,14 +217,87 @@
         <!-- DASHBOARD -->
         <div class="page active" id="p-dashboard">
             <div class="grid-kpi">
-                <div class="kpi green"><div class="kpi-label">💰 Faturamento</div><div class="kpi-value" id="k-fat">R$ 0</div></div>
-                <div class="kpi blue"><div class="kpi-label">📦 Custo Total</div><div class="kpi-value" id="k-custo">R$ 0</div></div>
-                <div class="kpi yellow"><div class="kpi-label">📊 CMV Geral</div><div class="kpi-value" id="k-cmv">0%</div></div>
-                <div class="kpi purple"><div class="kpi-label">🎯 Lucro Bruto</div><div class="kpi-value" id="k-lucro">R$ 0</div></div>
+                <div class="kpi green">
+                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-label">Faturamento Total</div>
+                    <div class="kpi-value" id="k-fat">R$ 0</div>
+                    <div class="kpi-sub" id="k-fat-sub">-</div>
+                </div>
+                <div class="kpi blue">
+                    <div class="kpi-icon">📦</div>
+                    <div class="kpi-label">Custo Total</div>
+                    <div class="kpi-value" id="k-custo">R$ 0</div>
+                    <div class="kpi-sub" id="k-custo-sub">-</div>
+                </div>
+                <div class="kpi yellow" id="kpi-cmv">
+                    <div class="kpi-icon">📊</div>
+                    <div class="kpi-label">CMV Médio</div>
+                    <div class="kpi-value" id="k-cmv">0%</div>
+                    <div class="kpi-sub">Meta: &lt; 30%</div>
+                </div>
+                <div class="kpi purple">
+                    <div class="kpi-icon">🎯</div>
+                    <div class="kpi-label">Lucro Bruto</div>
+                    <div class="kpi-value" id="k-lucro">R$ 0</div>
+                    <div class="kpi-sub" id="k-lucro-sub">-</div>
+                </div>
             </div>
+            
+            <div class="dash-grid">
+                <div class="card">
+                    <div class="card-title">📈 Resumo do Catálogo</div>
+                    <div class="stat-row" style="margin-top:1.25rem;">
+                        <div class="stat-card"><div class="stat-val" style="color:var(--blue);" id="d-pratos">0</div><div class="stat-lbl">Pratos</div></div>
+                        <div class="stat-card"><div class="stat-val" style="color:var(--cyan);" id="d-bebidas">0</div><div class="stat-lbl">Bebidas</div></div>
+                        <div class="stat-card"><div class="stat-val" style="color:var(--pink);" id="d-sobremesas">0</div><div class="stat-lbl">Sobremesas</div></div>
+                        <div class="stat-card"><div class="stat-val" style="color:var(--orange);" id="d-extras">0</div><div class="stat-lbl">Extras</div></div>
+                    </div>
+                    <div class="stat-row" style="margin-top:1rem;">
+                        <div class="stat-card"><div class="stat-val" style="color:var(--yellow);" id="d-ingredientes">0</div><div class="stat-lbl">Ingredientes</div></div>
+                        <div class="stat-card"><div class="stat-val" style="color:var(--green);" id="d-fichas">0</div><div class="stat-lbl">Fichas</div></div>
+                        <div class="stat-card"><div class="stat-val" style="color:var(--purple);" id="d-vendas">0</div><div class="stat-lbl">Importações</div></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">🎯 CMV por Categoria</div>
+                    <div class="chart-container" style="margin-top:1rem;">
+                        <canvas id="chart-cmv-cat"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dash-grid">
+                <div class="card">
+                    <div class="card-title">📱 Comparativo: iFood vs AnotaAi</div>
+                    <div class="compare-grid" id="compare-plat">
+                        <div class="compare-card">
+                            <h4>🔴 iFood</h4>
+                            <div class="val" style="color:var(--orange);" id="cmp-if-fat">R$ 0</div>
+                            <div style="margin-top:0.5rem;font-size:0.95rem;color:var(--txt3);">CMV: <span id="cmp-if-cmv">0%</span></div>
+                        </div>
+                        <div class="compare-card">
+                            <h4>🟢 AnotaAi</h4>
+                            <div class="val" style="color:var(--green);" id="cmp-an-fat">R$ 0</div>
+                            <div style="margin-top:0.5rem;font-size:0.95rem;color:var(--txt3);">CMV: <span id="cmp-an-cmv">0%</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">📅 Últimas Importações</div>
+                    <div class="tbl-wrap" style="margin-top:1rem;">
+                        <table>
+                            <thead><tr><th>Período</th><th>Plataforma</th><th>Faturamento</th><th>CMV</th></tr></thead>
+                            <tbody id="tbl-ultimas"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
             <div class="card">
-                <div class="card-title">🏆 Top 10 Produtos - Maior CMV (Atenção!)</div>
-                <div class="tbl-wrap" style="margin-top:0.75rem;">
+                <div class="card-title">⚠️ Top 10 Produtos com Maior CMV (Atenção!)</div>
+                <div class="tbl-wrap" style="margin-top:1rem;">
                     <table>
                         <thead><tr><th>Produto</th><th>Categoria</th><th>Tam</th><th>Custo</th><th>Preço iFood</th><th>CMV</th></tr></thead>
                         <tbody id="tbl-ranking"></tbody>
@@ -524,7 +321,6 @@
                                     <option value="risoto">Risoto</option>
                                     <option value="nhoque">Nhoque</option>
                                     <option value="combo">Combo</option>
-                                    <option value="outros">Outros</option>
                                 </select>
                             </div>
                             <div class="filter-group">
@@ -536,11 +332,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="search-box">
-                            <span>🔍</span>
-                            <input type="text" id="search-prod" placeholder="Buscar produto..." oninput="filtrar('prod')">
-                        </div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-prod')">+ Novo Produto</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-prod" placeholder="Buscar..." oninput="filtrar('prod')"></div>
+                        <button class="btn btn-p" onclick="abrirModal('mod-prod')">+ Novo</button>
                     </div>
                 </div>
                 <div class="tbl-wrap">
@@ -558,16 +351,13 @@
                 <div class="card-head">
                     <span class="card-title">🥤 Bebidas</span>
                     <div class="card-actions">
-                        <div class="search-box">
-                            <span>🔍</span>
-                            <input type="text" id="search-beb" placeholder="Buscar bebida..." oninput="filtrar('beb')">
-                        </div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-beb')">+ Nova Bebida</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-beb" placeholder="Buscar..." oninput="filtrar('beb')"></div>
+                        <button class="btn btn-p" onclick="abrirModal('mod-beb')">+ Nova</button>
                     </div>
                 </div>
                 <div class="tbl-wrap">
                     <table>
-                        <thead><tr><th>Nome</th><th>Custo</th><th>Preço iFood</th><th>Preço Anota</th><th>CMV iFood</th><th>CMV Anota</th><th>Ações</th></tr></thead>
+                        <thead><tr><th>Nome</th><th>Custo</th><th>iFood</th><th>AnotaAi</th><th>CMV iF</th><th>CMV An</th><th>Ações</th></tr></thead>
                         <tbody id="tbl-beb"></tbody>
                     </table>
                 </div>
@@ -580,16 +370,13 @@
                 <div class="card-head">
                     <span class="card-title">🍰 Sobremesas</span>
                     <div class="card-actions">
-                        <div class="search-box">
-                            <span>🔍</span>
-                            <input type="text" id="search-sob" placeholder="Buscar sobremesa..." oninput="filtrar('sob')">
-                        </div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-sob')">+ Nova Sobremesa</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-sob" placeholder="Buscar..." oninput="filtrar('sob')"></div>
+                        <button class="btn btn-p" onclick="abrirModal('mod-sob')">+ Nova</button>
                     </div>
                 </div>
                 <div class="tbl-wrap">
                     <table>
-                        <thead><tr><th>Nome</th><th>Custo</th><th>Preço iFood</th><th>Preço Anota</th><th>CMV iFood</th><th>CMV Anota</th><th>Ações</th></tr></thead>
+                        <thead><tr><th>Nome</th><th>Custo</th><th>iFood</th><th>AnotaAi</th><th>CMV iF</th><th>CMV An</th><th>Ações</th></tr></thead>
                         <tbody id="tbl-sob"></tbody>
                     </table>
                 </div>
@@ -602,16 +389,13 @@
                 <div class="card-head">
                     <span class="card-title">➕ Extras / Adicionais</span>
                     <div class="card-actions">
-                        <div class="search-box">
-                            <span>🔍</span>
-                            <input type="text" id="search-ext" placeholder="Buscar extra..." oninput="filtrar('ext')">
-                        </div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-ext')">+ Novo Extra</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-ext" placeholder="Buscar..." oninput="filtrar('ext')"></div>
+                        <button class="btn btn-p" onclick="abrirModal('mod-ext')">+ Novo</button>
                     </div>
                 </div>
                 <div class="tbl-wrap">
                     <table>
-                        <thead><tr><th>Nome</th><th>Custo</th><th>Preço Venda</th><th>CMV</th><th>Ações</th></tr></thead>
+                        <thead><tr><th>Nome</th><th>Custo</th><th>Preço</th><th>CMV</th><th>Ações</th></tr></thead>
                         <tbody id="tbl-ext"></tbody>
                     </table>
                 </div>
@@ -624,13 +408,11 @@
                 <div class="card-head">
                     <span class="card-title">🧅 Ingredientes</span>
                     <div class="card-actions">
-                        <div class="search-box">
-                            <span>🔍</span>
-                            <input type="text" id="search-ing" placeholder="Buscar ingrediente..." oninput="filtrar('ing')">
-                        </div>
-                        <button class="btn btn-p" onclick="abrirModal('mod-ing')">+ Novo Ingrediente</button>
+                        <div class="search-box"><span>🔍</span><input type="text" id="search-ing" placeholder="Buscar..." oninput="filtrar('ing')"></div>
+                        <button class="btn btn-p" onclick="abrirModal('mod-ing')">+ Novo</button>
                     </div>
                 </div>
+                <div class="alert info">💡 Cadastre ingredientes em <strong>kg</strong> ou <strong>L</strong> (custo por unidade). Na ficha técnica, use <strong>g</strong> ou <strong>ml</strong>.</div>
                 <div class="tbl-wrap">
                     <table>
                         <thead><tr><th>Nome</th><th>Unidade</th><th>Custo/Un</th><th>Fornecedor</th><th>Ações</th></tr></thead>
@@ -643,38 +425,37 @@
         <!-- FICHAS TÉCNICAS -->
         <div class="page" id="p-fichas">
             <div class="card">
-                <div class="card-title" style="margin-bottom:1rem;">📋 Fichas Técnicas</div>
-                <div class="alert info">💡 O custo do produto é calculado automaticamente pela soma dos ingredientes da ficha técnica.</div>
-                <div class="field" style="max-width:400px;">
+                <div class="card-title" style="margin-bottom:1.5rem;">📋 Fichas Técnicas</div>
+                <div class="alert info">💡 Ingredientes em <strong>kg/L</strong> → Ficha em <strong>g/ml</strong>. O sistema converte automaticamente.</div>
+                <div class="field" style="max-width:500px;">
                     <label>Selecione o Produto</label>
-                    <select id="ficha-prod" onchange="carregarFicha()"></select>
+                    <select id="ficha-prod" onchange="carregarFicha()" style="font-size:1.1rem;"></select>
                 </div>
-                <div id="ficha-area" style="display:none;margin-top:1rem;">
-                    <div style="background:var(--bg3);border-radius:10px;padding:1rem;">
-                        <div style="font-size:1rem;font-weight:600;margin-bottom:0.75rem;">🧅 Adicionar Ingrediente</div>
-                        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:flex-end;">
-                            <div class="field" style="flex:2;min-width:200px;margin:0;">
+                <div id="ficha-area" style="display:none;margin-top:1.5rem;">
+                    <div style="background:var(--bg3);border-radius:14px;padding:1.5rem;">
+                        <div style="font-size:1.15rem;font-weight:600;margin-bottom:1rem;">🧅 Adicionar Ingrediente</div>
+                        <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;">
+                            <div class="field" style="flex:2;min-width:250px;margin:0;">
                                 <label>Ingrediente</label>
-                                <select id="ficha-ing"></select>
+                                <select id="ficha-ing" style="font-size:1.05rem;"></select>
+                            </div>
+                            <div class="field" style="width:130px;margin:0;">
+                                <label>Quantidade</label>
+                                <input type="number" id="ficha-qtd" placeholder="Ex: 150" step="1" min="0" style="font-size:1.05rem;">
                             </div>
                             <div class="field" style="width:100px;margin:0;">
-                                <label>Quantidade</label>
-                                <input type="number" id="ficha-qtd" placeholder="Ex: 150" step="0.001">
-                            </div>
-                            <div class="field" style="width:80px;margin:0;">
                                 <label>Unidade</label>
-                                <select id="ficha-un"><option>kg</option><option selected>g</option><option>L</option><option>ml</option><option>un</option></select>
+                                <select id="ficha-un" style="font-size:1.05rem;"><option selected>g</option><option>ml</option><option>un</option></select>
                             </div>
                             <button class="btn btn-p" onclick="addIngFicha()">+ Adicionar</button>
                         </div>
                         <div class="ing-list" id="ficha-list"></div>
                     </div>
-                    <div class="res-box" style="margin-top:1rem;background:var(--bg3);padding:1rem;border-radius:10px;">
+                    <div class="res-box" style="margin-top:1.5rem;">
                         <div class="res-item"><div class="lbl">Custo Total</div><div class="val" style="color:var(--green);" id="f-custo">R$ 0,00</div></div>
-                        <div class="res-item"><div class="lbl">CMV iFood</div><div class="val" style="color:#ea4335;" id="f-cmv-if">0%</div></div>
-                        <div class="res-item"><div class="lbl">CMV AnotaAi</div><div class="val" style="color:#34a853;" id="f-cmv-an">0%</div></div>
+                        <div class="res-item"><div class="lbl">CMV iFood</div><div class="val" id="f-cmv-if">0%</div></div>
+                        <div class="res-item"><div class="lbl">CMV AnotaAi</div><div class="val" id="f-cmv-an">0%</div></div>
                     </div>
-                    <div class="alert ok" style="margin-top:0.75rem;">✅ O custo é salvo automaticamente no produto quando você adiciona/remove ingredientes.</div>
                 </div>
             </div>
         </div>
@@ -682,7 +463,7 @@
         <!-- IMPORTAR -->
         <div class="page" id="p-importar">
             <div class="card">
-                <div class="card-title" style="margin-bottom:1rem;">📥 Importar Vendas do Excel</div>
+                <div class="card-title" style="margin-bottom:1.5rem;">📥 Importar Vendas do Excel</div>
                 <div class="upload-box" id="upload-box">
                     <div class="upload-icon">📁</div>
                     <p class="upload-text">Clique ou arraste o arquivo Excel aqui</p>
@@ -693,7 +474,7 @@
             </div>
             <div class="card">
                 <div class="card-title">📅 Histórico de Importações</div>
-                <div class="tbl-wrap" style="margin-top:0.75rem;">
+                <div class="tbl-wrap" style="margin-top:1rem;">
                     <table>
                         <thead><tr><th>Período</th><th>Plataforma</th><th>Faturamento</th><th>Custo</th><th>CMV</th><th>Ações</th></tr></thead>
                         <tbody id="tbl-vendas"></tbody>
@@ -707,7 +488,7 @@
             <div class="card">
                 <div class="card-head">
                     <span class="card-title">📈 Análise Detalhada</span>
-                    <select id="sel-venda" style="font-size:1rem;padding:0.5rem 0.75rem;background:var(--bg3);border:1px solid var(--brd);border-radius:8px;color:var(--txt);" onchange="mostrarAnalise()"></select>
+                    <select id="sel-venda" style="font-size:1.1rem;padding:0.75rem 1rem;background:var(--bg3);border:1px solid var(--brd);border-radius:10px;color:var(--txt);min-width:250px;" onchange="mostrarAnalise()"></select>
                 </div>
             </div>
             <div id="analise-area"></div>
@@ -716,118 +497,101 @@
         <!-- CONFIG -->
         <div class="page" id="p-config">
             <div class="card">
-                <div class="card-title" style="margin-bottom:1rem;">⚙️ Configurações do Sistema</div>
-                <div class="alert info">☁️ Dados salvos no PostgreSQL (Neon Database)</div>
-                <div style="margin-top:1rem;display:flex;gap:0.75rem;flex-wrap:wrap;">
-                    <button class="btn btn-s" onclick="setupDB()">🔧 Setup Database</button>
-                    <button class="btn btn-s" onclick="seedDB()">🌱 Carregar Dados Exemplo</button>
+                <div class="card-title" style="margin-bottom:1.5rem;">⚙️ Configurações</div>
+                <div class="alert info">☁️ Dados armazenados no PostgreSQL (Neon Database)</div>
+                <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+                    <button class="btn btn-s" onclick="setupDB()">🔧 Setup DB</button>
+                    <button class="btn btn-s" onclick="seedDB()">🌱 Dados Exemplo</button>
                     <button class="btn btn-d" onclick="confirmarLimpar()">🗑️ Limpar Tudo</button>
-                    <button class="btn btn-s" onclick="exportarBackup()">📤 Exportar Backup</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-title">📊 Estatísticas do Sistema</div>
-                <div class="res-box" style="margin-top:1rem;">
-                    <div class="res-item"><div class="lbl">Produtos</div><div class="val" style="color:var(--blue);" id="st-prod">0</div></div>
-                    <div class="res-item"><div class="lbl">Bebidas</div><div class="val" style="color:var(--cyan);" id="st-beb">0</div></div>
-                    <div class="res-item"><div class="lbl">Sobremesas</div><div class="val" style="color:var(--pink);" id="st-sob">0</div></div>
-                    <div class="res-item"><div class="lbl">Extras</div><div class="val" style="color:var(--orange);" id="st-ext">0</div></div>
-                    <div class="res-item"><div class="lbl">Ingredientes</div><div class="val" style="color:var(--yellow);" id="st-ing">0</div></div>
-                    <div class="res-item"><div class="lbl">Importações</div><div class="val" style="color:var(--purple);" id="st-vendas">0</div></div>
+                    <button class="btn btn-s" onclick="exportarBackup()">📤 Backup JSON</button>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- MODAIS -->
-    <!-- Modal Produto -->
     <div class="modal-bg" id="mod-prod"><div class="modal">
         <div class="modal-head"><h3>Produto</h3><button class="modal-close" onclick="fecharModal('mod-prod')">×</button></div>
         <form id="form-prod"><input type="hidden" id="prod-id">
-            <div class="field"><label>Nome do Produto *</label><input type="text" id="prod-nome" required></div>
+            <div class="field"><label>Nome *</label><input type="text" id="prod-nome" required></div>
             <div class="form-row">
-                <div class="field"><label>Categoria</label><select id="prod-cat"><option value="macarrao">Macarrão</option><option value="risoto">Risoto</option><option value="nhoque">Nhoque</option><option value="combo">Combo</option><option value="outros">Outros</option></select></div>
+                <div class="field"><label>Categoria</label><select id="prod-cat"><option value="macarrao">Macarrão</option><option value="risoto">Risoto</option><option value="nhoque">Nhoque</option><option value="combo">Combo</option></select></div>
                 <div class="field"><label>Tamanho</label><select id="prod-tam"><option value="P">Box P</option><option value="G" selected>Box G</option></select></div>
             </div>
             <div class="section-title">💰 Preços de Venda</div>
             <div class="form-row">
-                <div class="field"><label>Preço iFood (R$)</label><input type="number" id="prod-pif" step="0.01" oninput="prevCMV()"></div>
-                <div class="field"><label>Preço AnotaAi (R$)</label><input type="number" id="prod-pan" step="0.01" oninput="prevCMV()"></div>
+                <div class="field"><label>Preço iFood (R$)</label><input type="number" id="prod-pif" step="0.01" min="0" oninput="prevCMV()"></div>
+                <div class="field"><label>Preço AnotaAi (R$)</label><input type="number" id="prod-pan" step="0.01" min="0" oninput="prevCMV()"></div>
             </div>
-            <div class="alert info" style="margin-top:0.5rem;">💡 O custo será calculado automaticamente pela Ficha Técnica</div>
-            <div id="prod-custo-info" style="display:none;margin-top:0.5rem;">
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:0.5rem;background:var(--bg3);border-radius:8px;">
-                    <span>Custo atual (ficha técnica):</span>
-                    <span class="mono" style="color:var(--green);font-weight:700;" id="prod-custo-val">R$ 0,00</span>
+            <div class="alert info">💡 O custo é calculado automaticamente pela Ficha Técnica</div>
+            <div id="prod-custo-info" style="display:none;margin-top:0.75rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:var(--bg3);border-radius:10px;">
+                    <span style="font-size:1.05rem;">Custo (ficha técnica):</span>
+                    <span class="mono" style="color:var(--green);font-weight:700;font-size:1.4rem;" id="prod-custo-val">R$ 0,00</span>
                 </div>
             </div>
             <div class="cmv-preview">
                 <div class="cmv-box ifood"><div class="plat">📱 iFood</div><div class="cmv-val" id="prev-if">0%</div></div>
                 <div class="cmv-box anota"><div class="plat">📲 AnotaAi</div><div class="cmv-val" id="prev-an">0%</div></div>
             </div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:1rem;">💾 Salvar Produto</button>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:1.5rem;">💾 Salvar Produto</button>
         </form>
     </div></div>
 
-    <!-- Modal Bebida -->
     <div class="modal-bg" id="mod-beb"><div class="modal">
         <div class="modal-head"><h3>Bebida</h3><button class="modal-close" onclick="fecharModal('mod-beb')">×</button></div>
         <form id="form-beb"><input type="hidden" id="beb-id">
             <div class="field"><label>Nome *</label><input type="text" id="beb-nome" required></div>
             <div class="form-row">
-                <div class="field"><label>Custo (R$)</label><input type="number" id="beb-custo" step="0.01"></div>
-                <div class="field"><label>Preço iFood</label><input type="number" id="beb-pif" step="0.01"></div>
-                <div class="field"><label>Preço Anota</label><input type="number" id="beb-pan" step="0.01"></div>
+                <div class="field"><label>Custo (R$)</label><input type="number" id="beb-custo" step="0.01" min="0"></div>
+                <div class="field"><label>Preço iFood</label><input type="number" id="beb-pif" step="0.01" min="0"></div>
+                <div class="field"><label>Preço AnotaAi</label><input type="number" id="beb-pan" step="0.01" min="0"></div>
             </div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.75rem;">💾 Salvar</button>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:1rem;">💾 Salvar</button>
         </form>
     </div></div>
 
-    <!-- Modal Sobremesa -->
     <div class="modal-bg" id="mod-sob"><div class="modal">
         <div class="modal-head"><h3>Sobremesa</h3><button class="modal-close" onclick="fecharModal('mod-sob')">×</button></div>
         <form id="form-sob"><input type="hidden" id="sob-id">
             <div class="field"><label>Nome *</label><input type="text" id="sob-nome" required></div>
             <div class="form-row">
-                <div class="field"><label>Custo (R$)</label><input type="number" id="sob-custo" step="0.01"></div>
-                <div class="field"><label>Preço iFood</label><input type="number" id="sob-pif" step="0.01"></div>
-                <div class="field"><label>Preço Anota</label><input type="number" id="sob-pan" step="0.01"></div>
+                <div class="field"><label>Custo (R$)</label><input type="number" id="sob-custo" step="0.01" min="0"></div>
+                <div class="field"><label>Preço iFood</label><input type="number" id="sob-pif" step="0.01" min="0"></div>
+                <div class="field"><label>Preço AnotaAi</label><input type="number" id="sob-pan" step="0.01" min="0"></div>
             </div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.75rem;">💾 Salvar</button>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:1rem;">💾 Salvar</button>
         </form>
     </div></div>
 
-    <!-- Modal Extra -->
     <div class="modal-bg" id="mod-ext"><div class="modal">
         <div class="modal-head"><h3>Extra</h3><button class="modal-close" onclick="fecharModal('mod-ext')">×</button></div>
         <form id="form-ext"><input type="hidden" id="ext-id">
             <div class="field"><label>Nome *</label><input type="text" id="ext-nome" required></div>
             <div class="form-row">
-                <div class="field"><label>Custo (R$)</label><input type="number" id="ext-custo" step="0.01"></div>
-                <div class="field"><label>Preço Venda</label><input type="number" id="ext-preco" step="0.01"></div>
+                <div class="field"><label>Custo (R$)</label><input type="number" id="ext-custo" step="0.01" min="0"></div>
+                <div class="field"><label>Preço Venda</label><input type="number" id="ext-preco" step="0.01" min="0"></div>
             </div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.75rem;">💾 Salvar</button>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:1rem;">💾 Salvar</button>
         </form>
     </div></div>
 
-    <!-- Modal Ingrediente -->
     <div class="modal-bg" id="mod-ing"><div class="modal">
         <div class="modal-head"><h3>Ingrediente</h3><button class="modal-close" onclick="fecharModal('mod-ing')">×</button></div>
         <form id="form-ing"><input type="hidden" id="ing-id">
             <div class="form-row">
                 <div class="field"><label>Nome *</label><input type="text" id="ing-nome" required></div>
-                <div class="field"><label>Unidade</label><select id="ing-un"><option>kg</option><option>g</option><option>L</option><option>ml</option><option>un</option></select></div>
+                <div class="field"><label>Unidade de Compra</label><select id="ing-un"><option selected>kg</option><option>L</option><option>un</option></select></div>
             </div>
             <div class="form-row">
-                <div class="field"><label>Custo por Unidade (R$)</label><input type="number" id="ing-custo" step="0.0001"></div>
+                <div class="field"><label>Custo por Unidade (R$)</label><input type="number" id="ing-custo" step="0.01" min="0"></div>
                 <div class="field"><label>Fornecedor</label><input type="text" id="ing-forn"></div>
             </div>
-            <button type="submit" class="btn btn-p" style="width:100%;margin-top:0.75rem;">💾 Salvar</button>
+            <button type="submit" class="btn btn-p" style="width:100%;margin-top:1rem;">💾 Salvar</button>
         </form>
     </div></div>
 
-    <!-- Modal Confirmar -->
-    <div class="modal-bg" id="mod-confirm"><div class="modal" style="max-width:380px;">
+    <div class="modal-bg" id="mod-confirm"><div class="modal" style="max-width:420px;">
         <div class="confirm-modal">
             <div class="confirm-icon" id="conf-icon">⚠️</div>
             <div class="confirm-title" id="conf-title">Confirmar</div>
@@ -842,54 +606,70 @@
 <script>
 const API = '/api';
 const DB = { produtos:[], bebidas:[], sobremesas:[], extras:[], ingredientes:[], fichas:[], vendas:[] };
-let filterText = {};
+let filterText = {}, chartCMV = null;
 
 const $ = id => document.getElementById(id);
-const R$ = v => 'R$ '+(parseFloat(v)||0).toFixed(2).replace('.',',');
-const pct = v => (parseFloat(v)||0).toFixed(1)+'%';
-const calcCMV = (c,p) => p > 0 ? ((c/p)*100) : 0;
+const R$ = v => 'R$ ' + (parseFloat(v)||0).toFixed(2).replace('.', ',');
+const pct = v => (parseFloat(v)||0).toFixed(1) + '%';
+const calcCMV = (c, p) => p > 0 ? ((c / p) * 100) : 0;
 const cmvCls = c => c <= 25 ? 'green' : c <= 35 ? 'yellow' : 'red';
+const cmvColor = c => c <= 25 ? '#22c55e' : c <= 35 ? '#eab308' : '#ef4444';
 
-function toast(msg, err) { 
-    const t = $('toast'); 
-    t.textContent = (err?'❌ ':'✅ ') + msg; 
-    t.className = err ? 'err' : ''; 
-    t.style.display = 'block'; 
-    setTimeout(() => t.style.display = 'none', 3000); 
+// Formatar quantidade - sem decimais desnecessárias
+const fmtQtd = v => {
+    const n = parseFloat(v) || 0;
+    if (n === Math.floor(n)) return n.toString();
+    return n.toFixed(1).replace('.0', '');
+};
+
+function toast(msg, err) {
+    const t = $('toast');
+    t.textContent = (err ? '❌ ' : '✅ ') + msg;
+    t.className = err ? 'err' : '';
+    t.style.display = 'block';
+    setTimeout(() => t.style.display = 'none', 3000);
 }
+
 function loading(s) { $('loading').style.display = s ? 'flex' : 'none'; }
 
-async function api(route, method='GET', body=null) {
-    try {
-        const opts = { method, headers: { 'Content-Type': 'application/json' } };
-        if (body) opts.body = JSON.stringify(body);
-        const res = await fetch(API + '?route=' + route, opts);
-        if (!res.ok) throw new Error(await res.text());
-        return await res.json();
-    } catch (e) { console.error(e); throw e; }
+async function api(route, method = 'GET', body = null) {
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
+    if (body) opts.body = JSON.stringify(body);
+    const res = await fetch(API + '?route=' + route, opts);
+    if (!res.ok) throw new Error(await res.text());
+    return await res.json();
 }
 
-// Calcula custo do produto baseado na ficha técnica
+// CÁLCULO DE CUSTO - CONVERSÃO CORRETA
+// Ingredientes em kg/L, Ficha em g/ml
 function calcCustoProduto(prodId) {
     const itens = DB.fichas.filter(f => f.produto_id === prodId);
     let custo = 0;
+    
     itens.forEach(f => {
         const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
-        if (ing) {
-            // Converter unidades se necessário
-            let qtdNorm = parseFloat(f.qtd) || 0;
-            const ingUn = ing.un || 'kg';
-            const fichaUn = f.un || 'g';
-            
-            // Normalizar para a unidade do ingrediente
-            if (ingUn === 'kg' && fichaUn === 'g') qtdNorm = qtdNorm / 1000;
-            else if (ingUn === 'g' && fichaUn === 'kg') qtdNorm = qtdNorm * 1000;
-            else if (ingUn === 'L' && fichaUn === 'ml') qtdNorm = qtdNorm / 1000;
-            else if (ingUn === 'ml' && fichaUn === 'L') qtdNorm = qtdNorm * 1000;
-            
-            custo += parseFloat(ing.custo) * qtdNorm;
-        }
+        if (!ing) return;
+        
+        const qtdFicha = parseFloat(f.qtd) || 0;
+        const custoIng = parseFloat(ing.custo) || 0;
+        const unIng = (ing.un || 'kg').toLowerCase();
+        const unFicha = (f.un || 'g').toLowerCase();
+        
+        // Converter quantidade da ficha para a unidade do ingrediente
+        let fator = 1;
+        
+        // Se ingrediente é kg e ficha é g → dividir por 1000
+        if (unIng === 'kg' && unFicha === 'g') fator = 1 / 1000;
+        // Se ingrediente é L e ficha é ml → dividir por 1000
+        else if (unIng === 'l' && unFicha === 'ml') fator = 1 / 1000;
+        // Se mesma unidade, fator = 1
+        else if (unIng === unFicha) fator = 1;
+        // Unidades (embalagens etc)
+        else if (unIng === 'un' && unFicha === 'un') fator = 1;
+        
+        custo += custoIng * qtdFicha * fator;
     });
+    
     return custo;
 }
 
@@ -904,13 +684,11 @@ async function loadAll() {
         try { DB.sobremesas = await api('sobremesas') || []; } catch(e) { DB.sobremesas = []; }
         try { DB.extras = await api('extras') || []; } catch(e) { DB.extras = []; }
         
-        // Atualizar custos dos produtos baseado nas fichas
-        DB.produtos.forEach(p => {
-            p.custoFicha = calcCustoProduto(p.id);
-        });
+        // Calcular custos baseados nas fichas
+        DB.produtos.forEach(p => { p.custoFicha = calcCustoProduto(p.id); });
         
         renderAll();
-    } catch (e) { toast('Erro: ' + e.message, true); }
+    } catch (e) { toast('Erro ao carregar: ' + e.message, true); }
     loading(false);
 }
 
@@ -919,45 +697,44 @@ function abrirModal(id, editId) {
     if (form) { form.reset(); const h = form.querySelector('input[type="hidden"]'); if (h) h.value = ''; }
     if (editId) preencherForm(id, editId);
     $(id).classList.add('show');
-    if (id === 'mod-prod') prevCMV();
+    if (id === 'mod-prod') { $('prod-custo-info').style.display = 'none'; prevCMV(); }
 }
 
 function fecharModal(id) { $(id).classList.remove('show'); }
 
 function preencherForm(mid, id) {
-    if (mid === 'mod-prod') { 
-        const p = DB.produtos.find(x => x.id === id); 
-        if (p) { 
-            $('prod-id').value = id; 
-            $('prod-nome').value = p.nome; 
-            $('prod-cat').value = p.cat||'macarrao'; 
-            $('prod-tam').value = p.tam||'G'; 
-            $('prod-pif').value = p.preco_ifood||''; 
-            $('prod-pan').value = p.preco_anota||''; 
-            // Mostrar custo da ficha
-            const custoFicha = p.custoFicha || calcCustoProduto(id);
-            $('prod-custo-val').textContent = R$(custoFicha);
-            $('prod-custo-info').style.display = custoFicha > 0 ? 'block' : 'none';
-            prevCMV(); 
-        } 
+    if (mid === 'mod-prod') {
+        const p = DB.produtos.find(x => x.id === id);
+        if (p) {
+            $('prod-id').value = id;
+            $('prod-nome').value = p.nome;
+            $('prod-cat').value = p.cat || 'macarrao';
+            $('prod-tam').value = p.tam || 'G';
+            $('prod-pif').value = p.preco_ifood || '';
+            $('prod-pan').value = p.preco_anota || '';
+            const c = p.custoFicha || calcCustoProduto(id);
+            $('prod-custo-val').textContent = R$(c);
+            $('prod-custo-info').style.display = c > 0 ? 'block' : 'none';
+            prevCMV();
+        }
     }
-    else if (mid === 'mod-beb') { const b = DB.bebidas.find(x => x.id === id); if (b) { $('beb-id').value = id; $('beb-nome').value = b.nome; $('beb-custo').value = b.custo||''; $('beb-pif').value = b.preco_ifood||''; $('beb-pan').value = b.preco_anota||''; } }
-    else if (mid === 'mod-sob') { const s = DB.sobremesas.find(x => x.id === id); if (s) { $('sob-id').value = id; $('sob-nome').value = s.nome; $('sob-custo').value = s.custo||''; $('sob-pif').value = s.preco_ifood||''; $('sob-pan').value = s.preco_anota||''; } }
-    else if (mid === 'mod-ext') { const e = DB.extras.find(x => x.id === id); if (e) { $('ext-id').value = id; $('ext-nome').value = e.nome; $('ext-custo').value = e.custo||''; $('ext-preco').value = e.preco||''; } }
-    else if (mid === 'mod-ing') { const i = DB.ingredientes.find(x => x.id === id); if (i) { $('ing-id').value = id; $('ing-nome').value = i.nome; $('ing-un').value = i.un||'kg'; $('ing-custo').value = i.custo||''; $('ing-forn').value = i.forn||''; } }
+    else if (mid === 'mod-beb') { const b = DB.bebidas.find(x => x.id === id); if (b) { $('beb-id').value = id; $('beb-nome').value = b.nome; $('beb-custo').value = b.custo || ''; $('beb-pif').value = b.preco_ifood || ''; $('beb-pan').value = b.preco_anota || ''; } }
+    else if (mid === 'mod-sob') { const s = DB.sobremesas.find(x => x.id === id); if (s) { $('sob-id').value = id; $('sob-nome').value = s.nome; $('sob-custo').value = s.custo || ''; $('sob-pif').value = s.preco_ifood || ''; $('sob-pan').value = s.preco_anota || ''; } }
+    else if (mid === 'mod-ext') { const e = DB.extras.find(x => x.id === id); if (e) { $('ext-id').value = id; $('ext-nome').value = e.nome; $('ext-custo').value = e.custo || ''; $('ext-preco').value = e.preco || ''; } }
+    else if (mid === 'mod-ing') { const i = DB.ingredientes.find(x => x.id === id); if (i) { $('ing-id').value = id; $('ing-nome').value = i.nome; $('ing-un').value = i.un || 'kg'; $('ing-custo').value = i.custo || ''; $('ing-forn').value = i.forn || ''; } }
 }
 
 function prevCMV() {
     const prodId = parseInt($('prod-id').value);
     const prod = DB.produtos.find(p => p.id === prodId);
     const custo = prod ? (prod.custoFicha || calcCustoProduto(prodId)) : 0;
-    const pif = parseFloat($('prod-pif').value)||0;
-    const pan = parseFloat($('prod-pan').value)||0;
+    const pif = parseFloat($('prod-pif').value) || 0;
+    const pan = parseFloat($('prod-pan').value) || 0;
     const cmvIf = calcCMV(custo, pif), cmvAn = calcCMV(custo, pan);
-    $('prev-if').textContent = pct(cmvIf); 
-    $('prev-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
-    $('prev-an').textContent = pct(cmvAn); 
-    $('prev-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('prev-if').textContent = pct(cmvIf);
+    $('prev-if').style.color = cmvColor(cmvIf);
+    $('prev-an').textContent = pct(cmvAn);
+    $('prev-an').style.color = cmvColor(cmvAn);
 }
 
 // Navegação
@@ -970,7 +747,6 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
     };
 });
 
-// Filtros
 function filtrar(tipo) {
     filterText[tipo] = $('search-' + tipo)?.value?.toLowerCase() || '';
     if (tipo === 'prod') renderProd();
@@ -980,41 +756,32 @@ function filtrar(tipo) {
     else if (tipo === 'ing') renderIng();
 }
 
-// Renders
+const catLabels = { macarrao: 'Macarrão', risoto: 'Risoto', nhoque: 'Nhoque', combo: 'Combo' };
+const catBadge = { macarrao: 'blue', risoto: 'orange', nhoque: 'pink', combo: 'purple' };
+
 function renderProd() {
     let data = DB.produtos;
-    
-    // Filtro por categoria
-    const filCat = $('fil-cat')?.value;
-    if (filCat) data = data.filter(p => p.cat === filCat);
-    
-    // Filtro por tamanho
-    const filTam = $('fil-tam')?.value;
-    if (filTam) data = data.filter(p => p.tam === filTam);
-    
-    // Filtro por texto
+    const filCat = $('fil-cat')?.value; if (filCat) data = data.filter(p => p.cat === filCat);
+    const filTam = $('fil-tam')?.value; if (filTam) data = data.filter(p => p.tam === filTam);
     if (filterText.prod) data = data.filter(x => x.nome.toLowerCase().includes(filterText.prod));
     
-    const catLabels = { macarrao:'Macarrão', risoto:'Risoto', nhoque:'Nhoque', combo:'Combo', outros:'Outros' };
-    const catBadge = { macarrao:'blue', risoto:'orange', nhoque:'pink', combo:'purple', outros:'cyan' };
-    
-    $('tbl-prod').innerHTML = data.length === 0 ? '<tr><td colspan="9"><div class="empty"><div class="empty-icon">🍽️</div>Nenhum produto encontrado</div></td></tr>' :
+    $('tbl-prod').innerHTML = data.length === 0 ? '<tr><td colspan="9"><div class="empty"><div class="empty-icon">🍽️</div>Nenhum produto</div></td></tr>' :
         data.map(p => {
             const custo = p.custoFicha || calcCustoProduto(p.id);
             const cmvIf = calcCMV(custo, p.preco_ifood), cmvAn = calcCMV(custo, p.preco_anota);
             const hasFicha = DB.fichas.some(f => f.produto_id === p.id);
             return `<tr>
                 <td><strong>${p.nome}</strong></td>
-                <td><span class="badge ${catBadge[p.cat]||'cyan'}">${catLabels[p.cat]||p.cat}</span></td>
-                <td><span class="badge ${p.tam === 'P' ? 'gray' : 'blue'}">${p.tam||'G'}</span></td>
-                <td class="mono">${custo > 0 ? R$(custo) : '<span style="color:var(--txt3)">-</span>'} ${hasFicha ? '<span class="custo-auto">auto</span>' : ''}</td>
+                <td><span class="badge ${catBadge[p.cat] || 'cyan'}">${catLabels[p.cat] || p.cat}</span></td>
+                <td><span class="badge ${p.tam === 'P' ? 'gray' : 'blue'}">${p.tam || 'G'}</span></td>
+                <td class="mono">${custo > 0 ? R$(custo) : '-'} ${hasFicha ? '<span class="custo-auto">auto</span>' : ''}</td>
                 <td class="mono">${R$(p.preco_ifood)}</td>
                 <td class="mono">${R$(p.preco_anota)}</td>
                 <td><span class="badge ${cmvCls(cmvIf)}">${pct(cmvIf)}</span></td>
                 <td><span class="badge ${cmvCls(cmvAn)}">${pct(cmvAn)}</span></td>
                 <td class="actions">
-                    <button class="btn btn-e btn-sm" onclick="abrirModal('mod-prod',${p.id})" title="Editar">✏️</button>
-                    <button class="btn btn-d btn-sm" onclick="confirmar('prod',${p.id})" title="Excluir">🗑️</button>
+                    <button class="btn btn-e btn-sm" onclick="abrirModal('mod-prod',${p.id})">✏️</button>
+                    <button class="btn btn-d btn-sm" onclick="confirmar('prod',${p.id})">🗑️</button>
                 </td>
             </tr>`;
         }).join('');
@@ -1054,7 +821,7 @@ function renderIng() {
     let data = DB.ingredientes;
     if (filterText.ing) data = data.filter(x => x.nome.toLowerCase().includes(filterText.ing));
     $('tbl-ing').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty"><div class="empty-icon">🧅</div>Nenhum ingrediente</div></td></tr>' :
-        data.map(i => `<tr><td><strong>${i.nome}</strong></td><td>${i.un||'kg'}</td><td class="mono">${R$(i.custo)}</td><td>${i.forn||'-'}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-ing',${i.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('ing',${i.id})">🗑️</button></td></tr>`).join('');
+        data.map(i => `<tr><td><strong>${i.nome}</strong></td><td><span class="badge gray">${i.un || 'kg'}</span></td><td class="mono">${R$(i.custo)}</td><td>${i.forn || '-'}</td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-ing',${i.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('ing',${i.id})">🗑️</button></td></tr>`).join('');
 }
 
 function renderVendas() {
@@ -1067,17 +834,8 @@ function renderVendas() {
 }
 
 function renderFichaSelects() {
-    $('ficha-prod').innerHTML = '<option value="">Selecione um produto...</option>' + DB.produtos.map(p => `<option value="${p.id}">${p.nome} (${p.tam||'G'})</option>`).join('');
-    $('ficha-ing').innerHTML = '<option value="">Selecione...</option>' + DB.ingredientes.map(i => `<option value="${i.id}">${i.nome} (${R$(i.custo)}/${i.un})</option>`).join('');
-}
-
-function renderStats() {
-    $('st-prod').textContent = DB.produtos.length;
-    $('st-beb').textContent = DB.bebidas.length;
-    $('st-sob').textContent = DB.sobremesas.length;
-    $('st-ext').textContent = DB.extras.length;
-    $('st-ing').textContent = DB.ingredientes.length;
-    $('st-vendas').textContent = DB.vendas.length;
+    $('ficha-prod').innerHTML = '<option value="">Selecione um produto...</option>' + DB.produtos.map(p => `<option value="${p.id}">${p.nome} (${p.tam || 'G'})</option>`).join('');
+    $('ficha-ing').innerHTML = '<option value="">Selecione...</option>' + DB.ingredientes.map(i => `<option value="${i.id}">${i.nome} — ${R$(i.custo)}/${i.un}</option>`).join('');
 }
 
 function renderRanking() {
@@ -1086,13 +844,10 @@ function renderRanking() {
         return { ...p, custo, cmv: calcCMV(custo, p.preco_ifood) };
     }).filter(p => p.custo > 0 && p.preco_ifood > 0).sort((a, b) => b.cmv - a.cmv).slice(0, 10);
     
-    const catLabels = { macarrao:'Macarrão', risoto:'Risoto', nhoque:'Nhoque', combo:'Combo', outros:'Outros' };
-    const catBadge = { macarrao:'blue', risoto:'orange', nhoque:'pink', combo:'purple', outros:'cyan' };
-    
-    $('tbl-ranking').innerHTML = prods.length === 0 ? '<tr><td colspan="6"><div class="empty">Cadastre produtos com ficha técnica</div></td></tr>' :
+    $('tbl-ranking').innerHTML = prods.length === 0 ? '<tr><td colspan="6"><div class="empty">Cadastre fichas técnicas para ver o ranking</div></td></tr>' :
         prods.map(p => `<tr>
             <td><strong>${p.nome}</strong></td>
-            <td><span class="badge ${catBadge[p.cat]||'cyan'}">${catLabels[p.cat]||p.cat}</span></td>
+            <td><span class="badge ${catBadge[p.cat] || 'cyan'}">${catLabels[p.cat] || p.cat}</span></td>
             <td><span class="badge ${p.tam === 'P' ? 'gray' : 'blue'}">${p.tam}</span></td>
             <td class="mono">${R$(p.custo)}</td>
             <td class="mono">${R$(p.preco_ifood)}</td>
@@ -1101,134 +856,226 @@ function renderRanking() {
 }
 
 function atualizarDash() {
-    if (DB.vendas.length === 0) { 
-        $('k-fat').textContent = 'R$ 0'; 
-        $('k-custo').textContent = 'R$ 0'; 
-        $('k-cmv').textContent = '0%'; 
-        $('k-lucro').textContent = 'R$ 0'; 
-        return; 
+    // Stats catálogo
+    $('d-pratos').textContent = DB.produtos.length;
+    $('d-bebidas').textContent = DB.bebidas.length;
+    $('d-sobremesas').textContent = DB.sobremesas.length;
+    $('d-extras').textContent = DB.extras.length;
+    $('d-ingredientes').textContent = DB.ingredientes.length;
+    $('d-fichas').textContent = [...new Set(DB.fichas.map(f => f.produto_id))].length;
+    $('d-vendas').textContent = DB.vendas.length;
+    
+    // KPIs
+    if (DB.vendas.length === 0) {
+        $('k-fat').textContent = 'R$ 0';
+        $('k-custo').textContent = 'R$ 0';
+        $('k-cmv').textContent = '0%';
+        $('k-lucro').textContent = 'R$ 0';
+        $('k-fat-sub').textContent = 'Nenhuma importação';
+        $('k-custo-sub').textContent = '-';
+        $('k-lucro-sub').textContent = '-';
+    } else {
+        const totFat = DB.vendas.reduce((s, v) => s + parseFloat(v.total_fat || 0), 0);
+        const totCusto = DB.vendas.reduce((s, v) => s + parseFloat(v.total_custo || 0), 0);
+        const cmv = totFat > 0 ? (totCusto / totFat * 100) : 0;
+        
+        $('k-fat').textContent = R$(totFat);
+        $('k-custo').textContent = R$(totCusto);
+        $('k-cmv').textContent = pct(cmv);
+        $('k-lucro').textContent = R$(totFat - totCusto);
+        $('k-fat-sub').textContent = `${DB.vendas.length} importação(ões)`;
+        $('k-custo-sub').textContent = `${pct((totCusto / totFat) * 100)} do faturamento`;
+        $('k-lucro-sub').textContent = `Margem: ${pct(100 - cmv)}`;
+        
+        // Mudar cor do KPI CMV baseado no valor
+        const kpiCmv = $('kpi-cmv');
+        kpiCmv.className = 'kpi ' + cmvCls(cmv);
     }
-    const ultima = DB.vendas[DB.vendas.length - 1];
-    const cmv = ultima.total_fat > 0 ? (ultima.total_custo / ultima.total_fat * 100) : 0;
-    $('k-fat').textContent = R$(ultima.total_fat); 
-    $('k-custo').textContent = R$(ultima.total_custo); 
-    $('k-cmv').textContent = pct(cmv); 
-    $('k-lucro').textContent = R$(ultima.total_fat - ultima.total_custo);
+    
+    // Comparativo iFood vs AnotaAi
+    const ifoodVendas = DB.vendas.filter(v => v.cardapio === 'ifood');
+    const anotaVendas = DB.vendas.filter(v => v.cardapio === 'anota');
+    
+    const ifFat = ifoodVendas.reduce((s, v) => s + parseFloat(v.total_fat || 0), 0);
+    const ifCusto = ifoodVendas.reduce((s, v) => s + parseFloat(v.total_custo || 0), 0);
+    const anFat = anotaVendas.reduce((s, v) => s + parseFloat(v.total_fat || 0), 0);
+    const anCusto = anotaVendas.reduce((s, v) => s + parseFloat(v.total_custo || 0), 0);
+    
+    $('cmp-if-fat').textContent = R$(ifFat);
+    $('cmp-if-cmv').textContent = pct(calcCMV(ifCusto, ifFat));
+    $('cmp-an-fat').textContent = R$(anFat);
+    $('cmp-an-cmv').textContent = pct(calcCMV(anCusto, anFat));
+    
+    // Últimas importações
+    const ultimas = DB.vendas.slice(-5).reverse();
+    $('tbl-ultimas').innerHTML = ultimas.length === 0 ? '<tr><td colspan="4"><div class="empty">-</div></td></tr>' :
+        ultimas.map(v => {
+            const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
+            return `<tr><td>${v.mes}/${v.ano}</td><td><span class="badge ${v.cardapio === 'ifood' ? 'orange' : 'green'}">${v.cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}</span></td><td class="mono">${R$(v.total_fat)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td></tr>`;
+        }).join('');
+    
+    renderChartCMV();
 }
 
-function renderAll() { 
-    renderProd(); 
-    renderBeb(); 
-    renderSob(); 
-    renderExt(); 
-    renderIng(); 
-    renderVendas(); 
-    renderFichaSelects(); 
-    renderStats(); 
-    renderRanking(); 
-    atualizarDash(); 
+function renderChartCMV() {
+    const cats = ['macarrao', 'risoto', 'nhoque', 'combo'];
+    const data = cats.map(cat => {
+        const prods = DB.produtos.filter(p => p.cat === cat && (p.custoFicha || calcCustoProduto(p.id)) > 0);
+        if (prods.length === 0) return 0;
+        return prods.reduce((s, p) => s + calcCMV(p.custoFicha || calcCustoProduto(p.id), p.preco_ifood), 0) / prods.length;
+    });
+    
+    const ctx = $('chart-cmv-cat').getContext('2d');
+    if (chartCMV) chartCMV.destroy();
+    
+    chartCMV = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: cats.map(c => catLabels[c]),
+            datasets: [{
+                label: 'CMV Médio %',
+                data: data,
+                backgroundColor: data.map(v => v <= 25 ? 'rgba(34,197,94,0.8)' : v <= 35 ? 'rgba(234,179,8,0.8)' : 'rgba(239,68,68,0.8)'),
+                borderRadius: 8,
+                borderSkipped: false
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, max: 50, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8', font: { size: 13 }, callback: v => v + '%' } },
+                x: { grid: { display: false }, ticks: { color: '#f8fafc', font: { size: 14 } } }
+            }
+        }
+    });
 }
 
-// Confirmar exclusão
+function renderAll() {
+    renderProd();
+    renderBeb();
+    renderSob();
+    renderExt();
+    renderIng();
+    renderVendas();
+    renderFichaSelects();
+    renderRanking();
+    atualizarDash();
+}
+
 function confirmar(tipo, id) {
     const cfg = {
-        'prod': { title: 'Excluir Produto?', text: 'A ficha técnica também será removida.', fn: () => execDel('produtos', id) },
-        'beb': { title: 'Excluir Bebida?', text: '', fn: () => execDel('bebidas', id) },
-        'sob': { title: 'Excluir Sobremesa?', text: '', fn: () => execDel('sobremesas', id) },
-        'ext': { title: 'Excluir Extra?', text: '', fn: () => execDel('extras', id) },
-        'ing': { title: 'Excluir Ingrediente?', text: 'Será removido das fichas técnicas.', fn: () => execDel('ingredientes', id) },
-        'venda': { title: 'Excluir Importação?', text: '', fn: () => execDel('vendas', id) },
+        prod: { title: 'Excluir Produto?', text: 'A ficha técnica também será removida.', fn: () => execDel('produtos', id) },
+        beb: { title: 'Excluir Bebida?', text: 'Esta ação não pode ser desfeita.', fn: () => execDel('bebidas', id) },
+        sob: { title: 'Excluir Sobremesa?', text: 'Esta ação não pode ser desfeita.', fn: () => execDel('sobremesas', id) },
+        ext: { title: 'Excluir Extra?', text: 'Esta ação não pode ser desfeita.', fn: () => execDel('extras', id) },
+        ing: { title: 'Excluir Ingrediente?', text: 'Será removido das fichas técnicas.', fn: () => execDel('ingredientes', id) },
+        venda: { title: 'Excluir Importação?', text: 'Os dados desta importação serão perdidos.', fn: () => execDel('vendas', id) }
     }[tipo];
-    $('conf-icon').textContent = '🗑️'; 
-    $('conf-title').textContent = cfg.title; 
-    $('conf-text').textContent = cfg.text || 'Esta ação não pode ser desfeita.';
+    
+    $('conf-icon').textContent = '🗑️';
+    $('conf-title').textContent = cfg.title;
+    $('conf-text').textContent = cfg.text;
     $('conf-btn').onclick = () => { cfg.fn(); fecharModal('mod-confirm'); };
     abrirModal('mod-confirm');
 }
 
 async function execDel(tabela, id) {
-    try { 
-        await api(tabela, 'DELETE', { id }); 
-        DB[tabela] = DB[tabela].filter(x => x.id !== id); 
+    try {
+        await api(tabela, 'DELETE', { id });
+        DB[tabela] = DB[tabela].filter(x => x.id !== id);
         if (tabela === 'produtos') DB.fichas = DB.fichas.filter(f => f.produto_id !== id);
         if (tabela === 'ingredientes') DB.fichas = DB.fichas.filter(f => f.ingrediente_id !== id);
-        renderAll(); 
-        toast('Excluído!'); 
+        renderAll();
+        toast('Excluído com sucesso!');
     } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
-// Forms
 async function submitForm(fid, tabela, getData, mid) {
-    const form = $(fid), btn = form.querySelector('button[type="submit"]'), idField = form.querySelector('input[type="hidden"]'), id = idField && idField.value ? parseInt(idField.value) : null;
+    const form = $(fid), btn = form.querySelector('button[type="submit"]');
+    const idField = form.querySelector('input[type="hidden"]');
+    const id = idField && idField.value ? parseInt(idField.value) : null;
     btn.disabled = true;
+    
     try {
         const data = getData();
         let result;
-        if (id && id > 0) { 
-            result = await api(tabela, 'PUT', { ...data, id }); 
-            const idx = DB[tabela].findIndex(x => x.id === id); 
-            if (idx >= 0) DB[tabela][idx] = result; 
+        if (id && id > 0) {
+            result = await api(tabela, 'PUT', { ...data, id });
+            const idx = DB[tabela].findIndex(x => x.id === id);
+            if (idx >= 0) DB[tabela][idx] = result;
+        } else {
+            result = await api(tabela, 'POST', data);
+            DB[tabela].push(result);
         }
-        else { 
-            result = await api(tabela, 'POST', data); 
-            DB[tabela].push(result); 
-        }
-        renderAll(); 
-        fecharModal(mid); 
-        toast('Salvo!');
+        renderAll();
+        fecharModal(mid);
+        toast('Salvo com sucesso!');
     } catch (e) { toast('Erro: ' + e.message, true); }
     btn.disabled = false;
 }
 
-$('form-prod').onsubmit = e => { 
-    e.preventDefault(); 
+$('form-prod').onsubmit = e => {
+    e.preventDefault();
     const prodId = parseInt($('prod-id').value);
     const custo = prodId ? calcCustoProduto(prodId) : 0;
-    submitForm('form-prod', 'produtos', () => ({ 
-        nome: $('prod-nome').value.trim(), 
-        cat: $('prod-cat').value, 
-        tam: $('prod-tam').value, 
-        custo: custo, // Custo vem da ficha
-        preco_ifood: parseFloat($('prod-pif').value)||0, 
-        preco_anota: parseFloat($('prod-pan').value)||0 
-    }), 'mod-prod'); 
+    submitForm('form-prod', 'produtos', () => ({
+        nome: $('prod-nome').value.trim(),
+        cat: $('prod-cat').value,
+        tam: $('prod-tam').value,
+        custo: custo,
+        preco_ifood: parseFloat($('prod-pif').value) || 0,
+        preco_anota: parseFloat($('prod-pan').value) || 0
+    }), 'mod-prod');
 };
-$('form-beb').onsubmit = e => { e.preventDefault(); submitForm('form-beb', 'bebidas', () => ({ nome: $('beb-nome').value.trim(), custo: parseFloat($('beb-custo').value)||0, preco_ifood: parseFloat($('beb-pif').value)||0, preco_anota: parseFloat($('beb-pan').value)||0 }), 'mod-beb'); };
-$('form-sob').onsubmit = e => { e.preventDefault(); submitForm('form-sob', 'sobremesas', () => ({ nome: $('sob-nome').value.trim(), custo: parseFloat($('sob-custo').value)||0, preco_ifood: parseFloat($('sob-pif').value)||0, preco_anota: parseFloat($('sob-pan').value)||0 }), 'mod-sob'); };
-$('form-ext').onsubmit = e => { e.preventDefault(); submitForm('form-ext', 'extras', () => ({ nome: $('ext-nome').value.trim(), custo: parseFloat($('ext-custo').value)||0, preco: parseFloat($('ext-preco').value)||0 }), 'mod-ext'); };
-$('form-ing').onsubmit = e => { e.preventDefault(); submitForm('form-ing', 'ingredientes', () => ({ nome: $('ing-nome').value.trim(), un: $('ing-un').value, custo: parseFloat($('ing-custo').value)||0, forn: $('ing-forn').value.trim() }), 'mod-ing'); };
 
-// Ficha Técnica
-function carregarFicha() { 
-    const prodId = parseInt($('ficha-prod').value); 
-    if (!prodId) { $('ficha-area').style.display = 'none'; return; } 
-    $('ficha-area').style.display = 'block'; 
-    renderFichaItens(); 
+$('form-beb').onsubmit = e => { e.preventDefault(); submitForm('form-beb', 'bebidas', () => ({ nome: $('beb-nome').value.trim(), custo: parseFloat($('beb-custo').value) || 0, preco_ifood: parseFloat($('beb-pif').value) || 0, preco_anota: parseFloat($('beb-pan').value) || 0 }), 'mod-beb'); };
+$('form-sob').onsubmit = e => { e.preventDefault(); submitForm('form-sob', 'sobremesas', () => ({ nome: $('sob-nome').value.trim(), custo: parseFloat($('sob-custo').value) || 0, preco_ifood: parseFloat($('sob-pif').value) || 0, preco_anota: parseFloat($('sob-pan').value) || 0 }), 'mod-sob'); };
+$('form-ext').onsubmit = e => { e.preventDefault(); submitForm('form-ext', 'extras', () => ({ nome: $('ext-nome').value.trim(), custo: parseFloat($('ext-custo').value) || 0, preco: parseFloat($('ext-preco').value) || 0 }), 'mod-ext'); };
+$('form-ing').onsubmit = e => { e.preventDefault(); submitForm('form-ing', 'ingredientes', () => ({ nome: $('ing-nome').value.trim(), un: $('ing-un').value, custo: parseFloat($('ing-custo').value) || 0, forn: $('ing-forn').value.trim() }), 'mod-ing'); };
+
+// Fichas Técnicas
+function carregarFicha() {
+    const prodId = parseInt($('ficha-prod').value);
+    if (!prodId) { $('ficha-area').style.display = 'none'; return; }
+    $('ficha-area').style.display = 'block';
+    renderFichaItens();
 }
 
 function renderFichaItens() {
-    const prodId = parseInt($('ficha-prod').value), itens = DB.fichas.filter(f => f.produto_id === prodId);
-    $('ficha-list').innerHTML = itens.length === 0 ? '<div class="empty" style="padding:1rem;">Nenhum ingrediente adicionado</div>' :
-        itens.map(f => { 
-            const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id); 
-            if (!ing) return ''; 
+    const prodId = parseInt($('ficha-prod').value);
+    const itens = DB.fichas.filter(f => f.produto_id === prodId);
+    
+    $('ficha-list').innerHTML = itens.length === 0 ? '<div class="empty" style="padding:1.5rem;">Nenhum ingrediente adicionado</div>' :
+        itens.map(f => {
+            const ing = DB.ingredientes.find(i => i.id === f.ingrediente_id);
+            if (!ing) return '';
             
-            // Calcular custo considerando unidades
-            let qtdNorm = parseFloat(f.qtd) || 0;
-            const ingUn = ing.un || 'kg';
-            const fichaUn = f.un || 'g';
-            if (ingUn === 'kg' && fichaUn === 'g') qtdNorm = qtdNorm / 1000;
-            else if (ingUn === 'L' && fichaUn === 'ml') qtdNorm = qtdNorm / 1000;
-            const c = parseFloat(ing.custo) * qtdNorm;
+            const qtdFicha = parseFloat(f.qtd) || 0;
+            const custoIng = parseFloat(ing.custo) || 0;
+            const unIng = (ing.un || 'kg').toLowerCase();
+            const unFicha = (f.un || 'g').toLowerCase();
+            
+            // Calcular custo correto
+            let fator = 1;
+            if (unIng === 'kg' && unFicha === 'g') fator = 1 / 1000;
+            else if (unIng === 'l' && unFicha === 'ml') fator = 1 / 1000;
+            
+            const c = custoIng * qtdFicha * fator;
             
             return `<div class="ing-item">
-                <div><strong>${ing.nome}</strong> <span style="color:var(--txt3)">${f.qtd} ${f.un || ing.un}</span></div>
-                <div style="display:flex;align-items:center;gap:0.5rem;">
-                    <span class="mono" style="color:var(--green);font-weight:600;">${R$(c)}</span>
-                    <button class="btn btn-d btn-sm" onclick="remFichaItem(${f.id})" style="padding:0.25rem 0.5rem;">×</button>
+                <div>
+                    <strong>${ing.nome}</strong>
+                    <span style="color:var(--txt3);margin-left:0.5rem;">${fmtQtd(f.qtd)} ${f.un || 'g'}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:1rem;">
+                    <span class="mono" style="color:var(--green);font-weight:600;font-size:1.15rem;">${R$(c)}</span>
+                    <button class="btn btn-d btn-sm" onclick="remFichaItem(${f.id})">×</button>
                 </div>
             </div>`;
         }).join('');
+    
     calcFichaCusto();
 }
 
@@ -1241,10 +1088,10 @@ function calcFichaCusto() {
     const cmvAn = prod ? calcCMV(custoTotal, prod.preco_anota) : 0;
     
     $('f-custo').textContent = R$(custoTotal);
-    $('f-cmv-if').textContent = pct(cmvIf); 
-    $('f-cmv-if').style.color = cmvIf <= 25 ? 'var(--green)' : cmvIf <= 35 ? 'var(--yellow)' : 'var(--red)';
-    $('f-cmv-an').textContent = pct(cmvAn); 
-    $('f-cmv-an').style.color = cmvAn <= 25 ? 'var(--green)' : cmvAn <= 35 ? 'var(--yellow)' : 'var(--red)';
+    $('f-cmv-if').textContent = pct(cmvIf);
+    $('f-cmv-if').style.color = cmvColor(cmvIf);
+    $('f-cmv-an').textContent = pct(cmvAn);
+    $('f-cmv-an').style.color = cmvColor(cmvAn);
 }
 
 async function addIngFicha() {
@@ -1253,12 +1100,15 @@ async function addIngFicha() {
     const qtd = parseFloat($('ficha-qtd').value);
     const un = $('ficha-un').value;
     
-    if (!prodId || !ingId || !qtd) { toast('Preencha todos os campos!', true); return; }
+    if (!prodId || !ingId || !qtd || qtd <= 0) {
+        toast('Preencha todos os campos corretamente!', true);
+        return;
+    }
     
-    try { 
-        const result = await api('fichas', 'POST', { produto_id: prodId, ingrediente_id: ingId, qtd, un }); 
-        DB.fichas.push(result); 
-        $('ficha-qtd').value = ''; 
+    try {
+        const result = await api('fichas', 'POST', { produto_id: prodId, ingrediente_id: ingId, qtd, un });
+        DB.fichas.push(result);
+        $('ficha-qtd').value = '';
         
         // Atualizar custo do produto
         const custoTotal = calcCustoProduto(prodId);
@@ -1268,21 +1118,20 @@ async function addIngFicha() {
             await api('produtos', 'PUT', { ...prod, custo: custoTotal });
         }
         
-        renderFichaItens(); 
+        renderFichaItens();
         renderAll();
-        toast('Ingrediente adicionado!'); 
+        toast('Ingrediente adicionado!');
     } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
-async function remFichaItem(id) { 
+async function remFichaItem(id) {
     const ficha = DB.fichas.find(f => f.id === id);
     const prodId = ficha?.produto_id;
     
-    try { 
-        await api('fichas', 'DELETE', { id }); 
-        DB.fichas = DB.fichas.filter(f => f.id !== id); 
+    try {
+        await api('fichas', 'DELETE', { id });
+        DB.fichas = DB.fichas.filter(f => f.id !== id);
         
-        // Atualizar custo do produto
         if (prodId) {
             const custoTotal = calcCustoProduto(prodId);
             const prod = DB.produtos.find(p => p.id === prodId);
@@ -1295,43 +1144,43 @@ async function remFichaItem(id) {
         renderFichaItens();
         renderAll();
         toast('Removido!');
-    } catch (e) { toast('Erro: ' + e.message, true); } 
+    } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
 // Upload Excel
 const uploadBox = $('upload-box'), fileInput = $('file-input');
 uploadBox.onclick = () => fileInput.click();
-uploadBox.ondragover = e => { e.preventDefault(); };
+uploadBox.ondragover = e => e.preventDefault();
 uploadBox.ondrop = e => { e.preventDefault(); if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]); };
 fileInput.onchange = e => { if (e.target.files[0]) processFile(e.target.files[0]); };
 
 let importData = null;
 
 function processFile(file) {
-    $('upload-file').textContent = '📄 ' + file.name; 
-    uploadBox.classList.add('has-file'); 
+    $('upload-file').textContent = '📄 ' + file.name;
+    uploadBox.classList.add('has-file');
     loading(true);
     const reader = new FileReader();
-    reader.onload = ev => { 
-        try { 
-            const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' }); 
-            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 }); 
-            processarExcel(data); 
-        } catch (e) { toast('Erro: ' + e.message, true); } 
-        loading(false); 
+    reader.onload = ev => {
+        try {
+            const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
+            const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 });
+            processarExcel(data);
+        } catch (e) { toast('Erro ao ler arquivo: ' + e.message, true); }
+        loading(false);
     };
     reader.readAsArrayBuffer(file);
 }
 
 function processarExcel(data) {
     let periodo = '';
-    if (data[1] && data[1][0]) { 
-        const match = String(data[1][0]).match(/(\d{2})\/(\d{2})\/(\d{4})/); 
-        if (match) periodo = match[2] + '/' + match[3]; 
+    if (data[1] && data[1][0]) {
+        const match = String(data[1][0]).match(/(\d{2})\/(\d{2})\/(\d{4})/);
+        if (match) periodo = match[2] + '/' + match[3];
     }
     
-    const vendas = { produtos: [], bebidas: [], sobremesas: [], extras: [], totalFat: 0 };
-    const norm = n => n.toLowerCase().replace(/\(aprox\.?\s*\d+g?\)/gi,'').replace(/\(vale muito a pena!\)/gi,'').replace(/box\s*[pg]/gi,'').replace(/-/g,' ').replace(/\s+/g,' ').trim();
+    const vendas = { produtos: [], bebidas: [], sobremesas: [], totalFat: 0 };
+    const norm = n => n.toLowerCase().replace(/\(aprox\.?\s*\d+g?\)/gi, '').replace(/\(vale muito a pena!\)/gi, '').replace(/box\s*[pg]/gi, '').replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
     
     const findProd = (nome, tam) => {
         const n = norm(nome);
@@ -1339,14 +1188,15 @@ function processarExcel(data) {
             if (p.tam !== tam) return false;
             const pn = norm(p.nome);
             if (n.includes(pn) || pn.includes(n)) return true;
-            const palavras = ['camarão','funghi','bolonhesa','pomodoro','broccoli','parisiense','costela','ragu','frango','cheddar','queijos','bacon'];
-            for (const pc of palavras) if (n.includes(pc) && pn.includes(pc)) return true;
+            const pcs = ['camarão', 'funghi', 'bolonhesa', 'pomodoro', 'broccoli', 'parisiense', 'costela', 'ragu', 'frango', 'cheddar', 'queijos', 'bacon'];
+            for (const pc of pcs) if (n.includes(pc) && pn.includes(pc)) return true;
             return false;
         });
     };
     
     for (let i = 5; i < data.length; i++) {
-        const row = data[i]; if (!row || !row[0]) continue;
+        const row = data[i];
+        if (!row || !row[0]) continue;
         const nome = String(row[0]).trim(), qtd = parseInt(row[1]) || 0, valor = parseFloat(row[2]) || 0;
         if (!nome || nome === 'nan') continue;
         
@@ -1367,12 +1217,12 @@ function processarExcel(data) {
                 }
             }
             
-            if (qtd > 0 && (nomeL.includes('refrigerante') || nomeL.includes('água') || nomeL.includes('suco') || nomeL.includes('vinho') || nomeL.includes('energético'))) {
+            if (qtd > 0 && (nomeL.includes('refrigerante') || nomeL.includes('água') || nomeL.includes('suco') || nomeL.includes('vinho'))) {
                 const beb = DB.bebidas.find(b => norm(nome).includes(norm(b.nome)) || norm(b.nome).includes(norm(nome)));
                 if (beb) vendas.bebidas.push({ ...beb, qtdVenda: qtd, valorVenda: valor });
             }
             
-            if (qtd > 0 && (nomeL.includes('tiramisu') || nomeL.includes('brownie') || nomeL.includes('cannoli') || nomeL.includes('palha italiana'))) {
+            if (qtd > 0 && (nomeL.includes('tiramisu') || nomeL.includes('brownie') || nomeL.includes('cannoli') || nomeL.includes('palha'))) {
                 const sob = DB.sobremesas.find(s => norm(nome).includes(norm(s.nome)) || norm(s.nome).includes(norm(nome)));
                 if (sob) vendas.sobremesas.push({ ...sob, qtdVenda: qtd, valorVenda: valor });
             }
@@ -1385,34 +1235,34 @@ function processarExcel(data) {
 
 function mostrarPreview() {
     const v = importData.vendas;
-    const meses = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     const anoAtual = new Date().getFullYear();
     
     let custoProds = 0, custoBeb = 0, custoSob = 0;
-    v.produtos.forEach(p => custoProds += (parseFloat(p.custo)||0) * p.qtdVenda);
-    v.bebidas.forEach(b => custoBeb += (parseFloat(b.custo)||0) * b.qtdVenda);
-    v.sobremesas.forEach(s => custoSob += (parseFloat(s.custo)||0) * s.qtdVenda);
+    v.produtos.forEach(p => custoProds += (parseFloat(p.custo) || 0) * p.qtdVenda);
+    v.bebidas.forEach(b => custoBeb += (parseFloat(b.custo) || 0) * b.qtdVenda);
+    v.sobremesas.forEach(s => custoSob += (parseFloat(s.custo) || 0) * s.qtdVenda);
     const custoTotal = custoProds + custoBeb + custoSob;
     const cmv = v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0;
     
     $('import-preview').innerHTML = `
         <div class="preview">
-            <div class="form-row" style="margin-bottom:1rem;">
-                <div class="field"><label>Mês</label><select id="imp-mes">${meses.map((m,i) => i > 0 ? `<option value="${String(i).padStart(2,'0')}" ${importData.periodo.startsWith(String(i).padStart(2,'0'))?'selected':''}>${m}</option>` : '').join('')}</select></div>
-                <div class="field"><label>Ano</label><select id="imp-ano">${[anoAtual-1,anoAtual,anoAtual+1].map(a => `<option value="${a}" ${importData.periodo.includes(String(a))?'selected':''}>${a}</option>`).join('')}</select></div>
+            <div class="form-row" style="margin-bottom:1.5rem;">
+                <div class="field"><label>Mês</label><select id="imp-mes">${meses.map((m, i) => i > 0 ? `<option value="${String(i).padStart(2, '0')}" ${importData.periodo.startsWith(String(i).padStart(2, '0')) ? 'selected' : ''}>${m}</option>` : '').join('')}</select></div>
+                <div class="field"><label>Ano</label><select id="imp-ano">${[anoAtual - 1, anoAtual, anoAtual + 1].map(a => `<option value="${a}" ${importData.periodo.includes(String(a)) ? 'selected' : ''}>${a}</option>`).join('')}</select></div>
                 <div class="field"><label>Plataforma</label><select id="imp-plat"><option value="">Selecione...</option><option value="ifood">iFood</option><option value="anota">AnotaAi</option></select></div>
             </div>
             <div class="res-box">
                 <div class="res-item"><div class="lbl">Pratos</div><div class="val" style="color:var(--blue)">${v.produtos.length}</div></div>
                 <div class="res-item"><div class="lbl">Bebidas</div><div class="val" style="color:var(--cyan)">${v.bebidas.length}</div></div>
                 <div class="res-item"><div class="lbl">Sobremesas</div><div class="val" style="color:var(--pink)">${v.sobremesas.length}</div></div>
-                <div class="res-item"><div class="lbl">CMV Estimado</div><div class="val" style="color:${cmv <= 25 ? 'var(--green)' : cmv <= 35 ? 'var(--yellow)' : 'var(--red)'};">${pct(cmv)}</div></div>
+                <div class="res-item"><div class="lbl">CMV Est.</div><div class="val" style="color:${cmvColor(cmv)};">${pct(cmv)}</div></div>
             </div>
-            <div style="margin-top:0.75rem;font-size:0.95rem;color:var(--txt2);">
-                Faturamento: <span class="mono" style="color:var(--green)">${R$(v.totalFat)}</span> | 
-                Custo Total: <span class="mono" style="color:var(--blue)">${R$(custoTotal)}</span>
+            <div style="margin-top:1.25rem;font-size:1.1rem;color:var(--txt2);text-align:center;">
+                Faturamento: <span class="mono" style="color:var(--green);font-weight:600;">${R$(v.totalFat)}</span> &nbsp;|&nbsp;
+                Custo: <span class="mono" style="color:var(--blue);font-weight:600;">${R$(custoTotal)}</span>
             </div>
-            <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+            <div style="display:flex;gap:1rem;margin-top:1.5rem;">
                 <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Confirmar Importação</button>
                 <button class="btn btn-s" onclick="cancelarImport()">❌ Cancelar</button>
             </div>
@@ -1429,67 +1279,80 @@ async function confirmarImport() {
     let custoTotal = 0;
     const detalhes = [];
     
-    v.produtos.forEach(p => { const c = (parseFloat(p.custo)||0) * p.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'produto', nome: p.nome, qtd: p.qtdVenda, custo: c }); });
-    v.bebidas.forEach(b => { const c = (parseFloat(b.custo)||0) * b.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'bebida', nome: b.nome, qtd: b.qtdVenda, custo: c }); });
-    v.sobremesas.forEach(s => { const c = (parseFloat(s.custo)||0) * s.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'sobremesa', nome: s.nome, qtd: s.qtdVenda, custo: c }); });
+    v.produtos.forEach(p => { const c = (parseFloat(p.custo) || 0) * p.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'produto', nome: p.nome, qtd: p.qtdVenda, custo: c }); });
+    v.bebidas.forEach(b => { const c = (parseFloat(b.custo) || 0) * b.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'bebida', nome: b.nome, qtd: b.qtdVenda, custo: c }); });
+    v.sobremesas.forEach(s => { const c = (parseFloat(s.custo) || 0) * s.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'sobremesa', nome: s.nome, qtd: s.qtdVenda, custo: c }); });
     
     try {
         const result = await api('vendas', 'POST', { mes, ano, cardapio: plat, itens: detalhes, total_qtd: detalhes.length, total_fat: v.totalFat, total_custo: custoTotal });
         DB.vendas.push(result);
-        toast(`Importado! CMV: ${pct(v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0)}`);
-        cancelarImport(); 
+        toast(`Importado com sucesso! CMV: ${pct(v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0)}`);
+        cancelarImport();
         renderAll();
     } catch (e) { toast('Erro: ' + e.message, true); }
     loading(false);
 }
 
-function cancelarImport() { 
-    importData = null; 
-    $('import-preview').innerHTML = ''; 
-    fileInput.value = ''; 
-    $('upload-file').textContent = ''; 
-    uploadBox.classList.remove('has-file'); 
+function cancelarImport() {
+    importData = null;
+    $('import-preview').innerHTML = '';
+    fileInput.value = '';
+    $('upload-file').textContent = '';
+    uploadBox.classList.remove('has-file');
 }
 
 // Análise
 function mostrarAnalise() {
-    const id = parseInt($('sel-venda').value), v = DB.vendas.find(x => x.id === id);
+    const id = parseInt($('sel-venda').value);
+    const v = DB.vendas.find(x => x.id === id);
     if (!v) { $('analise-area').innerHTML = ''; return; }
-    const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0, lucro = v.total_fat - v.total_custo;
-    let itens = []; try { itens = typeof v.itens === 'string' ? JSON.parse(v.itens) : (v.itens || []); } catch(e) {}
+    
+    const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
+    const lucro = v.total_fat - v.total_custo;
+    let itens = [];
+    try { itens = typeof v.itens === 'string' ? JSON.parse(v.itens) : (v.itens || []); } catch(e) {}
     
     $('analise-area').innerHTML = `
         <div class="grid-kpi" style="grid-template-columns:repeat(4,1fr);">
             <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value">${R$(v.total_fat)}</div></div>
             <div class="kpi blue"><div class="kpi-label">Custo</div><div class="kpi-value">${R$(v.total_custo)}</div></div>
             <div class="kpi ${cmvCls(cmv)}"><div class="kpi-label">CMV</div><div class="kpi-value">${pct(cmv)}</div></div>
-            <div class="kpi purple"><div class="kpi-label">Lucro</div><div class="kpi-value">${R$(lucro)}</div></div>
+            <div class="kpi purple"><div class="kpi-label">Lucro Bruto</div><div class="kpi-value">${R$(lucro)}</div></div>
         </div>
-        ${itens.length > 0 ? `<div class="card"><div class="card-title">📋 Detalhamento por Item</div><div class="tbl-wrap" style="margin-top:0.75rem;"><table><thead><tr><th>Tipo</th><th>Item</th><th>Qtd</th><th>Custo Total</th></tr></thead><tbody>${itens.map(it => `<tr><td><span class="badge ${it.tipo === 'produto' ? 'blue' : it.tipo === 'bebida' ? 'cyan' : 'pink'}">${it.tipo}</span></td><td>${it.nome}</td><td class="mono">${it.qtd}</td><td class="mono">${R$(it.custo)}</td></tr>`).join('')}</tbody></table></div></div>` : ''}
+        ${itens.length > 0 ? `
+        <div class="card">
+            <div class="card-title">📋 Detalhamento por Item</div>
+            <div class="tbl-wrap" style="margin-top:1rem;">
+                <table>
+                    <thead><tr><th>Tipo</th><th>Item</th><th>Qtd</th><th>Custo Total</th></tr></thead>
+                    <tbody>${itens.map(it => `<tr><td><span class="badge ${it.tipo === 'produto' ? 'blue' : it.tipo === 'bebida' ? 'cyan' : 'pink'}">${it.tipo}</span></td><td>${it.nome}</td><td class="mono">${it.qtd}</td><td class="mono">${R$(it.custo)}</td></tr>`).join('')}</tbody>
+                </table>
+            </div>
+        </div>` : ''}
     `;
 }
 
 // Config
-async function setupDB() { 
-    if (!confirm('Criar/atualizar tabelas do banco de dados?')) return; 
-    loading(true); 
-    try { await api('setup', 'POST'); toast('Tabelas criadas com sucesso!'); await loadAll(); } 
-    catch (e) { toast('Erro: ' + e.message, true); } 
-    loading(false); 
+async function setupDB() {
+    if (!confirm('Criar/atualizar tabelas do banco de dados?')) return;
+    loading(true);
+    try { await api('setup', 'POST'); toast('Tabelas criadas com sucesso!'); await loadAll(); }
+    catch (e) { toast('Erro: ' + e.message, true); }
+    loading(false);
 }
 
-async function seedDB() { 
-    if (!confirm('Carregar dados de exemplo? Os dados existentes serão mantidos.')) return; 
-    loading(true); 
-    try { await api('seed', 'POST'); await loadAll(); toast('Dados de exemplo carregados!'); } 
-    catch (e) { toast('Erro: ' + e.message, true); } 
-    loading(false); 
+async function seedDB() {
+    if (!confirm('Carregar dados de exemplo?')) return;
+    loading(true);
+    try { await api('seed', 'POST'); await loadAll(); toast('Dados de exemplo carregados!'); }
+    catch (e) { toast('Erro: ' + e.message, true); }
+    loading(false);
 }
 
 function confirmarLimpar() {
-    $('conf-icon').textContent = '⚠️'; 
-    $('conf-title').textContent = 'LIMPAR TODOS OS DADOS?'; 
-    $('conf-text').textContent = 'Esta ação irá remover TODOS os produtos, ingredientes, fichas e importações permanentemente!';
+    $('conf-icon').textContent = '⚠️';
+    $('conf-title').textContent = 'LIMPAR TODOS OS DADOS?';
+    $('conf-text').textContent = 'Esta ação irá remover TODOS os dados permanentemente!';
     $('conf-btn').onclick = () => { limparDB(); fecharModal('mod-confirm'); };
     abrirModal('mod-confirm');
 }
@@ -1498,7 +1361,8 @@ async function limparDB() {
     loading(true);
     try {
         await api('setup', 'POST', { action: 'clear' });
-        DB.produtos = []; DB.bebidas = []; DB.sobremesas = []; DB.extras = []; DB.ingredientes = []; DB.fichas = []; DB.vendas = [];
+        DB.produtos = []; DB.bebidas = []; DB.sobremesas = []; DB.extras = [];
+        DB.ingredientes = []; DB.fichas = []; DB.vendas = [];
         renderAll();
         toast('Banco de dados limpo!');
     } catch (e) { toast('Erro: ' + e.message, true); }
@@ -1506,18 +1370,18 @@ async function limparDB() {
 }
 
 function exportarBackup() {
-    const backup = { versao: '9.3', data: new Date().toISOString(), dados: DB };
+    const backup = { versao: '9.4', data: new Date().toISOString(), dados: DB };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a'); 
-    a.href = URL.createObjectURL(blob); 
-    a.download = `backup_cmv_${new Date().toISOString().slice(0, 10)}.json`; 
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `backup_cmv_${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     toast('Backup exportado!');
 }
 
 // Init
-document.querySelectorAll('.modal-bg').forEach(m => { 
-    m.onclick = e => { if (e.target === m) fecharModal(m.id); }; 
+document.querySelectorAll('.modal-bg').forEach(m => {
+    m.onclick = e => { if (e.target === m) fecharModal(m.id); };
 });
 
 document.addEventListener('keydown', e => {
