@@ -49,8 +49,6 @@
         .kpi.yellow .kpi-value { color: var(--yellow); } .kpi.purple .kpi-value { color: var(--purple); }
         .kpi.red .kpi-value { color: var(--red); } .kpi.cyan .kpi-value { color: var(--cyan); }
         .kpi-sub { font-size: 0.9rem; color: var(--txt3); margin-top: 0.5rem; }
-        .kpi-compare { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 0.9rem; }
-        .kpi-compare.up { color: var(--green); } .kpi-compare.down { color: var(--red); }
         
         .dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
         @media (max-width: 1200px) { .dash-grid { grid-template-columns: 1fr; } }
@@ -175,12 +173,97 @@
         .compare-card h4 { font-size: 1rem; color: var(--txt3); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
         .compare-card .val { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; font-weight: 700; }
         
+        /* PAINEL DE TAXAS */
+        .taxas-panel {
+            background: linear-gradient(135deg, var(--bg2), var(--bg3));
+            border: 1px solid var(--brd);
+            border-radius: 14px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            align-items: center;
+        }
+        .taxas-panel .panel-title {
+            font-weight: 600;
+            color: var(--txt2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+        .taxa-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: var(--bg1);
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            border: 2px solid var(--brd);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .taxa-item:hover { border-color: var(--blue); }
+        .taxa-item.active { border-color: var(--green); background: rgba(34,197,94,0.1); }
+        .taxa-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--green);
+        }
+        .taxa-item label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--txt);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+        .taxa-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .taxa-badge.ifood { background: rgba(234,67,53,0.2); color: #ea4335; }
+        .taxa-badge.todos { background: rgba(59,130,246,0.2); color: var(--blue); }
+        .taxa-input {
+            width: 65px;
+            background: var(--bg3);
+            border: 1px solid var(--brd);
+            border-radius: 6px;
+            padding: 0.4rem 0.5rem;
+            color: var(--txt);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        .taxa-input:focus { outline: none; border-color: var(--green); }
+        .taxa-input:disabled { opacity: 0.4; }
+        .taxas-info {
+            font-size: 0.85rem;
+            color: var(--txt3);
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .taxas-info .total-taxa {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--yellow);
+            font-weight: 600;
+        }
+        
         @media (max-width: 768px) {
             body { font-size: 15px; }
             .main { padding: 1rem; }
             .kpi-value { font-size: 1.8rem; }
             .nav-btn { padding: 0.75rem 1rem; }
             .compare-grid { grid-template-columns: 1fr; }
+            .taxas-panel { padding: 1rem; gap: 0.75rem; }
+            .taxa-item { padding: 0.5rem 0.75rem; }
         }
     </style>
 </head>
@@ -192,7 +275,7 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.4</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.5</span></div>
             </div>
             <div class="sync" id="sync">☁️ Online</div>
         </div>
@@ -214,6 +297,34 @@
     </nav>
 
     <main class="main">
+        <!-- PAINEL DE TAXAS GLOBAL -->
+        <div class="taxas-panel" id="taxas-panel">
+            <div class="panel-title">💰 Taxas no CMV:</div>
+            <div class="taxa-item" id="taxa-ifood-box">
+                <input type="checkbox" id="taxa-ifood" onchange="atualizarTaxas()">
+                <label for="taxa-ifood">Taxa iFood <span class="taxa-badge ifood">10%</span></label>
+                <span class="taxa-badge ifood">só iFood</span>
+            </div>
+            <div class="taxa-item" id="taxa-royalties-box">
+                <input type="checkbox" id="taxa-royalties" onchange="atualizarTaxas()">
+                <label for="taxa-royalties">Royalties <span class="taxa-badge todos">5%</span></label>
+                <span class="taxa-badge todos">ambos</span>
+            </div>
+            <div class="taxa-item" id="taxa-imposto-box">
+                <input type="checkbox" id="taxa-imposto" onchange="atualizarTaxas()">
+                <label for="taxa-imposto">Imposto</label>
+                <input type="number" class="taxa-input" id="taxa-imposto-val" value="0" min="0" max="100" step="0.1" onchange="atualizarTaxas()" disabled>
+                <span>%</span>
+                <span class="taxa-badge todos">ambos</span>
+            </div>
+            <div class="taxas-info">
+                <span>Total taxas iFood:</span>
+                <span class="total-taxa" id="total-taxa-if">0%</span>
+                <span style="margin-left:0.5rem;">| AnotaAi:</span>
+                <span class="total-taxa" id="total-taxa-an">0%</span>
+            </div>
+        </div>
+
         <!-- DASHBOARD -->
         <div class="page active" id="p-dashboard">
             <div class="grid-kpi">
@@ -225,7 +336,7 @@
                 </div>
                 <div class="kpi blue">
                     <div class="kpi-icon">📦</div>
-                    <div class="kpi-label">Custo Total</div>
+                    <div class="kpi-label">Custo + Taxas</div>
                     <div class="kpi-value" id="k-custo">R$ 0</div>
                     <div class="kpi-sub" id="k-custo-sub">-</div>
                 </div>
@@ -260,7 +371,7 @@
                 </div>
                 
                 <div class="card">
-                    <div class="card-title">🎯 CMV por Categoria</div>
+                    <div class="card-title">🎯 CMV por Categoria (com taxas)</div>
                     <div class="chart-container" style="margin-top:1rem;">
                         <canvas id="chart-cmv-cat"></canvas>
                     </div>
@@ -270,7 +381,7 @@
             <div class="dash-grid">
                 <div class="card">
                     <div class="card-title">📱 Comparativo: iFood vs AnotaAi</div>
-                    <div class="compare-grid" id="compare-plat">
+                    <div class="compare-grid">
                         <div class="compare-card">
                             <h4>🔴 iFood</h4>
                             <div class="val" style="color:var(--orange);" id="cmp-if-fat">R$ 0</div>
@@ -296,10 +407,10 @@
             </div>
             
             <div class="card">
-                <div class="card-title">⚠️ Top 10 Produtos com Maior CMV (Atenção!)</div>
+                <div class="card-title">⚠️ Top 10 Produtos com Maior CMV</div>
                 <div class="tbl-wrap" style="margin-top:1rem;">
                     <table>
-                        <thead><tr><th>Produto</th><th>Categoria</th><th>Tam</th><th>Custo</th><th>Preço iFood</th><th>CMV</th></tr></thead>
+                        <thead><tr><th>Produto</th><th>Categoria</th><th>Tam</th><th>Custo</th><th>Preço iFood</th><th>CMV iFood</th></tr></thead>
                         <tbody id="tbl-ranking"></tbody>
                     </table>
                 </div>
@@ -412,7 +523,7 @@
                         <button class="btn btn-p" onclick="abrirModal('mod-ing')">+ Novo</button>
                     </div>
                 </div>
-                <div class="alert info">💡 Cadastre ingredientes em <strong>kg</strong> ou <strong>L</strong> (custo por unidade). Na ficha técnica, use <strong>g</strong> ou <strong>ml</strong>.</div>
+                <div class="alert info">💡 Cadastre ingredientes em <strong>kg</strong> ou <strong>L</strong>. Na ficha técnica, use <strong>g</strong> ou <strong>ml</strong>.</div>
                 <div class="tbl-wrap">
                     <table>
                         <thead><tr><th>Nome</th><th>Unidade</th><th>Custo/Un</th><th>Fornecedor</th><th>Ações</th></tr></thead>
@@ -452,7 +563,7 @@
                         <div class="ing-list" id="ficha-list"></div>
                     </div>
                     <div class="res-box" style="margin-top:1.5rem;">
-                        <div class="res-item"><div class="lbl">Custo Total</div><div class="val" style="color:var(--green);" id="f-custo">R$ 0,00</div></div>
+                        <div class="res-item"><div class="lbl">Custo Ingred.</div><div class="val" style="color:var(--green);" id="f-custo">R$ 0,00</div></div>
                         <div class="res-item"><div class="lbl">CMV iFood</div><div class="val" id="f-cmv-if">0%</div></div>
                         <div class="res-item"><div class="lbl">CMV AnotaAi</div><div class="val" id="f-cmv-an">0%</div></div>
                     </div>
@@ -523,11 +634,11 @@
                 <div class="field"><label>Preço iFood (R$)</label><input type="number" id="prod-pif" step="0.01" min="0" oninput="prevCMV()"></div>
                 <div class="field"><label>Preço AnotaAi (R$)</label><input type="number" id="prod-pan" step="0.01" min="0" oninput="prevCMV()"></div>
             </div>
-            <div class="alert info">💡 O custo é calculado automaticamente pela Ficha Técnica</div>
+            <div class="alert info">💡 O custo é calculado pela Ficha Técnica</div>
             <div id="prod-custo-info" style="display:none;margin-top:0.75rem;">
                 <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem;background:var(--bg3);border-radius:10px;">
-                    <span style="font-size:1.05rem;">Custo (ficha técnica):</span>
-                    <span class="mono" style="color:var(--green);font-weight:700;font-size:1.4rem;" id="prod-custo-val">R$ 0,00</span>
+                    <span>Custo ingredientes:</span>
+                    <span class="mono" style="color:var(--green);font-weight:700;font-size:1.3rem;" id="prod-custo-val">R$ 0,00</span>
                 </div>
             </div>
             <div class="cmv-preview">
@@ -581,10 +692,10 @@
         <form id="form-ing"><input type="hidden" id="ing-id">
             <div class="form-row">
                 <div class="field"><label>Nome *</label><input type="text" id="ing-nome" required></div>
-                <div class="field"><label>Unidade de Compra</label><select id="ing-un"><option selected>kg</option><option>L</option><option>un</option></select></div>
+                <div class="field"><label>Unidade</label><select id="ing-un"><option selected>kg</option><option>L</option><option>un</option></select></div>
             </div>
             <div class="form-row">
-                <div class="field"><label>Custo por Unidade (R$)</label><input type="number" id="ing-custo" step="0.01" min="0"></div>
+                <div class="field"><label>Custo/Un (R$)</label><input type="number" id="ing-custo" step="0.01" min="0"></div>
                 <div class="field"><label>Fornecedor</label><input type="text" id="ing-forn"></div>
             </div>
             <button type="submit" class="btn btn-p" style="width:100%;margin-top:1rem;">💾 Salvar</button>
@@ -608,19 +719,104 @@ const API = '/api';
 const DB = { produtos:[], bebidas:[], sobremesas:[], extras:[], ingredientes:[], fichas:[], vendas:[] };
 let filterText = {}, chartCMV = null;
 
+// CONFIGURAÇÃO DE TAXAS
+let TAXAS = {
+    ifood: false,      // 10% só no iFood
+    royalties: false,  // 5% nos dois
+    imposto: false,    // X% nos dois
+    impostoVal: 0      // valor do imposto
+};
+
 const $ = id => document.getElementById(id);
 const R$ = v => 'R$ ' + (parseFloat(v)||0).toFixed(2).replace('.', ',');
 const pct = v => (parseFloat(v)||0).toFixed(1) + '%';
-const calcCMV = (c, p) => p > 0 ? ((c / p) * 100) : 0;
 const cmvCls = c => c <= 25 ? 'green' : c <= 35 ? 'yellow' : 'red';
 const cmvColor = c => c <= 25 ? '#22c55e' : c <= 35 ? '#eab308' : '#ef4444';
+const fmtQtd = v => { const n = parseFloat(v)||0; return n === Math.floor(n) ? n.toString() : n.toFixed(1); };
 
-// Formatar quantidade - sem decimais desnecessárias
-const fmtQtd = v => {
-    const n = parseFloat(v) || 0;
-    if (n === Math.floor(n)) return n.toString();
-    return n.toFixed(1).replace('.0', '');
-};
+// CÁLCULO DE CMV COM TAXAS
+function calcCMV(custoIngredientes, preco, isIfood = true) {
+    if (preco <= 0) return 0;
+    
+    // Custo base = ingredientes
+    let custoTotal = custoIngredientes;
+    
+    // Adicionar taxas baseadas no preço de venda
+    if (TAXAS.ifood && isIfood) {
+        custoTotal += preco * 0.10; // 10% taxa iFood
+    }
+    if (TAXAS.royalties) {
+        custoTotal += preco * 0.05; // 5% royalties
+    }
+    if (TAXAS.imposto && TAXAS.impostoVal > 0) {
+        custoTotal += preco * (TAXAS.impostoVal / 100);
+    }
+    
+    return (custoTotal / preco) * 100;
+}
+
+// Calcular custo total (ingredientes + taxas)
+function calcCustoTotal(custoIngredientes, preco, isIfood = true) {
+    let custoTotal = custoIngredientes;
+    
+    if (TAXAS.ifood && isIfood) {
+        custoTotal += preco * 0.10;
+    }
+    if (TAXAS.royalties) {
+        custoTotal += preco * 0.05;
+    }
+    if (TAXAS.imposto && TAXAS.impostoVal > 0) {
+        custoTotal += preco * (TAXAS.impostoVal / 100);
+    }
+    
+    return custoTotal;
+}
+
+// Atualizar taxas e recalcular tudo
+function atualizarTaxas() {
+    TAXAS.ifood = $('taxa-ifood').checked;
+    TAXAS.royalties = $('taxa-royalties').checked;
+    TAXAS.imposto = $('taxa-imposto').checked;
+    TAXAS.impostoVal = parseFloat($('taxa-imposto-val').value) || 0;
+    
+    // Habilitar/desabilitar campo de imposto
+    $('taxa-imposto-val').disabled = !TAXAS.imposto;
+    
+    // Atualizar visual dos boxes
+    $('taxa-ifood-box').className = 'taxa-item' + (TAXAS.ifood ? ' active' : '');
+    $('taxa-royalties-box').className = 'taxa-item' + (TAXAS.royalties ? ' active' : '');
+    $('taxa-imposto-box').className = 'taxa-item' + (TAXAS.imposto ? ' active' : '');
+    
+    // Calcular total de taxas
+    let totalIf = 0, totalAn = 0;
+    if (TAXAS.ifood) totalIf += 10;
+    if (TAXAS.royalties) { totalIf += 5; totalAn += 5; }
+    if (TAXAS.imposto) { totalIf += TAXAS.impostoVal; totalAn += TAXAS.impostoVal; }
+    
+    $('total-taxa-if').textContent = totalIf.toFixed(1) + '%';
+    $('total-taxa-an').textContent = totalAn.toFixed(1) + '%';
+    
+    // Salvar no localStorage
+    localStorage.setItem('cmv_taxas', JSON.stringify(TAXAS));
+    
+    // Recalcular tudo
+    renderAll();
+}
+
+// Carregar taxas salvas
+function carregarTaxas() {
+    try {
+        const saved = localStorage.getItem('cmv_taxas');
+        if (saved) {
+            TAXAS = JSON.parse(saved);
+            $('taxa-ifood').checked = TAXAS.ifood;
+            $('taxa-royalties').checked = TAXAS.royalties;
+            $('taxa-imposto').checked = TAXAS.imposto;
+            $('taxa-imposto-val').value = TAXAS.impostoVal || 0;
+            atualizarTaxas();
+        }
+    } catch(e) { console.log('Erro ao carregar taxas:', e); }
+}
 
 function toast(msg, err) {
     const t = $('toast');
@@ -640,8 +836,7 @@ async function api(route, method = 'GET', body = null) {
     return await res.json();
 }
 
-// CÁLCULO DE CUSTO - CONVERSÃO CORRETA
-// Ingredientes em kg/L, Ficha em g/ml
+// Custo de ingredientes do produto (sem taxas)
 function calcCustoProduto(prodId) {
     const itens = DB.fichas.filter(f => f.produto_id === prodId);
     let custo = 0;
@@ -655,17 +850,9 @@ function calcCustoProduto(prodId) {
         const unIng = (ing.un || 'kg').toLowerCase();
         const unFicha = (f.un || 'g').toLowerCase();
         
-        // Converter quantidade da ficha para a unidade do ingrediente
         let fator = 1;
-        
-        // Se ingrediente é kg e ficha é g → dividir por 1000
         if (unIng === 'kg' && unFicha === 'g') fator = 1 / 1000;
-        // Se ingrediente é L e ficha é ml → dividir por 1000
         else if (unIng === 'l' && unFicha === 'ml') fator = 1 / 1000;
-        // Se mesma unidade, fator = 1
-        else if (unIng === unFicha) fator = 1;
-        // Unidades (embalagens etc)
-        else if (unIng === 'un' && unFicha === 'un') fator = 1;
         
         custo += custoIng * qtdFicha * fator;
     });
@@ -684,9 +871,9 @@ async function loadAll() {
         try { DB.sobremesas = await api('sobremesas') || []; } catch(e) { DB.sobremesas = []; }
         try { DB.extras = await api('extras') || []; } catch(e) { DB.extras = []; }
         
-        // Calcular custos baseados nas fichas
         DB.produtos.forEach(p => { p.custoFicha = calcCustoProduto(p.id); });
         
+        carregarTaxas();
         renderAll();
     } catch (e) { toast('Erro ao carregar: ' + e.message, true); }
     loading(false);
@@ -727,10 +914,13 @@ function preencherForm(mid, id) {
 function prevCMV() {
     const prodId = parseInt($('prod-id').value);
     const prod = DB.produtos.find(p => p.id === prodId);
-    const custo = prod ? (prod.custoFicha || calcCustoProduto(prodId)) : 0;
+    const custoIng = prod ? (prod.custoFicha || calcCustoProduto(prodId)) : 0;
     const pif = parseFloat($('prod-pif').value) || 0;
     const pan = parseFloat($('prod-pan').value) || 0;
-    const cmvIf = calcCMV(custo, pif), cmvAn = calcCMV(custo, pan);
+    
+    const cmvIf = calcCMV(custoIng, pif, true);
+    const cmvAn = calcCMV(custoIng, pan, false);
+    
     $('prev-if').textContent = pct(cmvIf);
     $('prev-if').style.color = cmvColor(cmvIf);
     $('prev-an').textContent = pct(cmvAn);
@@ -767,14 +957,15 @@ function renderProd() {
     
     $('tbl-prod').innerHTML = data.length === 0 ? '<tr><td colspan="9"><div class="empty"><div class="empty-icon">🍽️</div>Nenhum produto</div></td></tr>' :
         data.map(p => {
-            const custo = p.custoFicha || calcCustoProduto(p.id);
-            const cmvIf = calcCMV(custo, p.preco_ifood), cmvAn = calcCMV(custo, p.preco_anota);
+            const custoIng = p.custoFicha || calcCustoProduto(p.id);
+            const cmvIf = calcCMV(custoIng, p.preco_ifood, true);
+            const cmvAn = calcCMV(custoIng, p.preco_anota, false);
             const hasFicha = DB.fichas.some(f => f.produto_id === p.id);
             return `<tr>
                 <td><strong>${p.nome}</strong></td>
                 <td><span class="badge ${catBadge[p.cat] || 'cyan'}">${catLabels[p.cat] || p.cat}</span></td>
                 <td><span class="badge ${p.tam === 'P' ? 'gray' : 'blue'}">${p.tam || 'G'}</span></td>
-                <td class="mono">${custo > 0 ? R$(custo) : '-'} ${hasFicha ? '<span class="custo-auto">auto</span>' : ''}</td>
+                <td class="mono">${custoIng > 0 ? R$(custoIng) : '-'} ${hasFicha ? '<span class="custo-auto">auto</span>' : ''}</td>
                 <td class="mono">${R$(p.preco_ifood)}</td>
                 <td class="mono">${R$(p.preco_anota)}</td>
                 <td><span class="badge ${cmvCls(cmvIf)}">${pct(cmvIf)}</span></td>
@@ -792,7 +983,8 @@ function renderBeb() {
     if (filterText.beb) data = data.filter(x => x.nome.toLowerCase().includes(filterText.beb));
     $('tbl-beb').innerHTML = data.length === 0 ? '<tr><td colspan="7"><div class="empty"><div class="empty-icon">🥤</div>Nenhuma bebida</div></td></tr>' :
         data.map(b => {
-            const cmvIf = calcCMV(b.custo, b.preco_ifood), cmvAn = calcCMV(b.custo, b.preco_anota);
+            const cmvIf = calcCMV(b.custo, b.preco_ifood, true);
+            const cmvAn = calcCMV(b.custo, b.preco_anota, false);
             return `<tr><td><strong>${b.nome}</strong></td><td class="mono">${R$(b.custo)}</td><td class="mono">${R$(b.preco_ifood)}</td><td class="mono">${R$(b.preco_anota)}</td><td><span class="badge ${cmvCls(cmvIf)}">${pct(cmvIf)}</span></td><td><span class="badge ${cmvCls(cmvAn)}">${pct(cmvAn)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-beb',${b.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('beb',${b.id})">🗑️</button></td></tr>`;
         }).join('');
 }
@@ -802,7 +994,8 @@ function renderSob() {
     if (filterText.sob) data = data.filter(x => x.nome.toLowerCase().includes(filterText.sob));
     $('tbl-sob').innerHTML = data.length === 0 ? '<tr><td colspan="7"><div class="empty"><div class="empty-icon">🍰</div>Nenhuma sobremesa</div></td></tr>' :
         data.map(s => {
-            const cmvIf = calcCMV(s.custo, s.preco_ifood), cmvAn = calcCMV(s.custo, s.preco_anota);
+            const cmvIf = calcCMV(s.custo, s.preco_ifood, true);
+            const cmvAn = calcCMV(s.custo, s.preco_anota, false);
             return `<tr><td><strong>${s.nome}</strong></td><td class="mono">${R$(s.custo)}</td><td class="mono">${R$(s.preco_ifood)}</td><td class="mono">${R$(s.preco_anota)}</td><td><span class="badge ${cmvCls(cmvIf)}">${pct(cmvIf)}</span></td><td><span class="badge ${cmvCls(cmvAn)}">${pct(cmvAn)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-sob',${s.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('sob',${s.id})">🗑️</button></td></tr>`;
         }).join('');
 }
@@ -812,7 +1005,7 @@ function renderExt() {
     if (filterText.ext) data = data.filter(x => x.nome.toLowerCase().includes(filterText.ext));
     $('tbl-ext').innerHTML = data.length === 0 ? '<tr><td colspan="5"><div class="empty"><div class="empty-icon">➕</div>Nenhum extra</div></td></tr>' :
         data.map(e => {
-            const cmv = calcCMV(e.custo, e.preco);
+            const cmv = calcCMV(e.custo, e.preco, true);
             return `<tr><td><strong>${e.nome}</strong></td><td class="mono">${R$(e.custo)}</td><td class="mono">${R$(e.preco)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td><td class="actions"><button class="btn btn-e btn-sm" onclick="abrirModal('mod-ext',${e.id})">✏️</button><button class="btn btn-d btn-sm" onclick="confirmar('ext',${e.id})">🗑️</button></td></tr>`;
         }).join('');
 }
@@ -840,23 +1033,22 @@ function renderFichaSelects() {
 
 function renderRanking() {
     const prods = DB.produtos.map(p => {
-        const custo = p.custoFicha || calcCustoProduto(p.id);
-        return { ...p, custo, cmv: calcCMV(custo, p.preco_ifood) };
-    }).filter(p => p.custo > 0 && p.preco_ifood > 0).sort((a, b) => b.cmv - a.cmv).slice(0, 10);
+        const custoIng = p.custoFicha || calcCustoProduto(p.id);
+        return { ...p, custoIng, cmv: calcCMV(custoIng, p.preco_ifood, true) };
+    }).filter(p => p.custoIng > 0 && p.preco_ifood > 0).sort((a, b) => b.cmv - a.cmv).slice(0, 10);
     
     $('tbl-ranking').innerHTML = prods.length === 0 ? '<tr><td colspan="6"><div class="empty">Cadastre fichas técnicas para ver o ranking</div></td></tr>' :
         prods.map(p => `<tr>
             <td><strong>${p.nome}</strong></td>
             <td><span class="badge ${catBadge[p.cat] || 'cyan'}">${catLabels[p.cat] || p.cat}</span></td>
             <td><span class="badge ${p.tam === 'P' ? 'gray' : 'blue'}">${p.tam}</span></td>
-            <td class="mono">${R$(p.custo)}</td>
+            <td class="mono">${R$(p.custoIng)}</td>
             <td class="mono">${R$(p.preco_ifood)}</td>
             <td><span class="badge ${cmvCls(p.cmv)}">${pct(p.cmv)}</span></td>
         </tr>`).join('');
 }
 
 function atualizarDash() {
-    // Stats catálogo
     $('d-pratos').textContent = DB.produtos.length;
     $('d-bebidas').textContent = DB.bebidas.length;
     $('d-sobremesas').textContent = DB.sobremesas.length;
@@ -865,7 +1057,6 @@ function atualizarDash() {
     $('d-fichas').textContent = [...new Set(DB.fichas.map(f => f.produto_id))].length;
     $('d-vendas').textContent = DB.vendas.length;
     
-    // KPIs
     if (DB.vendas.length === 0) {
         $('k-fat').textContent = 'R$ 0';
         $('k-custo').textContent = 'R$ 0';
@@ -875,19 +1066,28 @@ function atualizarDash() {
         $('k-custo-sub').textContent = '-';
         $('k-lucro-sub').textContent = '-';
     } else {
-        const totFat = DB.vendas.reduce((s, v) => s + parseFloat(v.total_fat || 0), 0);
-        const totCusto = DB.vendas.reduce((s, v) => s + parseFloat(v.total_custo || 0), 0);
-        const cmv = totFat > 0 ? (totCusto / totFat * 100) : 0;
+        let totFat = 0, totCustoIngredientes = 0, totCustoComTaxas = 0;
+        
+        DB.vendas.forEach(v => {
+            const fat = parseFloat(v.total_fat) || 0;
+            const custoIng = parseFloat(v.total_custo) || 0;
+            const isIfood = v.cardapio === 'ifood';
+            
+            totFat += fat;
+            totCustoIngredientes += custoIng;
+            totCustoComTaxas += calcCustoTotal(custoIng, fat, isIfood);
+        });
+        
+        const cmv = totFat > 0 ? (totCustoComTaxas / totFat * 100) : 0;
         
         $('k-fat').textContent = R$(totFat);
-        $('k-custo').textContent = R$(totCusto);
+        $('k-custo').textContent = R$(totCustoComTaxas);
         $('k-cmv').textContent = pct(cmv);
-        $('k-lucro').textContent = R$(totFat - totCusto);
+        $('k-lucro').textContent = R$(totFat - totCustoComTaxas);
         $('k-fat-sub').textContent = `${DB.vendas.length} importação(ões)`;
-        $('k-custo-sub').textContent = `${pct((totCusto / totFat) * 100)} do faturamento`;
+        $('k-custo-sub').textContent = `Ingred: ${R$(totCustoIngredientes)}`;
         $('k-lucro-sub').textContent = `Margem: ${pct(100 - cmv)}`;
         
-        // Mudar cor do KPI CMV baseado no valor
         const kpiCmv = $('kpi-cmv');
         kpiCmv.className = 'kpi ' + cmvCls(cmv);
     }
@@ -896,22 +1096,35 @@ function atualizarDash() {
     const ifoodVendas = DB.vendas.filter(v => v.cardapio === 'ifood');
     const anotaVendas = DB.vendas.filter(v => v.cardapio === 'anota');
     
-    const ifFat = ifoodVendas.reduce((s, v) => s + parseFloat(v.total_fat || 0), 0);
-    const ifCusto = ifoodVendas.reduce((s, v) => s + parseFloat(v.total_custo || 0), 0);
-    const anFat = anotaVendas.reduce((s, v) => s + parseFloat(v.total_fat || 0), 0);
-    const anCusto = anotaVendas.reduce((s, v) => s + parseFloat(v.total_custo || 0), 0);
+    let ifFat = 0, ifCustoTotal = 0, anFat = 0, anCustoTotal = 0;
+    
+    ifoodVendas.forEach(v => {
+        const fat = parseFloat(v.total_fat) || 0;
+        const custoIng = parseFloat(v.total_custo) || 0;
+        ifFat += fat;
+        ifCustoTotal += calcCustoTotal(custoIng, fat, true);
+    });
+    
+    anotaVendas.forEach(v => {
+        const fat = parseFloat(v.total_fat) || 0;
+        const custoIng = parseFloat(v.total_custo) || 0;
+        anFat += fat;
+        anCustoTotal += calcCustoTotal(custoIng, fat, false);
+    });
     
     $('cmp-if-fat').textContent = R$(ifFat);
-    $('cmp-if-cmv').textContent = pct(calcCMV(ifCusto, ifFat));
+    $('cmp-if-cmv').textContent = pct(ifFat > 0 ? (ifCustoTotal / ifFat * 100) : 0);
     $('cmp-an-fat').textContent = R$(anFat);
-    $('cmp-an-cmv').textContent = pct(calcCMV(anCusto, anFat));
+    $('cmp-an-cmv').textContent = pct(anFat > 0 ? (anCustoTotal / anFat * 100) : 0);
     
     // Últimas importações
     const ultimas = DB.vendas.slice(-5).reverse();
     $('tbl-ultimas').innerHTML = ultimas.length === 0 ? '<tr><td colspan="4"><div class="empty">-</div></td></tr>' :
         ultimas.map(v => {
-            const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
-            return `<tr><td>${v.mes}/${v.ano}</td><td><span class="badge ${v.cardapio === 'ifood' ? 'orange' : 'green'}">${v.cardapio === 'ifood' ? 'iFood' : 'AnotaAi'}</span></td><td class="mono">${R$(v.total_fat)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td></tr>`;
+            const isIfood = v.cardapio === 'ifood';
+            const custoTotal = calcCustoTotal(v.total_custo, v.total_fat, isIfood);
+            const cmv = v.total_fat > 0 ? (custoTotal / v.total_fat * 100) : 0;
+            return `<tr><td>${v.mes}/${v.ano}</td><td><span class="badge ${isIfood ? 'orange' : 'green'}">${isIfood ? 'iFood' : 'AnotaAi'}</span></td><td class="mono">${R$(v.total_fat)}</td><td><span class="badge ${cmvCls(cmv)}">${pct(cmv)}</span></td></tr>`;
         }).join('');
     
     renderChartCMV();
@@ -922,7 +1135,7 @@ function renderChartCMV() {
     const data = cats.map(cat => {
         const prods = DB.produtos.filter(p => p.cat === cat && (p.custoFicha || calcCustoProduto(p.id)) > 0);
         if (prods.length === 0) return 0;
-        return prods.reduce((s, p) => s + calcCMV(p.custoFicha || calcCustoProduto(p.id), p.preco_ifood), 0) / prods.length;
+        return prods.reduce((s, p) => s + calcCMV(p.custoFicha || calcCustoProduto(p.id), p.preco_ifood, true), 0) / prods.length;
     });
     
     const ctx = $('chart-cmv-cat').getContext('2d');
@@ -933,7 +1146,7 @@ function renderChartCMV() {
         data: {
             labels: cats.map(c => catLabels[c]),
             datasets: [{
-                label: 'CMV Médio %',
+                label: 'CMV %',
                 data: data,
                 backgroundColor: data.map(v => v <= 25 ? 'rgba(34,197,94,0.8)' : v <= 35 ? 'rgba(234,179,8,0.8)' : 'rgba(239,68,68,0.8)'),
                 borderRadius: 8,
@@ -945,7 +1158,7 @@ function renderChartCMV() {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
             scales: {
-                y: { beginAtZero: true, max: 50, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8', font: { size: 13 }, callback: v => v + '%' } },
+                y: { beginAtZero: true, max: 60, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8', font: { size: 13 }, callback: v => v + '%' } },
                 x: { grid: { display: false }, ticks: { color: '#f8fafc', font: { size: 14 } } }
             }
         }
@@ -971,7 +1184,7 @@ function confirmar(tipo, id) {
         sob: { title: 'Excluir Sobremesa?', text: 'Esta ação não pode ser desfeita.', fn: () => execDel('sobremesas', id) },
         ext: { title: 'Excluir Extra?', text: 'Esta ação não pode ser desfeita.', fn: () => execDel('extras', id) },
         ing: { title: 'Excluir Ingrediente?', text: 'Será removido das fichas técnicas.', fn: () => execDel('ingredientes', id) },
-        venda: { title: 'Excluir Importação?', text: 'Os dados desta importação serão perdidos.', fn: () => execDel('vendas', id) }
+        venda: { title: 'Excluir Importação?', text: 'Os dados serão perdidos.', fn: () => execDel('vendas', id) }
     }[tipo];
     
     $('conf-icon').textContent = '🗑️';
@@ -988,7 +1201,7 @@ async function execDel(tabela, id) {
         if (tabela === 'produtos') DB.fichas = DB.fichas.filter(f => f.produto_id !== id);
         if (tabela === 'ingredientes') DB.fichas = DB.fichas.filter(f => f.ingrediente_id !== id);
         renderAll();
-        toast('Excluído com sucesso!');
+        toast('Excluído!');
     } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
@@ -1011,7 +1224,7 @@ async function submitForm(fid, tabela, getData, mid) {
         }
         renderAll();
         fecharModal(mid);
-        toast('Salvo com sucesso!');
+        toast('Salvo!');
     } catch (e) { toast('Erro: ' + e.message, true); }
     btn.disabled = false;
 }
@@ -1030,10 +1243,10 @@ $('form-prod').onsubmit = e => {
     }), 'mod-prod');
 };
 
-$('form-beb').onsubmit = e => { e.preventDefault(); submitForm('form-beb', 'bebidas', () => ({ nome: $('beb-nome').value.trim(), custo: parseFloat($('beb-custo').value) || 0, preco_ifood: parseFloat($('beb-pif').value) || 0, preco_anota: parseFloat($('beb-pan').value) || 0 }), 'mod-beb'); };
-$('form-sob').onsubmit = e => { e.preventDefault(); submitForm('form-sob', 'sobremesas', () => ({ nome: $('sob-nome').value.trim(), custo: parseFloat($('sob-custo').value) || 0, preco_ifood: parseFloat($('sob-pif').value) || 0, preco_anota: parseFloat($('sob-pan').value) || 0 }), 'mod-sob'); };
-$('form-ext').onsubmit = e => { e.preventDefault(); submitForm('form-ext', 'extras', () => ({ nome: $('ext-nome').value.trim(), custo: parseFloat($('ext-custo').value) || 0, preco: parseFloat($('ext-preco').value) || 0 }), 'mod-ext'); };
-$('form-ing').onsubmit = e => { e.preventDefault(); submitForm('form-ing', 'ingredientes', () => ({ nome: $('ing-nome').value.trim(), un: $('ing-un').value, custo: parseFloat($('ing-custo').value) || 0, forn: $('ing-forn').value.trim() }), 'mod-ing'); };
+$('form-beb').onsubmit = e => { e.preventDefault(); submitForm('form-beb', 'bebidas', () => ({ nome: $('beb-nome').value.trim(), custo: parseFloat($('beb-custo').value)||0, preco_ifood: parseFloat($('beb-pif').value)||0, preco_anota: parseFloat($('beb-pan').value)||0 }), 'mod-beb'); };
+$('form-sob').onsubmit = e => { e.preventDefault(); submitForm('form-sob', 'sobremesas', () => ({ nome: $('sob-nome').value.trim(), custo: parseFloat($('sob-custo').value)||0, preco_ifood: parseFloat($('sob-pif').value)||0, preco_anota: parseFloat($('sob-pan').value)||0 }), 'mod-sob'); };
+$('form-ext').onsubmit = e => { e.preventDefault(); submitForm('form-ext', 'extras', () => ({ nome: $('ext-nome').value.trim(), custo: parseFloat($('ext-custo').value)||0, preco: parseFloat($('ext-preco').value)||0 }), 'mod-ext'); };
+$('form-ing').onsubmit = e => { e.preventDefault(); submitForm('form-ing', 'ingredientes', () => ({ nome: $('ing-nome').value.trim(), un: $('ing-un').value, custo: parseFloat($('ing-custo').value)||0, forn: $('ing-forn').value.trim() }), 'mod-ing'); };
 
 // Fichas Técnicas
 function carregarFicha() {
@@ -1057,7 +1270,6 @@ function renderFichaItens() {
             const unIng = (ing.un || 'kg').toLowerCase();
             const unFicha = (f.un || 'g').toLowerCase();
             
-            // Calcular custo correto
             let fator = 1;
             if (unIng === 'kg' && unFicha === 'g') fator = 1 / 1000;
             else if (unIng === 'l' && unFicha === 'ml') fator = 1 / 1000;
@@ -1065,12 +1277,9 @@ function renderFichaItens() {
             const c = custoIng * qtdFicha * fator;
             
             return `<div class="ing-item">
-                <div>
-                    <strong>${ing.nome}</strong>
-                    <span style="color:var(--txt3);margin-left:0.5rem;">${fmtQtd(f.qtd)} ${f.un || 'g'}</span>
-                </div>
+                <div><strong>${ing.nome}</strong> <span style="color:var(--txt3)">${fmtQtd(f.qtd)} ${f.un || 'g'}</span></div>
                 <div style="display:flex;align-items:center;gap:1rem;">
-                    <span class="mono" style="color:var(--green);font-weight:600;font-size:1.15rem;">${R$(c)}</span>
+                    <span class="mono" style="color:var(--green);font-weight:600;font-size:1.1rem;">${R$(c)}</span>
                     <button class="btn btn-d btn-sm" onclick="remFichaItem(${f.id})">×</button>
                 </div>
             </div>`;
@@ -1082,12 +1291,12 @@ function renderFichaItens() {
 function calcFichaCusto() {
     const prodId = parseInt($('ficha-prod').value);
     const prod = DB.produtos.find(p => p.id === prodId);
-    const custoTotal = calcCustoProduto(prodId);
+    const custoIng = calcCustoProduto(prodId);
     
-    const cmvIf = prod ? calcCMV(custoTotal, prod.preco_ifood) : 0;
-    const cmvAn = prod ? calcCMV(custoTotal, prod.preco_anota) : 0;
+    const cmvIf = prod ? calcCMV(custoIng, prod.preco_ifood, true) : 0;
+    const cmvAn = prod ? calcCMV(custoIng, prod.preco_anota, false) : 0;
     
-    $('f-custo').textContent = R$(custoTotal);
+    $('f-custo').textContent = R$(custoIng);
     $('f-cmv-if').textContent = pct(cmvIf);
     $('f-cmv-if').style.color = cmvColor(cmvIf);
     $('f-cmv-an').textContent = pct(cmvAn);
@@ -1101,7 +1310,7 @@ async function addIngFicha() {
     const un = $('ficha-un').value;
     
     if (!prodId || !ingId || !qtd || qtd <= 0) {
-        toast('Preencha todos os campos corretamente!', true);
+        toast('Preencha todos os campos!', true);
         return;
     }
     
@@ -1110,7 +1319,6 @@ async function addIngFicha() {
         DB.fichas.push(result);
         $('ficha-qtd').value = '';
         
-        // Atualizar custo do produto
         const custoTotal = calcCustoProduto(prodId);
         const prod = DB.produtos.find(p => p.id === prodId);
         if (prod) {
@@ -1120,7 +1328,7 @@ async function addIngFicha() {
         
         renderFichaItens();
         renderAll();
-        toast('Ingrediente adicionado!');
+        toast('Adicionado!');
     } catch (e) { toast('Erro: ' + e.message, true); }
 }
 
@@ -1166,7 +1374,7 @@ function processFile(file) {
             const wb = XLSX.read(new Uint8Array(ev.target.result), { type: 'array' });
             const data = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 });
             processarExcel(data);
-        } catch (e) { toast('Erro ao ler arquivo: ' + e.message, true); }
+        } catch (e) { toast('Erro: ' + e.message, true); }
         loading(false);
     };
     reader.readAsArrayBuffer(file);
@@ -1263,7 +1471,7 @@ function mostrarPreview() {
                 Custo: <span class="mono" style="color:var(--blue);font-weight:600;">${R$(custoTotal)}</span>
             </div>
             <div style="display:flex;gap:1rem;margin-top:1.5rem;">
-                <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Confirmar Importação</button>
+                <button class="btn btn-p" style="flex:1;" onclick="confirmarImport()">✅ Confirmar</button>
                 <button class="btn btn-s" onclick="cancelarImport()">❌ Cancelar</button>
             </div>
         </div>
@@ -1279,14 +1487,14 @@ async function confirmarImport() {
     let custoTotal = 0;
     const detalhes = [];
     
-    v.produtos.forEach(p => { const c = (parseFloat(p.custo) || 0) * p.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'produto', nome: p.nome, qtd: p.qtdVenda, custo: c }); });
-    v.bebidas.forEach(b => { const c = (parseFloat(b.custo) || 0) * b.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'bebida', nome: b.nome, qtd: b.qtdVenda, custo: c }); });
-    v.sobremesas.forEach(s => { const c = (parseFloat(s.custo) || 0) * s.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'sobremesa', nome: s.nome, qtd: s.qtdVenda, custo: c }); });
+    v.produtos.forEach(p => { const c = (parseFloat(p.custo)||0) * p.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'produto', nome: p.nome, qtd: p.qtdVenda, custo: c }); });
+    v.bebidas.forEach(b => { const c = (parseFloat(b.custo)||0) * b.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'bebida', nome: b.nome, qtd: b.qtdVenda, custo: c }); });
+    v.sobremesas.forEach(s => { const c = (parseFloat(s.custo)||0) * s.qtdVenda; custoTotal += c; detalhes.push({ tipo: 'sobremesa', nome: s.nome, qtd: s.qtdVenda, custo: c }); });
     
     try {
         const result = await api('vendas', 'POST', { mes, ano, cardapio: plat, itens: detalhes, total_qtd: detalhes.length, total_fat: v.totalFat, total_custo: custoTotal });
         DB.vendas.push(result);
-        toast(`Importado com sucesso! CMV: ${pct(v.totalFat > 0 ? (custoTotal / v.totalFat * 100) : 0)}`);
+        toast('Importado com sucesso!');
         cancelarImport();
         renderAll();
     } catch (e) { toast('Erro: ' + e.message, true); }
@@ -1307,24 +1515,27 @@ function mostrarAnalise() {
     const v = DB.vendas.find(x => x.id === id);
     if (!v) { $('analise-area').innerHTML = ''; return; }
     
-    const cmv = v.total_fat > 0 ? (v.total_custo / v.total_fat * 100) : 0;
-    const lucro = v.total_fat - v.total_custo;
+    const isIfood = v.cardapio === 'ifood';
+    const custoComTaxas = calcCustoTotal(v.total_custo, v.total_fat, isIfood);
+    const cmv = v.total_fat > 0 ? (custoComTaxas / v.total_fat * 100) : 0;
+    const lucro = v.total_fat - custoComTaxas;
+    
     let itens = [];
     try { itens = typeof v.itens === 'string' ? JSON.parse(v.itens) : (v.itens || []); } catch(e) {}
     
     $('analise-area').innerHTML = `
         <div class="grid-kpi" style="grid-template-columns:repeat(4,1fr);">
             <div class="kpi green"><div class="kpi-label">Faturamento</div><div class="kpi-value">${R$(v.total_fat)}</div></div>
-            <div class="kpi blue"><div class="kpi-label">Custo</div><div class="kpi-value">${R$(v.total_custo)}</div></div>
+            <div class="kpi blue"><div class="kpi-label">Custo + Taxas</div><div class="kpi-value">${R$(custoComTaxas)}</div><div class="kpi-sub">Ingred: ${R$(v.total_custo)}</div></div>
             <div class="kpi ${cmvCls(cmv)}"><div class="kpi-label">CMV</div><div class="kpi-value">${pct(cmv)}</div></div>
-            <div class="kpi purple"><div class="kpi-label">Lucro Bruto</div><div class="kpi-value">${R$(lucro)}</div></div>
+            <div class="kpi purple"><div class="kpi-label">Lucro</div><div class="kpi-value">${R$(lucro)}</div></div>
         </div>
         ${itens.length > 0 ? `
         <div class="card">
-            <div class="card-title">📋 Detalhamento por Item</div>
+            <div class="card-title">📋 Detalhamento</div>
             <div class="tbl-wrap" style="margin-top:1rem;">
                 <table>
-                    <thead><tr><th>Tipo</th><th>Item</th><th>Qtd</th><th>Custo Total</th></tr></thead>
+                    <thead><tr><th>Tipo</th><th>Item</th><th>Qtd</th><th>Custo</th></tr></thead>
                     <tbody>${itens.map(it => `<tr><td><span class="badge ${it.tipo === 'produto' ? 'blue' : it.tipo === 'bebida' ? 'cyan' : 'pink'}">${it.tipo}</span></td><td>${it.nome}</td><td class="mono">${it.qtd}</td><td class="mono">${R$(it.custo)}</td></tr>`).join('')}</tbody>
                 </table>
             </div>
@@ -1334,25 +1545,25 @@ function mostrarAnalise() {
 
 // Config
 async function setupDB() {
-    if (!confirm('Criar/atualizar tabelas do banco de dados?')) return;
+    if (!confirm('Criar tabelas?')) return;
     loading(true);
-    try { await api('setup', 'POST'); toast('Tabelas criadas com sucesso!'); await loadAll(); }
+    try { await api('setup', 'POST'); toast('Tabelas criadas!'); await loadAll(); }
     catch (e) { toast('Erro: ' + e.message, true); }
     loading(false);
 }
 
 async function seedDB() {
-    if (!confirm('Carregar dados de exemplo?')) return;
+    if (!confirm('Carregar dados exemplo?')) return;
     loading(true);
-    try { await api('seed', 'POST'); await loadAll(); toast('Dados de exemplo carregados!'); }
+    try { await api('seed', 'POST'); await loadAll(); toast('Dados carregados!'); }
     catch (e) { toast('Erro: ' + e.message, true); }
     loading(false);
 }
 
 function confirmarLimpar() {
     $('conf-icon').textContent = '⚠️';
-    $('conf-title').textContent = 'LIMPAR TODOS OS DADOS?';
-    $('conf-text').textContent = 'Esta ação irá remover TODOS os dados permanentemente!';
+    $('conf-title').textContent = 'LIMPAR TUDO?';
+    $('conf-text').textContent = 'Todos os dados serão removidos!';
     $('conf-btn').onclick = () => { limparDB(); fecharModal('mod-confirm'); };
     abrirModal('mod-confirm');
 }
@@ -1364,13 +1575,13 @@ async function limparDB() {
         DB.produtos = []; DB.bebidas = []; DB.sobremesas = []; DB.extras = [];
         DB.ingredientes = []; DB.fichas = []; DB.vendas = [];
         renderAll();
-        toast('Banco de dados limpo!');
+        toast('Banco limpo!');
     } catch (e) { toast('Erro: ' + e.message, true); }
     loading(false);
 }
 
 function exportarBackup() {
-    const backup = { versao: '9.4', data: new Date().toISOString(), dados: DB };
+    const backup = { versao: '9.5', data: new Date().toISOString(), taxas: TAXAS, dados: DB };
     const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
