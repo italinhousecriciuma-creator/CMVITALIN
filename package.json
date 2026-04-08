@@ -1,6 +1,6 @@
 {
   "name": "cmv-control",
-  "version": "9.7.6",
+  "version": "9.7.7",
   "dependencies": {
     "@neondatabase/serverless": "^0.9.0"
   }
