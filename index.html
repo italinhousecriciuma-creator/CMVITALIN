@@ -177,7 +177,7 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.7.4</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.7.5</span></div>
             </div>
             <div class="sync" id="sync">☁️ Online</div>
         </div>
@@ -320,13 +320,8 @@ const extrairSabor=nome=>{const n=norm(nome);const sabores=['camarão rosé','ca
 
 const findProd=(nome,tam,cat)=>{const sabor=extrairSabor(nome);return DB.produtos.find(p=>{if(p.tam!==tam)return false;if(cat&&p.cat!==cat)return false;const pSabor=extrairSabor(p.nome);if(sabor===pSabor)return true;if(sabor.includes(pSabor)||pSabor.includes(sabor))return true;if(sabor.includes('camarão')&&pSabor.includes('camarão'))return true;if(sabor.includes('costela')&&pSabor.includes('costela'))return true;if(sabor.includes('cheddar')&&sabor.includes('bacon')&&pSabor.includes('cheddar')&&pSabor.includes('bacon'))return true;if(sabor.includes('frango')&&pSabor.includes('frango'))return true;if(sabor.includes('queijos')&&pSabor.includes('queijos'))return true;return false;});};
 
-// Funções de detecção de categoria
-const isBebidaSecao=n=>{const nL=n.toLowerCase();return nL.includes('refrigerante')||nL.startsWith('água')||(nL.startsWith('suco')&&!nL.includes('macarrão'))||nL.startsWith('energético')||nL.startsWith('vinho')||nL.startsWith('cerveja')||nL.includes('coca-cola');};
-const isSobremesaSecao=n=>{const nL=n.toLowerCase();return nL.includes('tiramisu')||nL.includes('brownie')||nL.includes('cannoli')||nL.includes('palha italiana');};
-const isExtraSecao=n=>{const nL=n.toLowerCase();return nL.includes('crostini')||nL.includes('molho de pimenta')||nL.includes('chaveiro');};
-
-// Encontrar bebida no DB
-const findBebida=nome=>{const n=norm(nome);for(const b of DB.bebidas){const bn=norm(b.nome);if(n.includes(bn)||bn.includes(n))return b;}return null;};
+// Funções para encontrar no DB
+const findBebida=nome=>{const n=norm(nome);for(const b of DB.bebidas){const bn=norm(b.nome);if(n.includes(bn)||bn.includes(n))return b;if(n.includes('coca')&&bn.includes('coca'))return b;if(n.includes('fanta')&&bn.includes('fanta'))return b;if(n.includes('sprite')&&bn.includes('sprite'))return b;if(n.includes('água')&&bn.includes('água'))return b;if(n.includes('suco')&&bn.includes('suco'))return b;if(n.includes('energético')&&bn.includes('energético'))return b;if(n.includes('monster')&&bn.includes('monster'))return b;if(n.includes('vinho')&&bn.includes('vinho'))return b;}return null;};
 const findSobremesa=nome=>{const n=norm(nome);for(const s of DB.sobremesas){const sn=norm(s.nome);if(n.includes(sn)||sn.includes(n))return s;}return null;};
 const findExtra=nome=>{const n=norm(nome);for(const e of DB.extras){const en=norm(e.nome);if(n.includes(en)||en.includes(n))return e;}return null;};
 
@@ -350,40 +345,44 @@ salvarProdutoAnterior();
 if(valor>0)vendas.totalFat+=valor;
 isBoiadeirinha=nomeL.includes('boiadeirinha');
 
-// BEBIDAS - seção principal
-if(isBebidaSecao(nome)&&qtd>0&&valor>0){
-const beb=findBebida(nome);
-if(beb){vendas.bebidas.push({...beb,qtdVenda:qtd,valorVenda:valor,nomeOriginal:nome});}
-else{vendas.bebidas.push({id:0,nome:nome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:nome});}
-secaoAtual='bebidas';continue;}
-
-// SOBREMESAS - seção principal  
-if(isSobremesaSecao(nome)&&qtd>0&&valor>0){
-const sob=findSobremesa(nome);
-if(sob){vendas.sobremesas.push({...sob,qtdVenda:qtd,valorVenda:valor,nomeOriginal:nome});}
-else{vendas.sobremesas.push({id:0,nome:nome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:nome});}
-secaoAtual='sobremesas';continue;}
-
-// EXTRAS - seção principal
-if(isExtraSecao(nome)&&qtd>0&&valor>0){
-const ext=findExtra(nome);
-if(ext){vendas.extras.push({...ext,qtdVenda:qtd,valorVenda:valor,nomeOriginal:nome});}
-else{vendas.extras.push({id:0,nome:nome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:nome});}
-secaoAtual='extras';continue;}
-
-// Outras seções
-if(nomeL.includes('macarrão')&&nomeL.includes('box g'))secaoAtual='macarrao_g';
-else if(nomeL.includes('macarrão')&&!nomeL.includes('box g')&&!nomeL.includes('salada'))secaoAtual='macarrao';
+// Detectar seção
+if(nomeL.includes('bebida')||nomeL.includes('vai uma bebida'))secaoAtual='bebidas';
+else if(nomeL.includes('docinho')||nomeL.includes('vai um docinho'))secaoAtual='sobremesas';
+else if(nomeL.includes('entradas e acompanhamentos'))secaoAtual='extras';
+else if(nomeL.includes('molhinho'))secaoAtual='extras';
+else if(nomeL.includes('macarrão')&&nomeL.includes('box g'))secaoAtual='macarrao_g';
+else if(nomeL.includes('melhor macarrão')&&!nomeL.includes('box g'))secaoAtual='macarrao';
 else if(nomeL.includes('risoto')&&!nomeL.includes('combo'))secaoAtual='risoto';
 else if(nomeL.includes('nhoque')&&!nomeL.includes('combo'))secaoAtual='nhoque';
 else if(nomeL.includes('combo')||nomeL.includes('diversos')||nomeL.includes('oferta')||nomeL.includes('compre'))secaoAtual='combos';
-else if(nomeL.includes('especial de almoço'))secaoAtual='combos';
 else secaoAtual='outros';
 continue;}
 
 // SUB-ITENS
 const subNome=nome.replace(/^[-\s]+/,'').trim(),subNomeL=subNome.toLowerCase();
 
+// BEBIDAS - sub-itens
+if(secaoAtual==='bebidas'&&qtd>0&&valor>0){
+const beb=findBebida(subNome);
+if(beb){vendas.bebidas.push({...beb,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.bebidas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+continue;}
+
+// SOBREMESAS - sub-itens
+if(secaoAtual==='sobremesas'&&qtd>0&&valor>0){
+const sob=findSobremesa(subNome);
+if(sob){vendas.sobremesas.push({...sob,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.sobremesas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+continue;}
+
+// EXTRAS - sub-itens (crostini, polenta, etc com valor > 0)
+if(secaoAtual==='extras'&&qtd>0&&valor>0){
+const ext=findExtra(subNome);
+if(ext){vendas.extras.push({...ext,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.extras.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+continue;}
+
+// MACARRÃO
 if(secaoAtual==='macarrao'){
 if(subNomeL.includes('macarrão')&&valor>0&&qtd>0){salvarProdutoAnterior();produtoAtual={nome:subNome,qtd,valor};}
 else if((subNomeL.includes('box p')||subNomeL.includes('450g'))&&!subNomeL.includes('nhoque'))qtdBoxP+=qtd;
