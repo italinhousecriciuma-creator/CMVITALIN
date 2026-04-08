@@ -177,7 +177,7 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.7.5</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.7.6</span></div>
             </div>
             <div class="sync" id="sync">☁️ Online</div>
         </div>
@@ -320,8 +320,11 @@ const extrairSabor=nome=>{const n=norm(nome);const sabores=['camarão rosé','ca
 
 const findProd=(nome,tam,cat)=>{const sabor=extrairSabor(nome);return DB.produtos.find(p=>{if(p.tam!==tam)return false;if(cat&&p.cat!==cat)return false;const pSabor=extrairSabor(p.nome);if(sabor===pSabor)return true;if(sabor.includes(pSabor)||pSabor.includes(sabor))return true;if(sabor.includes('camarão')&&pSabor.includes('camarão'))return true;if(sabor.includes('costela')&&pSabor.includes('costela'))return true;if(sabor.includes('cheddar')&&sabor.includes('bacon')&&pSabor.includes('cheddar')&&pSabor.includes('bacon'))return true;if(sabor.includes('frango')&&pSabor.includes('frango'))return true;if(sabor.includes('queijos')&&pSabor.includes('queijos'))return true;return false;});};
 
+// Detectar se é item agrupador de bebida (não específico)
+const isAgrupadorBebida=n=>{const nL=n.toLowerCase();return (nL.startsWith('refrigerante ')||nL==='água'||nL==='sucos'||nL==='energético'||nL==='vinho')&&!nL.includes('coca')&&!nL.includes('fanta')&&!nL.includes('sprite limão')&&!nL.includes('guaraná')&&!nL.includes('monster')&&!nL.includes('sem gás')&&!nL.includes('com gás')&&!nL.includes('del valle')&&!nL.includes('badia');};
+
 // Funções para encontrar no DB
-const findBebida=nome=>{const n=norm(nome);for(const b of DB.bebidas){const bn=norm(b.nome);if(n.includes(bn)||bn.includes(n))return b;if(n.includes('coca')&&bn.includes('coca'))return b;if(n.includes('fanta')&&bn.includes('fanta'))return b;if(n.includes('sprite')&&bn.includes('sprite'))return b;if(n.includes('água')&&bn.includes('água'))return b;if(n.includes('suco')&&bn.includes('suco'))return b;if(n.includes('energético')&&bn.includes('energético'))return b;if(n.includes('monster')&&bn.includes('monster'))return b;if(n.includes('vinho')&&bn.includes('vinho'))return b;}return null;};
+const findBebida=nome=>{const n=norm(nome);for(const b of DB.bebidas){const bn=norm(b.nome);if(n===bn)return b;if(n.includes(bn)||bn.includes(n))return b;}return null;};
 const findSobremesa=nome=>{const n=norm(nome);for(const s of DB.sobremesas){const sn=norm(s.nome);if(n.includes(sn)||sn.includes(n))return s;}return null;};
 const findExtra=nome=>{const n=norm(nome);for(const e of DB.extras){const en=norm(e.nome);if(n.includes(en)||en.includes(n))return e;}return null;};
 
@@ -361,21 +364,22 @@ continue;}
 // SUB-ITENS
 const subNome=nome.replace(/^[-\s]+/,'').trim(),subNomeL=subNome.toLowerCase();
 
-// BEBIDAS - sub-itens
+// BEBIDAS - apenas agrupadores (Refrigerante Lata 350ml, Água, etc.) para evitar duplicação
 if(secaoAtual==='bebidas'&&qtd>0&&valor>0){
+if(isAgrupadorBebida(subNome)){
 const beb=findBebida(subNome);
 if(beb){vendas.bebidas.push({...beb,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
-else{vendas.bebidas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.bebidas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}}
 continue;}
 
-// SOBREMESAS - sub-itens
+// SOBREMESAS - todos os itens
 if(secaoAtual==='sobremesas'&&qtd>0&&valor>0){
 const sob=findSobremesa(subNome);
 if(sob){vendas.sobremesas.push({...sob,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 else{vendas.sobremesas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 continue;}
 
-// EXTRAS - sub-itens (crostini, polenta, etc com valor > 0)
+// EXTRAS - itens com valor > 0 (Polenta, Crostini, Molhos)
 if(secaoAtual==='extras'&&qtd>0&&valor>0){
 const ext=findExtra(subNome);
 if(ext){vendas.extras.push({...ext,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
