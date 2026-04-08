@@ -177,7 +177,7 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.7.8</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.7.9</span></div>
             </div>
             <div class="sync" id="sync">☁️ Online</div>
         </div>
@@ -365,6 +365,13 @@ continue;}
 
 // SUB-ITENS
 const subNome=nome.replace(/^[-\s]+/,'').trim(),subNomeL=subNome.toLowerCase();
+
+// EXTRAS AVULSOS (Extra Bacon, Extra Frango, etc.) - em QUALQUER seção
+if(subNomeL.startsWith('extra ')&&qtd>0&&valor>0){
+const ext=findExtra(subNome);
+if(ext){vendas.extras.push({...ext,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.extras.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+continue;}
 
 // BEBIDAS - apenas ITENS ESPECÍFICOS (ignorar agrupadores)
 if(secaoAtual==='bebidas'&&qtd>0&&valor>0){
