@@ -177,7 +177,7 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">🍝</div>
-                <div><h1>CMV Control</h1><span>Ital'in House v9.7.9</span></div>
+                <div><h1>CMV Control</h1><span>Ital'in House v9.8.0</span></div>
             </div>
             <div class="sync" id="sync">☁️ Online</div>
         </div>
@@ -314,16 +314,39 @@ function processFile(file){$('upload-file').textContent='📄 '+file.name;upload
 function processarExcel(data){
 let periodo='';if(data[1]&&data[1][0]){const match=String(data[1][0]).match(/(\d{2})\/(\d{2})\/(\d{4})/);if(match)periodo=match[2]+'/'+match[3];}
 const vendas={produtos:[],bebidas:[],sobremesas:[],extras:[],naoEncontrados:[],totalFat:0,detalhes:{macP:[],macG:[],risoto:[],nhoque:[]}};
-const norm=n=>n.toLowerCase().replace(/\(aprox\.?\s*\d+g?\)/gi,'').replace(/\(vale muito a pena!\)/gi,'').replace(/box\s*(p|g|kids)/gi,'').replace(/\t/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim();
+const norm=n=>n.toLowerCase().replace(/\(aprox\.?\s*\d+g?\)/gi,'').replace(/\(vale muito a pena!?\)/gi,'').replace(/box\s*(p|g|kids)/gi,'').replace(/\t/g,' ').replace(/-/g,' ').replace(/\s+/g,' ').trim();
 
-const extrairSabor=nome=>{const n=norm(nome);const sabores=['camarão rosé','camarão','quatro queijos','ragu de costela','ragu costela','cheddar com carne e bacon','cheddar carne bacon','cheddar com bacon','cheddar bacon','frango com requeijão','frango requeijão','frango cremoso','bolonhesa','pomodoro','broccoli','funghi','parisiense'];for(const s of sabores)if(n.includes(s))return s;return n;};
+// CORRIGIDO: Separar "cheddar com bacon" de "cheddar com carne e bacon"
+const extrairSabor=nome=>{const n=norm(nome);
+const sabores=['cheddar com carne e bacon','cheddar carne bacon','cheddar com bacon','cheddar bacon','camarão rosé','camarão','quatro queijos','ragu de costela','ragu costela','frango com requeijão','frango requeijão','frango cremoso','bolonhesa','pomodoro','broccoli','funghi','parisiense'];
+for(const s of sabores)if(n.includes(s))return s;return n;};
 
-const findProd=(nome,tam,cat)=>{const sabor=extrairSabor(nome);return DB.produtos.find(p=>{if(p.tam!==tam)return false;if(cat&&p.cat!==cat)return false;const pSabor=extrairSabor(p.nome);if(sabor===pSabor)return true;if(sabor.includes(pSabor)||pSabor.includes(sabor))return true;if(sabor.includes('camarão')&&pSabor.includes('camarão'))return true;if(sabor.includes('costela')&&pSabor.includes('costela'))return true;if(sabor.includes('cheddar')&&sabor.includes('bacon')&&pSabor.includes('cheddar')&&pSabor.includes('bacon'))return true;if(sabor.includes('frango')&&pSabor.includes('frango'))return true;if(sabor.includes('queijos')&&pSabor.includes('queijos'))return true;return false;});};
+const findProd=(nome,tam,cat)=>{const sabor=extrairSabor(nome);return DB.produtos.find(p=>{if(p.tam!==tam)return false;if(cat&&p.cat!==cat)return false;const pSabor=extrairSabor(p.nome);if(sabor===pSabor)return true;
+// Match especifico para cheddar
+if(sabor.includes('cheddar com carne')&&pSabor.includes('cheddar com carne'))return true;
+if(sabor.includes('cheddar')&&!sabor.includes('carne')&&pSabor.includes('cheddar')&&!pSabor.includes('carne'))return true;
+if(sabor.includes(pSabor)||pSabor.includes(sabor))return true;
+if(sabor.includes('camarão')&&pSabor.includes('camarão'))return true;
+if(sabor.includes('costela')&&pSabor.includes('costela'))return true;
+if(sabor.includes('frango')&&pSabor.includes('frango'))return true;
+if(sabor.includes('queijos')&&pSabor.includes('queijos'))return true;return false;});};
 
-// Detectar AGRUPADORES de bebidas (genéricos) - estes serão IGNORADOS
+// Detectar AGRUPADORES de bebidas
 const isAgrupadorBebida=n=>{const nL=n.toLowerCase().trim();
 const agrupadores=['refrigerante lata 350ml','refrigerante 600ml','refrigerante 200ml','refrigerante 2 litros','refrigerante sprite lemon fresh','água','sucos','energético','vinho'];
 return agrupadores.includes(nL);};
+
+// Detectar se é BEBIDA específica
+const isBebidaItem=n=>{const nL=n.toLowerCase();
+return nL.includes('coca')|| nL.includes('fanta')|| nL.includes('sprite')|| nL.includes('guaraná')|| nL.includes('água')|| nL.includes('suco')|| nL.includes('monster')|| nL.includes('energético')|| nL.includes('vinho')|| nL.includes('cerveja');};
+
+// Detectar se é SOBREMESA
+const isSobremesaItem=n=>{const nL=n.toLowerCase();
+return nL.includes('brownie')|| nL.includes('cannoli')|| nL.includes('tiramisu')|| nL.includes('palha italiana');};
+
+// Detectar se é EXTRA AVULSO (que não começa com "Extra")
+const isExtraAvulso=n=>{const nL=n.toLowerCase();
+return nL.startsWith('extra ')|| nL.includes('pimenta do reino')|| nL.includes('preciso de talher')|| nL.includes('acompanhamento + sobremesa')|| nL.includes('acompanhamento +sobremesa')|| nL.includes('espaguete grano duro')|| nL.includes('penne integral')|| nL.includes('nhoque recheado')|| nL.includes('polenta');};
 
 // Funções para encontrar no DB
 const findBebida=nome=>{const n=norm(nome);for(const b of DB.bebidas){const bn=norm(b.nome);if(n===bn)return b;if(n.includes(bn)||bn.includes(n))return b;}return null;};
@@ -334,7 +357,7 @@ let secaoAtual=null,produtoAtual=null,qtdBoxP=0,qtdBoxG=0,isBoiadeirinha=false,i
 
 const addProdVenda=(prod,qtd,valor,origem,tam)=>{if(!prod||qtd<=0)return;const custo=prod.custoFicha||calcCustoProduto(prod.id)||prod.custo||0;vendas.produtos.push({...prod,custo,qtdVenda:qtd,valorVenda:valor,origem,tamImport:tam});if(prod.cat==='risoto')vendas.detalhes.risoto.push({nome:prod.nome,qtd});else if(prod.cat==='nhoque')vendas.detalhes.nhoque.push({nome:prod.nome,qtd});else if(tam==='P')vendas.detalhes.macP.push({nome:prod.nome,qtd});else vendas.detalhes.macG.push({nome:prod.nome,qtd});};
 
-const salvarProdutoAnterior=()=>{if(!produtoAtual)return;if(secaoAtual==='macarrao'||isDiversosMac){if(qtdBoxP>0){const prod=findProd(produtoAtual.nome,'P','macarrao');if(prod)addProdVenda(prod,qtdBoxP,produtoAtual.valor*qtdBoxP/Math.max(produtoAtual.qtd,1),'Macarrão','P');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'P',qtd:qtdBoxP,cat:'macarrao'});}if(qtdBoxG>0){const prod=findProd(produtoAtual.nome,'G','macarrao');if(prod)addProdVenda(prod,qtdBoxG,produtoAtual.valor*qtdBoxG/Math.max(produtoAtual.qtd,1),'Macarrão','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:qtdBoxG,cat:'macarrao'});}}else if(secaoAtual==='macarrao_g'){const prod=findProd(produtoAtual.nome,'G','macarrao');if(prod)addProdVenda(prod,produtoAtual.qtd,produtoAtual.valor,'Macarrão BOX G','G');}else if(secaoAtual==='risoto'){const prod=findProd(produtoAtual.nome,'G','risoto');if(prod)addProdVenda(prod,produtoAtual.qtd,produtoAtual.valor,'Risoto','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:produtoAtual.qtd,cat:'risoto'});}else if(secaoAtual==='nhoque'){const prod=findProd(produtoAtual.nome,'G','nhoque');if(prod)addProdVenda(prod,produtoAtual.qtd,produtoAtual.valor,'Nhoque','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:produtoAtual.qtd,cat:'nhoque'});}produtoAtual=null;qtdBoxP=0;qtdBoxG=0;isDiversosMac=false;};
+const salvarProdutoAnterior=()=>{if(!produtoAtual)return;if(secaoAtual==='macarrao'||isDiversosMac){if(qtdBoxP>0){const prod=findProd(produtoAtual.nome,'P','macarrao');if(prod)addProdVenda(prod,qtdBoxP,produtoAtual.valor*qtdBoxP/Math.max(produtoAtual.qtd,1),'Macarrão','P');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'P',qtd:qtdBoxP,cat:'macarrao'});}if(qtdBoxG>0){const prod=findProd(produtoAtual.nome,'G','macarrao');if(prod)addProdVenda(prod,qtdBoxG,produtoAtual.valor*qtdBoxG/Math.max(produtoAtual.qtd,1),'Macarrão','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:qtdBoxG,cat:'macarrao'});}}else if(secaoAtual==='macarrao_g'){const prod=findProd(produtoAtual.nome,'G','macarrao');if(prod)addProdVenda(prod,produtoAtual.qtd,produtoAtual.valor,'Macarrão BOX G','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:produtoAtual.qtd,cat:'macarrao'});}else if(secaoAtual==='risoto'){const prod=findProd(produtoAtual.nome,'G','risoto');if(prod)addProdVenda(prod,produtoAtual.qtd,produtoAtual.valor,'Risoto','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:produtoAtual.qtd,cat:'risoto'});}else if(secaoAtual==='nhoque'){const prod=findProd(produtoAtual.nome,'G','nhoque');if(prod)addProdVenda(prod,produtoAtual.qtd,produtoAtual.valor,'Nhoque','G');else vendas.naoEncontrados.push({nome:produtoAtual.nome,tam:'G',qtd:produtoAtual.qtd,cat:'nhoque'});}produtoAtual=null;qtdBoxP=0;qtdBoxG=0;isDiversosMac=false;};
 
 const processarItemDireto=(subNome,qtd,origem)=>{const subNomeL=subNome.toLowerCase();if(subNomeL.includes('nhoque')&&!subNomeL.includes('recheado')&&!subNomeL.includes('tradicional'))return;let tam='G';if(subNomeL.includes('box kids')||subNomeL.includes('box p')||subNomeL.includes('450g')||isBoiadeirinha)tam='P';else if(subNomeL.includes('box g')||subNomeL.includes('800g')||subNomeL.includes('750g'))tam='G';else return;const sabores=['bolonhesa','camarão','queijos','costela','ragu','cheddar','bacon','frango','pomodoro','broccoli','funghi','parisiense'];let temSabor=false;for(const s of sabores)if(subNomeL.includes(s)){temSabor=true;break;}if(!temSabor)return;const prod=findProd(subNome,tam,'macarrao');if(prod)addProdVenda(prod,qtd,0,origem,tam);};
 
@@ -366,14 +389,29 @@ continue;}
 // SUB-ITENS
 const subNome=nome.replace(/^[-\s]+/,'').trim(),subNomeL=subNome.toLowerCase();
 
-// EXTRAS AVULSOS (Extra Bacon, Extra Frango, etc.) - em QUALQUER seção
-if(subNomeL.startsWith('extra ')&&qtd>0&&valor>0){
+// 1. EXTRAS AVULSOS - em QUALQUER seção (Extra X, Pimenta do Reino, Talheres, etc.)
+if(isExtraAvulso(subNome)&&qtd>0&&valor>0){
 const ext=findExtra(subNome);
 if(ext){vendas.extras.push({...ext,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 else{vendas.extras.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 continue;}
 
-// BEBIDAS - apenas ITENS ESPECÍFICOS (ignorar agrupadores)
+// 2. SOBREMESAS AVULSAS - em QUALQUER seção (Brownie, Cannoli, etc.)
+if(isSobremesaItem(subNome)&&qtd>0&&valor>0&&secaoAtual!=='sobremesas'){
+const sob=findSobremesa(subNome);
+if(sob){vendas.sobremesas.push({...sob,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.sobremesas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+continue;}
+
+// 3. BEBIDAS AVULSAS - em QUALQUER seção (Coca, Fanta, Sprite nos combos)
+if(isBebidaItem(subNome)&&qtd>0&&!isAgrupadorBebida(subNome)){
+// Calcular valor se não tiver (dentro de combos geralmente valor=0)
+const beb=findBebida(subNome);
+if(beb){vendas.bebidas.push({...beb,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+else{vendas.bebidas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
+continue;}
+
+// 4. BEBIDAS - seção bebidas, apenas ITENS ESPECÍFICOS
 if(secaoAtual==='bebidas'&&qtd>0&&valor>0){
 if(!isAgrupadorBebida(subNome)){
 const beb=findBebida(subNome);
@@ -381,21 +419,21 @@ if(beb){vendas.bebidas.push({...beb,qtdVenda:qtd,valorVenda:valor,nomeOriginal:s
 else{vendas.bebidas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}}
 continue;}
 
-// SOBREMESAS - todos os itens
+// 5. SOBREMESAS - seção sobremesas
 if(secaoAtual==='sobremesas'&&qtd>0&&valor>0){
 const sob=findSobremesa(subNome);
 if(sob){vendas.sobremesas.push({...sob,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 else{vendas.sobremesas.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 continue;}
 
-// EXTRAS - itens com valor > 0
+// 6. EXTRAS - seção extras
 if(secaoAtual==='extras'&&qtd>0&&valor>0){
 const ext=findExtra(subNome);
 if(ext){vendas.extras.push({...ext,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 else{vendas.extras.push({id:0,nome:subNome,custo:0,qtdVenda:qtd,valorVenda:valor,nomeOriginal:subNome});}
 continue;}
 
-// MACARRÃO
+// 7. MACARRÃO
 if(secaoAtual==='macarrao'){
 if(subNomeL.includes('macarrão')&&valor>0&&qtd>0){salvarProdutoAnterior();produtoAtual={nome:subNome,qtd,valor};}
 else if((subNomeL.includes('box p')||subNomeL.includes('450g'))&&!subNomeL.includes('nhoque'))qtdBoxP+=qtd;
@@ -407,6 +445,13 @@ if(subNomeL.includes('risoto')&&valor>0&&qtd>0){salvarProdutoAnterior();produtoA
 }else if(secaoAtual==='nhoque'){
 if(subNomeL.includes('nhoque')&&valor>0&&qtd>0&&!subNomeL.includes('recheado')&&!subNomeL.includes('tradicional')){salvarProdutoAnterior();produtoAtual={nome:subNome,qtd,valor};}
 }else if(secaoAtual==='combos'){
+// RISOTO nos combos
+if(subNomeL.includes('risoto')&&!subNomeL.includes('combo')&&qtd>0){
+const prod=findProd(subNome,'G','risoto');
+if(prod)addProdVenda(prod,qtd,valor,'Combo','G');
+else vendas.naoEncontrados.push({nome:subNome,tam:'G',qtd,cat:'risoto'});
+continue;}
+// MACARRÃO nos combos
 if(subNomeL.includes('macarrão')&&valor>0&&qtd>0){salvarProdutoAnterior();isDiversosMac=true;produtoAtual={nome:subNome,qtd,valor};if(subNomeL.includes('800g')||subNomeL.includes('750g')){const prod=findProd(subNome,'G','macarrao');if(prod)addProdVenda(prod,qtd,valor,'Diversos','G');produtoAtual=null;isDiversosMac=false;}}
 else if(isDiversosMac&&produtoAtual){if((subNomeL.includes('box p')||subNomeL.includes('450g'))&&!subNomeL.includes('nhoque'))qtdBoxP+=qtd;else if((subNomeL.includes('box g')||subNomeL.includes('800g'))&&!subNomeL.includes('nhoque'))qtdBoxG+=qtd;}
 else if(qtd>0&&!isDiversosMac){processarItemDireto(subNome,qtd,'Combo/Diversos');}
